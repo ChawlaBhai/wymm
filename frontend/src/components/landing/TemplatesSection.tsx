@@ -13,6 +13,8 @@ const FEATURED_IDS: TemplateId[] = [
   'mountain-soul',
 ]
 
+const DARK_TEMPLATES: TemplateId[] = ['the-modernist', 'celestial-night']
+
 const containerVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.08 } },

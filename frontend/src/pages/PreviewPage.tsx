@@ -1,11 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
-import { createRoot } from 'react-dom/client'
 import { useBiodataStore } from '@/store/biodataStore'
 import { useAuthStore } from '@/store/authStore'
 import { checkSlugAvailable, saveBiodataWithSlug } from '@/lib/biodataService'
-import { exportTemplateToPDF } from '@/lib/pdfExport'
 import TemplateModernMinimal from '@/components/templates/TemplateModernMinimal'
 import TemplateRefinedElegance from '@/components/templates/TemplateRefinedElegance'
 import TemplateProfessionalPremium from '@/components/templates/TemplateProfessionalPremium'
@@ -80,11 +78,6 @@ export default function PreviewPage() {
 
   // Copy state (for published link)
   const [copied, setCopied] = useState(false)
-
-  // PDF state
-  const [pdfLoading, setPdfLoading] = useState(false)
-  const [pdfProgress, setPdfProgress] = useState(0)
-  const hiddenPdfRef = useRef<HTMLDivElement | null>(null)
 
   const publishedUrl = publishedSlug
     ? `${window.location.origin}/${publishedSlug}`
@@ -170,53 +163,51 @@ export default function PreviewPage() {
     window.open(`https://wa.me/?text=${text}`, '_blank')
   }
 
-  // PDF download — renders template in a hidden 800px container, then exports
-  async function handleDownload() {
-    if (pdfLoading) return
-    setPdfLoading(true)
-    setPdfProgress(0)
-
-    // Create off-screen container
-    const container = document.createElement('div')
-    container.style.cssText = `
-      position: absolute;
-      left: -9999px;
-      top: 0;
-      width: 800px;
-      background: #ffffff;
-      overflow: visible;
-    `
-    document.body.appendChild(container)
-    hiddenPdfRef.current = container
-
-    // Render the template into the hidden container via React portal approach
-    // We use a temporary React root
-    const root = createRoot(container)
-    const fullName = biodata.basicInfo.fullName.replace(/\s+/g, '-').toLowerCase() || 'biodata'
+  // PDF download — inject print styles, trigger browser print dialog (Save as PDF)
+  function handleDownload() {
+    const fullName = biodata.basicInfo.fullName || 'biodata'
     const date = new Date().toISOString().slice(0, 10)
-    const filename = `wymm-biodata-${fullName}-${date}.pdf`
 
-    await new Promise<void>((resolve) => {
-      root.render(
-        <div style={{ width: '800px', background: '#fff' }}>
-          <TemplateRenderer templateId={biodata.templateId} biodata={biodata} />
-        </div>
-      )
-      // Give React a tick to finish rendering
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-    })
+    // Inject a print stylesheet that hides everything except the template
+    const style = document.createElement('style')
+    style.id = 'wymm-print-style'
+    style.textContent = `
+      @media print {
+        @page { size: A4 portrait; margin: 0; }
+        body * { visibility: hidden !important; }
+        .preview-header,
+        .mobile-template-strip-wrapper,
+        .preview-share-modal,
+        .mobile-share-bar { display: none !important; }
+        .preview-print-target,
+        .preview-print-target * { visibility: visible !important; }
+        .preview-print-target {
+          position: fixed !important;
+          top: 0 !important; left: 0 !important;
+          width: 100vw !important;
+          background: white !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          max-width: none !important;
+        }
+      }
+    `
+    document.head.appendChild(style)
 
-    try {
-      await exportTemplateToPDF(container, filename, (pct) => setPdfProgress(pct))
-    } catch (err) {
-      console.error('[PreviewPage] PDF export failed:', err)
-    } finally {
-      root.unmount()
-      document.body.removeChild(container)
-      hiddenPdfRef.current = null
-      setPdfLoading(false)
-      setPdfProgress(0)
-    }
+    // Mark the template container
+    const target = document.getElementById('preview-template-target')
+    if (target) target.classList.add('preview-print-target')
+
+    // Set document title so the browser suggests the right filename
+    const prev = document.title
+    document.title = `wymm-biodata-${fullName.replace(/\s+/g, '-').toLowerCase()}-${date}`
+
+    window.print()
+
+    // Cleanup after print dialog closes
+    document.title = prev
+    document.getElementById('wymm-print-style')?.remove()
+    target?.classList.remove('preview-print-target')
   }
 
   // Cleanup debounce on unmount
@@ -282,37 +273,23 @@ export default function PreviewPage() {
           <button
             type="button"
             onClick={handleDownload}
-            disabled={pdfLoading}
             className="btn-primary"
-            style={{ padding: '9px 20px', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px', opacity: pdfLoading ? 0.75 : 1, cursor: pdfLoading ? 'default' : 'pointer' }}
+            style={{ padding: '9px 20px', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            {pdfLoading ? (
-              <>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
-                  <circle cx="12" cy="12" r="10" strokeOpacity="0.3" />
-                  <path d="M12 2a10 10 0 0 1 10 10" />
-                </svg>
-                <span className="preview-header-download-full">{pdfProgress > 0 ? `${pdfProgress}%` : 'Generating…'}</span>
-                <span className="preview-header-download-short">…</span>
-              </>
-            ) : (
-              <>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                <span className="preview-header-download-full">Download PDF</span>
-                <span className="preview-header-download-short">PDF</span>
-              </>
-            )}
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span className="preview-header-download-full">Download PDF</span>
+            <span className="preview-header-download-short">PDF</span>
           </button>
         </div>
       </header>
 
       {/* Template content */}
       <main style={{ paddingTop: '65px', background: '#F8F9FB' }} className="preview-content">
-        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '32px 24px' }}>
+        <div id="preview-template-target" style={{ maxWidth: '900px', margin: '0 auto', padding: '32px 24px' }}>
           <TemplateRenderer templateId={biodata.templateId} biodata={biodata} />
         </div>
       </main>
