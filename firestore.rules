@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public biodatas: anyone can read public ones
+    // Write: anyone can create (anonymous support), only owner can update/delete
+    match /biodatas/{slug} {
+      allow read: if resource.data.isPublic == true;
+      allow create: if true; // Anonymous creation allowed
+      allow update, delete: if request.auth != null && (
+        resource.data._createdBy == request.auth.uid
+      );
+    }
+
+    // Analytics: write-only for everyone, read-only for admin
+    match /_analytics/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null &&
+        request.auth.token.email == 'bidi13bhai@gmail.com';
+    }
+  }
+}

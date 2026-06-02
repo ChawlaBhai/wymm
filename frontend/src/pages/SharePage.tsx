@@ -1,0 +1,294 @@
+import { useState, useEffect } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { getBiodata } from '@/lib/biodataService'
+import { exportToPDF } from '@/lib/pdfExport'
+import ShareModal from '@/components/ShareModal'
+import TemplateModernMinimal from '@/components/templates/TemplateModernMinimal'
+import TemplateRefinedElegance from '@/components/templates/TemplateRefinedElegance'
+import TemplateProfessionalPremium from '@/components/templates/TemplateProfessionalPremium'
+import TemplateCulturalGrace from '@/components/templates/TemplateCulturalGrace'
+import TemplateTheModernist from '@/components/templates/TemplateTheModernist'
+import TemplateMountainSoul from '@/components/templates/TemplateMountainSoul'
+import TemplateVintageWarmth from '@/components/templates/TemplateVintageWarmth'
+import TemplateAuroraGlass from '@/components/templates/TemplateAuroraGlass'
+import TemplateOceanBreeze from '@/components/templates/TemplateOceanBreeze'
+import TemplateRoyalMajestic from '@/components/templates/TemplateRoyalMajestic'
+import TemplateBotanicalFresh from '@/components/templates/TemplateBotanicalFresh'
+import TemplateCelestialNight from '@/components/templates/TemplateCelestialNight'
+import TemplateRoseGoldLuxe from '@/components/templates/TemplateRoseGoldLuxe'
+import TemplateZenMinimal from '@/components/templates/TemplateZenMinimal'
+import TemplatePastelDreams from '@/components/templates/TemplatePastelDreams'
+import TemplateHeritageSplendor from '@/components/templates/TemplateHeritageSplendor'
+import type { BiodataRecord } from '@/types/biodata'
+import { Download, Share2 } from 'lucide-react'
+
+const TEMPLATE_CONTAINER_ID = 'biodata-template-container'
+
+/** Render the correct template based on templateId */
+function BiodataTemplate({ biodata }: { biodata: BiodataRecord }) {
+  switch (biodata.templateId) {
+    case 'modern-minimal':
+      return <TemplateModernMinimal biodata={biodata} />
+    case 'refined-elegance':
+      return <TemplateRefinedElegance biodata={biodata} />
+    case 'professional-premium':
+      return <TemplateProfessionalPremium biodata={biodata} />
+    case 'cultural-grace':
+      return <TemplateCulturalGrace biodata={biodata} />
+    case 'the-modernist':
+      return <TemplateTheModernist biodata={biodata} />
+    case 'mountain-soul':
+      return <TemplateMountainSoul biodata={biodata} />
+    case 'vintage-warmth':
+      return <TemplateVintageWarmth biodata={biodata} />
+    case 'aurora-glass':
+      return <TemplateAuroraGlass biodata={biodata} />
+    case 'ocean-breeze':
+      return <TemplateOceanBreeze biodata={biodata} />
+    case 'royal-majestic':
+      return <TemplateRoyalMajestic biodata={biodata} />
+    case 'botanical-fresh':
+      return <TemplateBotanicalFresh biodata={biodata} />
+    case 'celestial-night':
+      return <TemplateCelestialNight biodata={biodata} />
+    case 'rose-gold-luxe':
+      return <TemplateRoseGoldLuxe biodata={biodata} />
+    case 'zen-minimal':
+      return <TemplateZenMinimal biodata={biodata} />
+    case 'pastel-dreams':
+      return <TemplatePastelDreams biodata={biodata} />
+    case 'heritage-splendor':
+      return <TemplateHeritageSplendor biodata={biodata} />
+    default:
+      return <TemplateModernMinimal biodata={biodata} />
+  }
+}
+
+export default function SharePage() {
+  const { slug } = useParams<{ slug: string }>()
+
+  const [biodata, setBiodata] = useState<BiodataRecord | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
+  const [pdfLoading, setPdfLoading] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [pdfError, setPdfError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!slug) {
+      setNotFound(true)
+      setLoading(false)
+      return
+    }
+
+    let cancelled = false
+
+    getBiodata(slug).then((data) => {
+      if (cancelled) return
+      if (!data) {
+        setNotFound(true)
+      } else {
+        setBiodata(data)
+      }
+      setLoading(false)
+    }).catch(() => {
+      if (!cancelled) {
+        setNotFound(true)
+        setLoading(false)
+      }
+    })
+
+    return () => { cancelled = true }
+  }, [slug])
+
+  const handleDownloadPDF = async () => {
+    if (!biodata) return
+    setPdfError(null)
+    try {
+      const name = biodata.basicInfo.fullName
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '') || slug || 'biodata'
+      await exportToPDF(TEMPLATE_CONTAINER_ID, name, setPdfLoading)
+    } catch {
+      setPdfError('Could not generate PDF. Please try again.')
+    }
+  }
+
+  // ── Loading state ─────────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          minHeight: '100vh', background: '#FAFAFA',
+          gap: 16,
+        }}
+      >
+        <div
+          style={{
+            width: 44, height: 44, borderRadius: '50%',
+            border: '3px solid #E5E5E5',
+            borderTopColor: '#7C3AED',
+            animation: 'spin 0.7s linear infinite',
+          }}
+        />
+        <p style={{ fontFamily: "'Sora', sans-serif", color: '#666', fontSize: 14 }}>
+          Loading profile...
+        </p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+      </div>
+    )
+  }
+
+  // ── Not found state ───────────────────────────────────────────────────────
+  if (notFound || !biodata) {
+    return (
+      <div
+        style={{
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          minHeight: '100vh', background: '#FAFAFA',
+          padding: '24px', textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            fontSize: 56, marginBottom: 16,
+            background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            fontFamily: "'Sora', sans-serif",
+            fontWeight: 800,
+          }}
+        >
+          404
+        </div>
+        <h1
+          style={{
+            fontFamily: "'Sora', sans-serif",
+            fontSize: 22, fontWeight: 700,
+            color: '#1A1A1A', marginBottom: 10,
+          }}
+        >
+          This biodata doesn't exist
+        </h1>
+        <p style={{ color: '#888', fontSize: 14, marginBottom: 32, maxWidth: 320 }}>
+          The link you followed may be broken, or this profile may have been removed.
+        </p>
+        <Link to="/create" className="btn-primary" style={{ fontSize: 14, padding: '10px 24px' }}>
+          Create yours →
+        </Link>
+      </div>
+    )
+  }
+
+  // ── Profile found ─────────────────────────────────────────────────────────
+  return (
+    <>
+      {/* Fixed acquisition header */}
+      <header
+        className="glass"
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0,
+          height: 60, zIndex: 100,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 24px',
+        }}
+      >
+        <Link
+          to="/"
+          style={{
+            fontFamily: "'Sora', sans-serif",
+            fontWeight: 700, fontSize: 20,
+            textDecoration: 'none',
+          }}
+        >
+          <span className="text-gradient-purple">wymm 💍</span>
+        </Link>
+        <Link
+          to="/create"
+          className="btn-primary"
+          style={{ fontSize: 13, padding: '8px 20px' }}
+        >
+          Create Mine →
+        </Link>
+      </header>
+
+      {/* Template content */}
+      <main style={{ paddingTop: 60, paddingBottom: 100, background: '#F8F9FB', minHeight: '100vh' }}>
+        <div
+          style={{ maxWidth: 860, margin: '0 auto', padding: '32px 16px 0' }}
+        >
+          <div id={TEMPLATE_CONTAINER_ID} style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.10)' }}>
+            <BiodataTemplate biodata={biodata} />
+          </div>
+        </div>
+      </main>
+
+      {/* Fixed bottom share/download bar */}
+      <div
+        className="glass"
+        style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0,
+          height: 72, zIndex: 100,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 12, padding: '0 24px',
+        }}
+      >
+        {pdfError && (
+          <p style={{ color: '#DC2626', fontSize: 12, position: 'absolute', top: -24, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap' }}>
+            {pdfError}
+          </p>
+        )}
+        <button
+          onClick={handleDownloadPDF}
+          disabled={pdfLoading}
+          className="btn-secondary"
+          style={{ padding: '10px 24px', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}
+          aria-label="Download as PDF"
+        >
+          {pdfLoading ? (
+            <>
+              <span
+                style={{
+                  width: 14, height: 14, borderRadius: '50%',
+                  border: '2px solid #E5E5E5', borderTopColor: '#7C3AED',
+                  display: 'inline-block', animation: 'spin 0.7s linear infinite',
+                }}
+              />
+              Generating...
+            </>
+          ) : (
+            <>
+              <Download size={16} />
+              Download PDF
+            </>
+          )}
+        </button>
+
+        <button
+          onClick={() => setShareOpen(true)}
+          className="btn-primary"
+          style={{ padding: '10px 24px', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}
+          aria-label="Share biodata"
+        >
+          <Share2 size={16} />
+          Share
+        </button>
+      </div>
+
+      {/* Share modal */}
+      {slug && (
+        <ShareModal
+          slug={slug}
+          isOpen={shareOpen}
+          onClose={() => setShareOpen(false)}
+        />
+      )}
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+    </>
+  )
+}
