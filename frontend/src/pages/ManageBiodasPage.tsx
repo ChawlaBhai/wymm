@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { collection, query, where, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { supabase } from '@/lib/supabase'
 import { useAuthStore } from '@/store/authStore'
 import { useBiodataStore } from '@/store/biodataStore'
 import { signOut } from '@/lib/auth'
@@ -334,9 +333,8 @@ export default function ManageBiodasPage() {
     if (!user) return
     setFetchLoading(true)
     try {
-      const q = query(collection(db, 'biodatas'), where('_createdBy', '==', user.uid))
-      const snap = await getDocs(q)
-      const docs = snap.docs.map(d => d.data() as BiodataRecord)
+      const { data } = await supabase.from('biodatas').select('*').eq('_createdBy', user.id)
+      const docs = (data ?? []) as BiodataRecord[]
       // Sort by createdAt desc
       docs.sort((a, b) => {
         const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
@@ -368,7 +366,7 @@ export default function ManageBiodasPage() {
   async function handleDelete(biodata: BiodataRecord) {
     if (!biodata.slug) return
     try {
-      await deleteDoc(doc(db, 'biodatas', biodata.slug))
+      await supabase.from('biodatas').delete().eq('id', biodata.slug)
       setBiodatas(prev => prev.filter(b => b.slug !== biodata.slug))
     } catch (err) {
       console.error('[ManageBiodasPage] delete error:', err)

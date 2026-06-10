@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { collection, addDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { supabase } from '@/lib/supabase'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
@@ -14,7 +13,7 @@ export default function ContactPage() {
     e.preventDefault()
     setStatus('loading')
     try {
-      await addDoc(collection(db, 'contact_submissions'), {
+      await supabase.from('contact_submissions').insert({
         name: form.name,
         email: form.email,
         phone: form.phone,

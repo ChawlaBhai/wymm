@@ -1,47 +1,46 @@
-import { auth } from './firebase'
-import {
-  signInWithEmailLink,
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signOut as firebaseSignOut,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
-  type User,
-} from 'firebase/auth'
+import { supabase } from './supabase'
+import type { User } from '@supabase/supabase-js'
 
-const ACTION_CODE_SETTINGS = {
-  url: window.location.origin + '/login?finish=true',
-  handleCodeInApp: true,
-}
+export type WymmUser = User | null
 
 export async function sendMagicLink(email: string): Promise<void> {
-  await sendSignInLinkToEmail(auth, email, ACTION_CODE_SETTINGS)
-  localStorage.setItem('wymm-signin-email', email)
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.origin + '/login?finish=true' }
+  })
+  if (error) throw error
 }
 
-export async function completeMagicLinkSignIn(): Promise<User | null> {
-  if (!isSignInWithEmailLink(auth, window.location.href)) return null
-  const email = localStorage.getItem('wymm-signin-email') || prompt('Please provide your email') || ''
-  const result = await signInWithEmailLink(auth, email, window.location.href)
-  localStorage.removeItem('wymm-signin-email')
-  return result.user
+export async function signInWithGoogle(): Promise<WymmUser> {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/manage' }
+  })
+  if (error) throw error
+  return null // Google OAuth redirects, so no immediate user returned
 }
 
-export async function signInWithGoogle(): Promise<User | null> {
-  const provider = new GoogleAuthProvider()
-  const result = await signInWithPopup(auth, provider)
-  return result.user
+export async function signInWithEmail(email: string, password: string) {
+  return supabase.auth.signInWithPassword({ email, password })
 }
 
 export async function signOut(): Promise<void> {
-  await firebaseSignOut(auth)
+  await supabase.auth.signOut()
 }
 
-export function onAuthChange(callback: (user: User | null) => void) {
-  return onAuthStateChanged(auth, callback)
+export function onAuthChange(callback: (user: WymmUser) => void) {
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session?.user ?? null)
+  })
+  return () => subscription.unsubscribe()
 }
 
-export function getCurrentUser(): User | null {
-  return auth.currentUser
+export async function getCurrentUser(): Promise<WymmUser> {
+  const { data: { user } } = await supabase.auth.getUser()
+  return user
+}
+
+export async function completeMagicLinkSignIn(): Promise<WymmUser> {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.user ?? null
 }

@@ -1,14 +1,14 @@
 import { create } from 'zustand'
-import type { User } from 'firebase/auth'
+import type { WymmUser } from '@/lib/auth'
 import { onAuthChange } from '@/lib/auth'
 
 interface AuthStore {
-  user: User | null
+  user: WymmUser
   loading: boolean
   initialized: boolean
-  setUser: (user: User | null) => void
+  setUser: (user: WymmUser) => void
   setLoading: (v: boolean) => void
-  initialize: () => () => void // returns unsubscribe
+  initialize: () => () => void
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({

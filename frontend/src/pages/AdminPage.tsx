@@ -1,17 +1,16 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { collection, getDocs, query, orderBy, deleteDoc, doc } from 'firebase/firestore'
-import { auth, db } from '@/lib/firebase'
-import { onAuthChange } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
+import { signInWithEmail, onAuthChange, signOut } from '@/lib/auth'
 import type { BiodataRecord } from '@/types/biodata'
 import { TEMPLATE_META } from '@/types/biodata'
 
 const ADMIN_EMAIL = 'bidi13bhai@gmail.com'
 const PAGE_SIZE = 20
 
-function isFirebaseDemoMode() {
-  return (auth.app.options as { projectId?: string }).projectId === 'demo-project'
+function isDemoMode() {
+  const url = import.meta.env.VITE_SUPABASE_URL || ''
+  return !url || url.includes('placeholder')
 }
 
 function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
@@ -25,16 +24,16 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
     setError('')
 
     // Check for demo Firebase config before attempting auth
-    if (isFirebaseDemoMode()) {
-      setError('Firebase is not yet configured. Please set up your .env file with real Firebase credentials to access the admin panel.')
+    if (isDemoMode()) {
+      setError('Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.')
       return
     }
-
     setLoading(true)
     try {
-      const cred = await signInWithEmailAndPassword(auth, email, password)
-      if (cred.user.email !== ADMIN_EMAIL) {
-        await auth.signOut()
+      const { data, error } = await signInWithEmail(email, password)
+      if (error || !data.user) { setError('Invalid email or password.'); return }
+      if (data.user.email !== ADMIN_EMAIL) {
+        await signOut()
         setError('Access denied.')
         return
       }
@@ -230,11 +229,10 @@ export default function AdminPage() {
   async function fetchAllBiodatas() {
     setDataLoading(true)
     try {
-      const q = query(collection(db, 'biodatas'), orderBy('createdAt', 'desc'))
-      const snap = await getDocs(q)
-      setBiodatas(snap.docs.map(d => d.data() as BiodataRecord))
+      const { data } = await supabase.from('biodatas').select('*').order('createdAt', { ascending: false })
+      setBiodatas((data ?? []) as BiodataRecord[])
     } catch (err) {
-      console.error('[AdminPage] fetchAllBiodatas error:', err)
+      console.error('[AdminPage] fetch error:', err)
     } finally {
       setDataLoading(false)
     }
@@ -242,7 +240,7 @@ export default function AdminPage() {
 
   async function handleDelete(slug: string) {
     try {
-      await deleteDoc(doc(db, 'biodatas', slug))
+      await supabase.from('biodatas').delete().eq('id', slug)
       setBiodatas(prev => prev.filter(b => b.slug !== slug))
     } catch (err) {
       console.error('[AdminPage] delete error:', err)
@@ -302,7 +300,7 @@ export default function AdminPage() {
       }}>
         <span>ADMIN PANEL — CONFIDENTIAL</span>
         <button
-          onClick={async () => { await auth.signOut(); navigate('/') }}
+          onClick={async () => { await signOut(); navigate('/') }}
           style={{
             background: 'none',
             border: '1px solid #333',
