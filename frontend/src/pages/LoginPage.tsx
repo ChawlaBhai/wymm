@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { sendMagicLink, completeMagicLinkSignIn, signInWithGoogle } from '@/lib/auth'
+import { sendMagicLink, signInWithGoogle } from '@/lib/auth'
 import { useAuthStore } from '@/store/authStore'
 
 export default function LoginPage() {
@@ -14,33 +14,19 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
 
-  // If already logged in, redirect to /manage
+  // Supabase handles the magic link token automatically via onAuthStateChange.
+  // The auth store's initialize() fires when the session is established.
+  // We just watch for user becoming non-null and redirect.
   useEffect(() => {
     if (!loading && user) {
       navigate('/manage', { replace: true })
     }
   }, [user, loading, navigate])
 
-  // On mount, auto-complete magic link sign-in if URL contains the link
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    if (params.get('finish') === 'true') {
-      completeMagicLinkSignIn()
-        .then((u) => {
-          if (u) navigate('/manage', { replace: true })
-        })
-        .catch((err) => {
-          setError(friendlyError(err))
-        })
-    }
-  }, [navigate])
-
   function friendlyError(err: unknown): string {
-    const code = (err as { code?: string })?.code ?? ''
-    if (code === 'auth/invalid-email') return 'That email address doesn\'t look right.'
-    if (code === 'auth/popup-closed-by-user') return 'Sign-in popup was closed. Please try again.'
-    if (code === 'auth/popup-blocked') return 'Popup was blocked. Allow popups for this site and try again.'
-    if (code === 'auth/network-request-failed') return 'Network error. Check your connection and try again.'
+    const msg = (err as { message?: string })?.message ?? ''
+    if (msg.includes('Invalid login')) return 'Invalid email or password.'
+    if (msg.includes('Email not confirmed')) return 'Check your email for the magic link.'
     return 'Something went wrong. Please try again.'
   }
 
@@ -64,11 +50,10 @@ export default function LoginPage() {
     setError('')
     setGoogleLoading(true)
     try {
-      const u = await signInWithGoogle()
-      if (u) navigate('/manage', { replace: true })
+      await signInWithGoogle()
+      // Google OAuth redirects to /manage — no need to navigate manually
     } catch (err) {
       setError(friendlyError(err))
-    } finally {
       setGoogleLoading(false)
     }
   }

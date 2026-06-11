@@ -377,7 +377,7 @@ export default function PreviewPage() {
                     background: '#F8F9FB',
                   }}>
                     <span style={{ padding: '11px 0 11px 14px', fontSize: '13px', color: '#AAA', whiteSpace: 'nowrap', fontFamily: 'Inter, monospace' }}>
-                      wymm.vercel.app/
+                      willyoumarry-me.vercel.app/
                     </span>
                     <input
                       type="text"
