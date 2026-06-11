@@ -174,21 +174,32 @@ export default function PreviewPage() {
     style.textContent = `
       @media print {
         @page { size: A4 portrait; margin: 0; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         body * { visibility: hidden !important; }
         .preview-header,
         .mobile-template-strip-wrapper,
         .preview-share-modal,
         .mobile-share-bar { display: none !important; }
-        .preview-print-target,
-        .preview-print-target * { visibility: visible !important; }
-        .preview-print-target {
-          position: fixed !important;
+        #preview-template-target,
+        #preview-template-target * { visibility: visible !important; }
+        #preview-template-target {
+          position: absolute !important;
           top: 0 !important; left: 0 !important;
-          width: 100vw !important;
-          background: white !important;
+          width: 100% !important;
+          max-width: none !important;
           padding: 0 !important;
           margin: 0 !important;
-          max-width: none !important;
+          overflow: visible !important;
+        }
+        #preview-template-target section,
+        #preview-template-target div,
+        #preview-template-target * {
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+        html, body {
+          height: auto !important;
+          overflow: visible !important;
         }
       }
     `

@@ -31,7 +31,8 @@ export async function saveBiodata(biodata: BiodataRecord): Promise<string> {
 
 export async function checkSlugAvailable(slug: string): Promise<boolean> {
   const { count } = await supabase.from('biodatas').select('id', { count: 'exact', head: true }).eq('id', slug)
-  return count === 0
+  // Supabase returns null when no rows found (not 0), so treat null as available
+  return count === null || count === 0
 }
 
 export async function saveBiodataWithSlug(biodata: BiodataRecord, slug: string): Promise<string> {

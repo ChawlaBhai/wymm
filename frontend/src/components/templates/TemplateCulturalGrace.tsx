@@ -95,7 +95,7 @@ export default function TemplateCulturalGrace({ biodata }: Props) {
           </h1>
           <LotusOrnament />
           <p style={{ fontSize: '16px', color: '#92400E', fontWeight: 500, marginTop: '8px' }}>
-            {basicInfo.religion}{basicInfo.caste ? ` · ${basicInfo.caste}` : ''}{basicInfo.gotra ? ` · ${basicInfo.gotra} Gotra` : ''}
+            {basicInfo.religion}{basicInfo.caste ? ` · ${basicInfo.caste}` : ''}{basicInfo.gotra && basicInfo.religion?.toLowerCase() === 'hindu' ? ` · ${basicInfo.gotra} Gotra` : ''}
           </p>
           <p style={{ fontSize: '14px', color: '#B45309', marginTop: '8px' }}>
             {basicInfo.city}{basicInfo.state ? `, ${basicInfo.state}` : ''}{basicInfo.age ? ` · ${basicInfo.age} years` : ''}
@@ -139,7 +139,7 @@ export default function TemplateCulturalGrace({ biodata }: Props) {
             {[
               { icon: ri.symbol, label: 'Religion', value: basicInfo.religion },
               { icon: '🪷', label: 'Caste', value: basicInfo.caste },
-              { icon: '✦', label: 'Gotra', value: basicInfo.gotra },
+              { icon: '✦', label: 'Gotra', value: basicInfo.religion?.toLowerCase() === 'hindu' ? basicInfo.gotra : undefined },
               { icon: '🏠', label: 'Family Type', value: familyInfo.familyType ? familyInfo.familyType.charAt(0).toUpperCase() + familyInfo.familyType.slice(1) : '' },
               { icon: '🌍', label: 'Native Place', value: familyInfo.nativePlace },
               { icon: '💛', label: 'Values', value: familyInfo.familyValues },
