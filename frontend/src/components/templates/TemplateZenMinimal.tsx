@@ -89,7 +89,6 @@ export default function TemplateZenMinimal({ biodata }: { biodata: BiodataRecord
               { label: 'Mother Tongue', value: basicInfo.motherTongue },
               { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
               { label: 'Blood Group', value: basicInfo.bloodGroup },
-              { label: 'Gotra', value: basicInfo.gotra },
             ].filter(x => x.value).map(({ label, value }) => (
               <motion.div key={label} variants={fadeUp}
                 style={{ padding: '24px 16px', borderBottom: '1px solid #E8E8E8' }}

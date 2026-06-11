@@ -159,7 +159,6 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
               { label: 'Mother Tongue', value: basicInfo.motherTongue },
               { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
               { label: 'Blood Group', value: basicInfo.bloodGroup },
-              { label: 'Gotra', value: basicInfo.gotra },
             ].filter(x => x.value).map(({ label, value }) => (
               <motion.div key={label} variants={fadeUp}
                 style={{ background: NAVY2, border: `1px solid ${SILVER}15`, borderRadius: 10, padding: '18px 20px' }}

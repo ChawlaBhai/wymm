@@ -95,7 +95,7 @@ export default function TemplateCulturalGrace({ biodata }: Props) {
           </h1>
           <LotusOrnament />
           <p style={{ fontSize: '16px', color: '#92400E', fontWeight: 500, marginTop: '8px' }}>
-            {basicInfo.religion}{basicInfo.caste ? ` · ${basicInfo.caste}` : ''}{basicInfo.gotra && basicInfo.religion?.toLowerCase() === 'hindu' ? ` · ${basicInfo.gotra} Gotra` : ''}
+            {basicInfo.religion}{basicInfo.caste ? ` · ${basicInfo.caste}` : ''}
           </p>
           <p style={{ fontSize: '14px', color: '#B45309', marginTop: '8px' }}>
             {basicInfo.city}{basicInfo.state ? `, ${basicInfo.state}` : ''}{basicInfo.age ? ` · ${basicInfo.age} years` : ''}

@@ -120,7 +120,6 @@ export default function TemplateRoyalMajestic({ biodata }: { biodata: BiodataRec
               { label: 'Mother Tongue', value: basicInfo.motherTongue },
               { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
               { label: 'Blood Group', value: basicInfo.bloodGroup },
-              { label: 'Gotra', value: basicInfo.gotra },
             ].filter(x => x.value).map(({ label, value }) => (
               <motion.div key={label} variants={fadeUp}
                 style={{ background: CREAM, border: `1px solid ${GOLD}40`, borderRadius: 8, padding: '20px 20px' }}

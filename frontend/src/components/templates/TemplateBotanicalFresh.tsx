@@ -126,7 +126,6 @@ export default function TemplateBotanicalFresh({ biodata }: { biodata: BiodataRe
               { label: 'Mother Tongue', value: basicInfo.motherTongue },
               { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
               { label: 'Blood Group', value: basicInfo.bloodGroup },
-              { label: 'Gotra', value: basicInfo.gotra },
             ].filter(x => x.value).map(({ label, value }) => (
               <motion.div key={label} variants={fadeUp}
                 style={{ background: '#FFFFFF', border: `1.5px solid ${GREEN}25`, borderRadius: 12, padding: '18px 20px' }}

@@ -1,29 +1,26 @@
--- Run this in the Supabase SQL Editor at supabase.com/dashboard
+-- Run this entire block in Supabase SQL Editor
 
-create extension if not exists "uuid-ossp";
-
+-- Biodatas: stores the whole biodata object as a single JSONB column
 create table if not exists biodatas (
   id text primary key,
-  slug text unique not null,
-  data jsonb not null default '{}',
+  biodata jsonb not null default '{}',
   "isPublic" boolean default true,
-  "_createdBy" text references auth.users(id) on delete set null,
+  "_createdBy" uuid references auth.users(id) on delete set null,
   "_email" text,
   "_sessionToken" text,
-  "_createdAt" timestamptz default now(),
-  "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now()
+  "_createdAt" timestamptz default now()
 );
 
 alter table biodatas enable row level security;
 
-create policy "Public profiles readable" on biodatas for select using ("isPublic" = true);
+create policy "Public profiles readable" on biodatas for select using ("isPublic" = true or "_createdBy" = auth.uid());
 create policy "Anyone can insert" on biodatas for insert with check (true);
-create policy "Owner can update" on biodatas for update using (auth.uid()::text = "_createdBy");
-create policy "Owner can delete" on biodatas for delete using (auth.uid()::text = "_createdBy");
+create policy "Owner can update" on biodatas for update using ("_createdBy" = auth.uid() or "_sessionToken" is not null);
+create policy "Owner can delete" on biodatas for delete using ("_createdBy" = auth.uid());
 
+-- Contact form submissions
 create table if not exists contact_submissions (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   name text not null,
   email text not null,
   phone text,
@@ -33,5 +30,5 @@ create table if not exists contact_submissions (
 );
 
 alter table contact_submissions enable row level security;
-create policy "Anyone can submit" on contact_submissions for insert with check (true);
-create policy "Auth users can read" on contact_submissions for select using (auth.role() = 'authenticated');
+create policy "Anyone can submit contact" on contact_submissions for insert with check (true);
+create policy "Auth users read contacts" on contact_submissions for select using (auth.role() = 'authenticated');

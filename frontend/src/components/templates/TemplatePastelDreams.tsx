@@ -149,7 +149,6 @@ export default function TemplatePastelDreams({ biodata }: { biodata: BiodataReco
               { label: 'Mother Tongue', value: basicInfo.motherTongue },
               { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
               { label: 'Blood Group', value: basicInfo.bloodGroup },
-              { label: 'Gotra', value: basicInfo.gotra },
             ].filter(x => x.value).map(({ label, value }) => (
               <motion.div key={label} variants={fadeUp}
                 style={{ background: 'white', border: `1px solid ${LILAC}`, borderRadius: 14, padding: '18px 20px' }}

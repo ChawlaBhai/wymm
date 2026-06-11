@@ -130,7 +130,6 @@ export default function TemplateRoseGoldLuxe({ biodata }: { biodata: BiodataReco
               { label: 'Mother Tongue', value: basicInfo.motherTongue },
               { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
               { label: 'Blood Group', value: basicInfo.bloodGroup },
-              { label: 'Gotra', value: basicInfo.gotra },
             ].filter(x => x.value).map(({ label, value }) => (
               <motion.div key={label} variants={fadeUp}
                 style={{ background: BLUSH, border: `1px solid ${ROSE_GOLD}35`, borderRadius: 12, padding: '18px 20px' }}

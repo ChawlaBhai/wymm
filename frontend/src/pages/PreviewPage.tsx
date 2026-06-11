@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { useBiodataStore } from '@/store/biodataStore'
 import { useAuthStore } from '@/store/authStore'
-import { checkSlugAvailable, saveBiodataWithSlug } from '@/lib/biodataService'
+import { checkSlugAvailable, saveBiodataWithSlug, suggestSlug } from '@/lib/biodataService'
 import TemplateModernMinimal from '@/components/templates/TemplateModernMinimal'
 import TemplateRefinedElegance from '@/components/templates/TemplateRefinedElegance'
 import TemplateProfessionalPremium from '@/components/templates/TemplateProfessionalPremium'
@@ -88,12 +88,16 @@ export default function PreviewPage() {
   // Open share modal — gate on auth
   function handleShareClick() {
     if (!user) {
-      setShareStep('idle')  // will show sign-in prompt
+      setShareStep('idle')
     } else if (publishedSlug || savedSlug) {
       setShareStep('published')
       setPublishedSlug(publishedSlug || savedSlug)
     } else {
       setShareStep('slug-picker')
+      // Pre-fill with AI-suggested slug from name
+      const suggested = suggestSlug(biodata.basicInfo.fullName)
+      setSlug(suggested)
+      checkSlug(suggested)
     }
     setShareOpen(true)
   }
@@ -173,7 +177,7 @@ export default function PreviewPage() {
     style.id = 'wymm-print-style'
     style.textContent = `
       @media print {
-        @page { size: A4 portrait; margin: 0; }
+        @page { size: 390px auto; margin: 0; }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         body * { visibility: hidden !important; }
         .preview-header,
@@ -185,21 +189,18 @@ export default function PreviewPage() {
         #preview-template-target {
           position: absolute !important;
           top: 0 !important; left: 0 !important;
-          width: 100% !important;
-          max-width: none !important;
+          width: 390px !important;
+          max-width: 390px !important;
           padding: 0 !important;
           margin: 0 !important;
           overflow: visible !important;
-        }
-        #preview-template-target section,
-        #preview-template-target div,
-        #preview-template-target * {
-          page-break-inside: avoid;
-          break-inside: avoid;
+          page-break-inside: auto;
+          break-inside: auto;
         }
         html, body {
           height: auto !important;
           overflow: visible !important;
+          width: 390px !important;
         }
       }
     `
