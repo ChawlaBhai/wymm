@@ -1,7 +1,23 @@
-// Run once: node scripts/seed-demos.mjs
-// Requires: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in environment or .env
-import { createClient } from '@supabase/supabase-js'
+// Run from project root: node scripts/seed-demos.mjs
 import { readFileSync } from 'fs'
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// Load .env
+try {
+  const env = readFileSync(join(__dirname, '../frontend/.env'), 'utf8')
+  env.split('\n').forEach(line => {
+    const [k, ...rest] = line.split('=')
+    if (k?.trim()) process.env[k.trim()] = rest.join('=').trim()
+  })
+} catch {}
+
+// Load supabase from frontend node_modules
+const require = createRequire(join(__dirname, '../frontend/package.json'))
+const { createClient } = require('@supabase/supabase-js')
 
 // Load .env manually
 try {
