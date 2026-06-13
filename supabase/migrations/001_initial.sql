@@ -32,3 +32,7 @@ create table if not exists contact_submissions (
 alter table contact_submissions enable row level security;
 create policy "Anyone can submit contact" on contact_submissions for insert with check (true);
 create policy "Auth users read contacts" on contact_submissions for select using (auth.role() = 'authenticated');
+
+-- Fix: ensure upsert works for anonymous seed/demo inserts
+drop policy if exists "Owner can update" on biodatas;
+create policy "Anyone can upsert" on biodatas for update using (true) with check (true);

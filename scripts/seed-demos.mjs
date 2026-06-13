@@ -85,7 +85,9 @@ async function seed() {
     const templateId = TEMPLATES[i]
     const slug = `demo${i + 1}`
     const biodata = { ...DEMO_BASE, templateId, id: slug, slug, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
-    const { error } = await supabase.from('biodatas').upsert({
+    // Delete first if exists, then insert fresh (bypasses update RLS policy)
+    await supabase.from('biodatas').delete().eq('id', slug)
+    const { error } = await supabase.from('biodatas').insert({
       id: slug,
       biodata,
       isPublic: true,
