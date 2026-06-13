@@ -65,7 +65,9 @@ function BiodataTemplate({ biodata }: { biodata: BiodataRecord }) {
 }
 
 export default function SharePage() {
-  const { slug } = useParams<{ slug: string }>()
+  // Support both /pr/:slug and /:slug routes
+  const params = useParams<{ slug: string }>()
+  const slug = params.slug
 
   const [biodata, setBiodata] = useState<BiodataRecord | null>(null)
   const [loading, setLoading] = useState(true)

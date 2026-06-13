@@ -315,7 +315,7 @@ function DeleteDialog({ name, onConfirm, onCancel }: DeleteDialogProps) {
 export default function ManageBiodasPage() {
   const navigate = useNavigate()
   const { user, loading } = useAuthStore()
-  const { resetBiodata, updateBasicInfo, updateFamilyInfo, updateEducation, updateCareer, updatePersonalInterests, updateMatchPreferences, updateMedia, setTemplate } = useBiodataStore()
+  const { resetBiodata, updateBasicInfo, updateFamilyInfo, updateEducation, updateCareer, updatePersonalInterests, updateMatchPreferences, updateMedia, setTemplate, setSavedSlug } = useBiodataStore()
 
   const [biodatas, setBiodatas] = useState<BiodataRecord[]>([])
   const [fetchLoading, setFetchLoading] = useState(false)
@@ -351,8 +351,8 @@ export default function ManageBiodasPage() {
   }
 
   async function handleEdit(biodata: BiodataRecord) {
-    // Load the biodata into the store
     resetBiodata()
+    // Load after reset so savedSlug from this specific profile is set
     if (biodata.templateId) setTemplate(biodata.templateId)
     if (biodata.basicInfo) updateBasicInfo(biodata.basicInfo)
     if (biodata.familyInfo) updateFamilyInfo(biodata.familyInfo)
@@ -361,6 +361,8 @@ export default function ManageBiodasPage() {
     if (biodata.personalInterests) updatePersonalInterests(biodata.personalInterests)
     if (biodata.matchPreferences) updateMatchPreferences(biodata.matchPreferences)
     if (biodata.media) updateMedia(biodata.media)
+    // Set the saved slug so PreviewPage knows this profile is already published
+    if (biodata.slug) setSavedSlug(biodata.slug)
     navigate('/create')
   }
 

@@ -80,9 +80,9 @@ export default function PreviewPage() {
   const [copied, setCopied] = useState(false)
 
   const publishedUrl = publishedSlug
-    ? `${window.location.origin}/${publishedSlug}`
+    ? `${window.location.origin}/pr/${publishedSlug}`
     : savedSlug
-      ? `${window.location.origin}/${savedSlug}`
+      ? `${window.location.origin}/pr/${savedSlug}`
       : null
 
   // Open share modal — gate on auth
@@ -388,7 +388,7 @@ export default function PreviewPage() {
                     background: '#F8F9FB',
                   }}>
                     <span style={{ padding: '11px 0 11px 14px', fontSize: '13px', color: '#AAA', whiteSpace: 'nowrap', fontFamily: 'Inter, monospace' }}>
-                      willyoumarry-me.vercel.app/
+                      willyoumarry-me.vercel.app/pr/
                     </span>
                     <input
                       type="text"

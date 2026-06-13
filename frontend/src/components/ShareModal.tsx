@@ -12,7 +12,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
   const [copied, setCopied] = useState(false)
   const backdropRef = useRef<HTMLDivElement>(null)
 
-  const url = `https://willyoumarry-me.vercel.app/${slug}`
+  const url = `https://willyoumarry-me.vercel.app/pr/${slug}`
 
   // Close on Escape key
   useEffect(() => {

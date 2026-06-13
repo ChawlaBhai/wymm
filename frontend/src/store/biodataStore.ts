@@ -125,7 +125,6 @@ export const useBiodataStore = create<BiodataStore>()(
       setSaving: (v) => set({ isSaving: v }),
       setSavedSlug: (slug) => set({ savedSlug: slug }),
       resetBiodata: () => {
-        // Clear persisted localStorage so hydration doesn't overwrite the reset
         try { localStorage.removeItem('wymm-biodata-draft') } catch (_) {}
         set({ biodata: defaultBiodata, currentStep: 1, savedSlug: null })
       },

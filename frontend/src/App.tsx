@@ -46,6 +46,7 @@ export default function App() {
           <Route path="/privacy"   element={<><Navbar /><PrivacyPage /></>} />
           <Route path="/terms"     element={<><Navbar /><TermsPage /></>} />
           <Route path="/contact"   element={<><Navbar /><ContactPage /></>} />
+          <Route path="/pr/:slug"   element={<SharePage />} />
           <Route path="/:slug"     element={<SharePage />} />
         </Routes>
       </Suspense>
