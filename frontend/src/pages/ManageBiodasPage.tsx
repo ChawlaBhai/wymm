@@ -333,9 +333,10 @@ export default function ManageBiodasPage() {
     if (!user) return
     setFetchLoading(true)
     try {
-      const { data } = await supabase.from('biodatas').select('*').eq('_createdBy', user.id)
-      const docs = (data ?? []) as BiodataRecord[]
-      // Sort by createdAt desc
+      const { data } = await supabase.from('biodatas').select('biodata, _createdAt').eq('_createdBy', user.id)
+      const docs = ((data ?? []) as { biodata: BiodataRecord; _createdAt: string }[])
+        .map(row => row.biodata)
+        .filter(Boolean)
       docs.sort((a, b) => {
         const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
         const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0

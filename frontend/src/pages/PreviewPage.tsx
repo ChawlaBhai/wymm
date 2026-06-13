@@ -177,30 +177,29 @@ export default function PreviewPage() {
     style.id = 'wymm-print-style'
     style.textContent = `
       @media print {
-        @page { size: 390px auto; margin: 0; }
+        @page { size: auto; margin: 0; }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        html, body {
+          height: auto !important;
+          overflow: visible !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
         body * { visibility: hidden !important; }
         .preview-header,
         .mobile-template-strip-wrapper,
         .preview-share-modal,
         .mobile-share-bar { display: none !important; }
         #preview-template-target,
-        #preview-template-target * { visibility: visible !important; }
+        #preview-template-target * { visibility: visible !important; page-break-inside: auto !important; break-inside: auto !important; }
         #preview-template-target {
-          position: absolute !important;
-          top: 0 !important; left: 0 !important;
-          width: 390px !important;
-          max-width: 390px !important;
+          position: static !important;
+          width: 100% !important;
+          max-width: none !important;
           padding: 0 !important;
           margin: 0 !important;
           overflow: visible !important;
-          page-break-inside: auto;
-          break-inside: auto;
-        }
-        html, body {
           height: auto !important;
-          overflow: visible !important;
-          width: 390px !important;
         }
       }
     `
