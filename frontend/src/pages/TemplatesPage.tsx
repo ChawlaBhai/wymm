@@ -47,6 +47,9 @@ const TEMPLATE_DEMO_SLUGS: Partial<Record<TemplateId, string>> = {
   'heritage-splendor': 'demo16',
 }
 
+const DARK_TEMPLATES: TemplateId[] = ['the-modernist', 'celestial-night']
+const TEMPLATE_IDS = Object.keys(TEMPLATE_META) as TemplateId[]
+
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
