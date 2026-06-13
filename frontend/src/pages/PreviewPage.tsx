@@ -532,6 +532,20 @@ export default function PreviewPage() {
                   </svg>
                   Share on WhatsApp
                 </button>
+
+                {/* Change URL option */}
+                <button
+                  type="button"
+                  onClick={() => { setShareStep('slug-picker'); setSlug(''); setSlugStatus('idle') }}
+                  style={{
+                    width: '100%', marginTop: '12px', padding: '10px', borderRadius: '10px',
+                    border: '1px solid #E5E5E5', background: 'transparent',
+                    color: '#AAA', fontFamily: 'Inter, sans-serif', fontSize: '13px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Change profile URL
+                </button>
               </div>
             )}
           </div>

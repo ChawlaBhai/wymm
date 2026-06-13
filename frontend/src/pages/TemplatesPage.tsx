@@ -38,8 +38,14 @@ const FILTER_MAP: Record<string, string[]> = {
   Soft: ['Soft'],
 }
 
-const DARK_TEMPLATES: TemplateId[] = ['the-modernist', 'celestial-night']
-const TEMPLATE_IDS = Object.keys(TEMPLATE_META) as TemplateId[]
+const TEMPLATE_DEMO_SLUGS: Partial<Record<TemplateId, string>> = {
+  'modern-minimal': 'demo1', 'refined-elegance': 'demo2', 'professional-premium': 'demo3',
+  'cultural-grace': 'demo4', 'the-modernist': 'demo5', 'mountain-soul': 'demo6',
+  'vintage-warmth': 'demo7', 'aurora-glass': 'demo8', 'ocean-breeze': 'demo9',
+  'royal-majestic': 'demo10', 'botanical-fresh': 'demo11', 'celestial-night': 'demo12',
+  'rose-gold-luxe': 'demo13', 'zen-minimal': 'demo14', 'pastel-dreams': 'demo15',
+  'heritage-splendor': 'demo16',
+}
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -137,10 +143,14 @@ export default function TemplatesPage() {
   }
 
   function previewTemplate(id: TemplateId) {
-    sessionStorage.setItem('selected-template-id', id)
-    sessionStorage.setItem('selectedTemplate', id)
-    sessionStorage.setItem('demo-mode', 'true')
-    navigate('/create')
+    const demoSlug = TEMPLATE_DEMO_SLUGS[id]
+    if (demoSlug) {
+      window.open(`/pr/${demoSlug}`, '_blank')
+    } else {
+      sessionStorage.setItem('selected-template-id', id)
+      sessionStorage.setItem('demo-mode', 'true')
+      navigate('/create')
+    }
   }
 
   return (

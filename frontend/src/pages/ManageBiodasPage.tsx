@@ -516,16 +516,16 @@ export default function ManageBiodasPage() {
             >
               {signingOut ? 'Signing out…' : 'Sign out'}
             </button>
-            <Link
-              to="/create"
+            <button
+              onClick={() => { resetBiodata(); navigate('/create') }}
               className="btn-primary"
-              style={{ padding: '9px 20px', fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              style={{ padding: '9px 20px', fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 6, cursor: 'pointer', border: 'none' }}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               Create New
-            </Link>
+            </button>
           </div>
         </div>
 
