@@ -16,6 +16,7 @@ const defaultBiodata: BiodataRecord = {
     state: '',
     country: 'India',
     aboutMe: '',
+    socialLinks: {},
   },
   familyInfo: {
     fatherName: '',
@@ -58,6 +59,7 @@ const defaultBiodata: BiodataRecord = {
     profilePhoto: undefined,
     galleryPhotos: [],
     resume: undefined,
+    documents: [],
   },
   isPublic: true,
 }

@@ -32,8 +32,12 @@ export async function checkSlugAvailable(slug: string): Promise<boolean> {
   return count === null || count === 0
 }
 
-export async function saveBiodataWithSlug(biodata: BiodataRecord, slug: string): Promise<string> {
+export async function saveBiodataWithSlug(biodata: BiodataRecord, slug: string, oldSlug?: string): Promise<string> {
   const { data: { user } } = await supabase.auth.getUser()
+  // If renaming (oldSlug differs), delete the old record first
+  if (oldSlug && oldSlug !== slug) {
+    await supabase.from('biodatas').delete().eq('id', oldSlug)
+  }
   const { error } = await supabase.from('biodatas').upsert(buildRow(biodata, slug, user?.id, user?.email ?? undefined))
   if (error) throw error
   return slug

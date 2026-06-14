@@ -17,6 +17,13 @@ export interface BasicInfo {
   state: string
   country: string
   aboutMe?: string
+  socialLinks?: {
+    instagram?: string
+    linkedin?: string
+    facebook?: string
+    twitter?: string
+    website?: string
+  }
   _email?: string          // CRM: collected at account/email prompt
   _phone?: string          // CRM: optional phone
   _createdBy?: string      // Firebase Auth UID if logged in
@@ -93,6 +100,11 @@ export interface MediaInfo {
   profilePhoto?: string // URL or base64
   galleryPhotos: string[] // URLs or base64, max 5
   resume?: string // URL
+  documents?: {
+    name: string      // e.g. "Kundli", "Horoscope", "Birth Certificate"
+    url: string       // base64 or URL
+    type: 'pdf' | 'image'
+  }[]
 }
 
 export type TemplateId = 'modern-minimal' | 'refined-elegance' | 'professional-premium' | 'cultural-grace' | 'the-modernist' | 'mountain-soul' | 'vintage-warmth' | 'aurora-glass' | 'ocean-breeze' | 'royal-majestic' | 'botanical-fresh' | 'celestial-night' | 'rose-gold-luxe' | 'zen-minimal' | 'pastel-dreams' | 'heritage-splendor'

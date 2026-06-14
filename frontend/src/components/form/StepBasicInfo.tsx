@@ -160,6 +160,38 @@ export default function StepBasicInfo() {
           </span>
         </div>
       </Field>
+
+      {/* Social Links */}
+      <div style={{ paddingTop: '8px' }}>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '15px', fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }}>
+          Social Links <span style={{ fontWeight: 400, color: '#AAA', fontSize: '13px' }}>(optional)</span>
+        </p>
+        <p style={{ fontSize: '13px', color: '#888', marginBottom: '16px', lineHeight: 1.5 }}>
+          Add your social profiles — they'll appear on your biodata.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {([
+            { key: 'instagram', icon: '📸', label: 'Instagram', placeholder: 'instagram.com/username' },
+            { key: 'linkedin',  icon: '🔗', label: 'LinkedIn',  placeholder: 'linkedin.com/in/username' },
+            { key: 'facebook',  icon: '👥', label: 'Facebook',  placeholder: 'facebook.com/username' },
+            { key: 'twitter',   icon: '🐦', label: 'Twitter / X', placeholder: 'x.com/username' },
+            { key: 'website',   icon: '🌐', label: 'Personal Website', placeholder: 'yourwebsite.com' },
+          ] as { key: keyof NonNullable<typeof basicInfo.socialLinks>; icon: string; label: string; placeholder: string }[]).map(({ key, icon, label, placeholder }) => (
+            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '18px', flexShrink: 0, width: '24px', textAlign: 'center' }}>{icon}</span>
+              <div style={{ flex: 1 }}>
+                <label className="form-label" style={{ fontSize: '12px', marginBottom: '4px', display: 'block' }}>{label}</label>
+                <input
+                  className="form-input"
+                  placeholder={placeholder}
+                  value={basicInfo.socialLinks?.[key] ?? ''}
+                  onChange={e => updateBasicInfo({ socialLinks: { ...basicInfo.socialLinks, [key]: e.target.value } })}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

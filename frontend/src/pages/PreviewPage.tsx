@@ -4,6 +4,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { useBiodataStore } from '@/store/biodataStore'
 import { useAuthStore } from '@/store/authStore'
 import { checkSlugAvailable, saveBiodataWithSlug, suggestSlug } from '@/lib/biodataService'
+import ShareCard from '@/components/ShareCard'
 import TemplateModernMinimal from '@/components/templates/TemplateModernMinimal'
 import TemplateRefinedElegance from '@/components/templates/TemplateRefinedElegance'
 import TemplateProfessionalPremium from '@/components/templates/TemplateProfessionalPremium'
@@ -82,6 +83,9 @@ export default function PreviewPage() {
   // Copy state (for published link)
   const [copied, setCopied] = useState(false)
 
+  // Share card overlay
+  const [showShareCard, setShowShareCard] = useState(false)
+
   const publishedUrl = publishedSlug
     ? `${window.location.origin}/pr/${publishedSlug}`
     : savedSlug
@@ -154,7 +158,8 @@ export default function PreviewPage() {
     setIsPublishing(true)
     setPublishError(null)
     try {
-      const finalSlug = await saveBiodataWithSlug(biodata, slug)
+      const oldSlug = publishedSlug || savedSlug
+      const finalSlug = await saveBiodataWithSlug(biodata, slug, oldSlug ?? undefined)
       setSavedSlug(finalSlug)
       setPublishedSlug(finalSlug)
       setShareStep('published')
@@ -216,11 +221,24 @@ export default function PreviewPage() {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: null,
+        backgroundColor: '#ffffff',
         scrollX: 0,
-        scrollY: -window.scrollY,
+        scrollY: 0,
         windowWidth: target.scrollWidth,
         windowHeight: target.scrollHeight,
+        onclone: (doc) => {
+          // Fix hero sections: remove minHeight:100vh so hero is content-height only
+          doc.querySelectorAll('section, div').forEach((el) => {
+            const s = (el as HTMLElement).style
+            if (s.minHeight && s.minHeight.includes('100vh')) {
+              s.minHeight = 'auto'
+            }
+            // Fix object-fit:cover images inside circles — ensure no overflow
+            if (s.borderRadius === '50%' || s.borderRadius?.includes('50%')) {
+              s.overflow = 'hidden'
+            }
+          })
+        },
       })
 
       // Restore wrapper
@@ -547,10 +565,10 @@ export default function PreviewPage() {
                   </div>
                 </div>
 
-                {/* WhatsApp */}
+                {/* WhatsApp — with share card */}
                 <button
                   type="button"
-                  onClick={handleWhatsApp}
+                  onClick={() => { setShowShareCard(true); handleCloseShare() }}
                   style={{
                     width: '100%', padding: '13px', borderRadius: '12px',
                     border: 'none', background: '#25D366',
@@ -566,7 +584,25 @@ export default function PreviewPage() {
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                     <path d="M12 0C5.373 0 0 5.373 0 12c0 2.128.558 4.127 1.534 5.864L.057 23.8a.5.5 0 0 0 .613.614l5.96-1.457A11.932 11.932 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.886 0-3.653-.52-5.164-1.424l-.363-.213-3.742.914.944-3.715-.232-.378A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
                   </svg>
-                  Share on WhatsApp
+                  Share on WhatsApp (with card)
+                </button>
+
+                {/* WhatsApp — text-only share */}
+                <button
+                  type="button"
+                  onClick={handleWhatsApp}
+                  style={{
+                    width: '100%', padding: '11px', borderRadius: '12px',
+                    border: '1.5px solid #25D366', background: 'transparent',
+                    color: '#25D366', fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                    transition: 'all 200ms ease',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(37,211,102,0.06)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+                >
+                  Text-only share
                 </button>
 
                 {/* Change URL option */}
@@ -644,6 +680,15 @@ export default function PreviewPage() {
         }
         .preview-header-download-short { display: none; }
       `}</style>
+
+      {/* Share Card overlay */}
+      {showShareCard && publishedUrl && (
+        <ShareCard
+          biodata={biodata}
+          profileUrl={publishedUrl}
+          onClose={() => setShowShareCard(false)}
+        />
+      )}
 
       {/* Mobile share button (fixed above template strip, visible only < 480px) */}
       <button
