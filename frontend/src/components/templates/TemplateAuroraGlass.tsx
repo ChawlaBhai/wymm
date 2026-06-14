@@ -281,6 +281,31 @@ export default function TemplateAuroraGlass({ biodata }: { biodata: BiodataRecor
         </section>
       )}
 
+      {/* SOCIAL LINKS */}
+      {basicInfo.socialLinks && Object.values(basicInfo.socialLinks).some(Boolean) && (
+        <section style={{ position: 'relative', zIndex: 1, padding: '40px 6vw', borderTop: '1px solid rgba(124,58,237,0.1)' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: '#bbb', marginBottom: '16px' }}>Connect</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: '10px', justifyContent: 'center' }}>
+              {([
+                { key: 'instagram', icon: '📸', label: 'Instagram' },
+                { key: 'linkedin',  icon: '🔗', label: 'LinkedIn' },
+                { key: 'facebook',  icon: '👥', label: 'Facebook' },
+                { key: 'twitter',   icon: '🐦', label: 'Twitter / X' },
+                { key: 'website',   icon: '🌐', label: 'Website' },
+              ] as { key: keyof NonNullable<typeof basicInfo.socialLinks>; icon: string; label: string }[])
+                .filter(({ key }) => basicInfo.socialLinks?.[key])
+                .map(({ key, icon, label }) => (
+                  <a key={key} href={`https://${basicInfo.socialLinks![key]!.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 18px', border: `1px solid rgba(124,58,237,0.3)`, borderRadius: '999px', fontSize: '13px', fontWeight: 500, color: `${purple}`, textDecoration: 'none', background: 'rgba(124,58,237,0.06)', backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}>
+                    <span>{icon}</span> {label}
+                  </a>
+                ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* FOOTER */}
       <footer style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(124,58,237,0.1)', padding: '48px 6vw' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: `linear-gradient(90deg,transparent,${purple},${pink},${cyan},transparent)` }} />
@@ -294,6 +319,35 @@ export default function TemplateAuroraGlass({ biodata }: { biodata: BiodataRecor
           <p style={{ fontSize: '11px', color: '#bbb', letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>made with wymm</p>
         </div>
       </footer>
+
+      {/* DOCUMENTS */}
+      {media.documents && media.documents.length > 0 && (
+        <section style={{ position: 'relative', zIndex: 1, padding: '60px 6vw', background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(12px)' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+            <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: '#bbb', marginBottom: '20px', textAlign: 'center' }}>Other Documents</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '14px' }}>
+              {media.documents.map((doc, i) => (
+                <div key={i} style={{ padding: '18px 20px', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '16px', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column' as const, gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '24px' }}>{doc.type === 'pdf' ? '📄' : '🖼️'}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#1A1A1A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{doc.name}</p>
+                      <span style={{ fontSize: '10px', fontWeight: 700, color: doc.type === 'pdf' ? '#DC2626' : purple, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>{doc.type}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { if (doc.type === 'image') setLightbox(doc.url); else window.open(doc.url, '_blank') }}
+                    style={{ padding: '6px 0', background: `linear-gradient(135deg,${purple},${pink})`, border: 'none', borderRadius: '8px', color: 'white', fontSize: '12px', fontWeight: 600, cursor: 'pointer', width: '100%' }}
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* LIGHTBOX */}
       {lightbox && (

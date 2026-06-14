@@ -329,6 +329,31 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
         </div>
       </section>
 
+      {/* SOCIAL LINKS */}
+      {basicInfo.socialLinks && Object.values(basicInfo.socialLinks).some(Boolean) && (
+        <section style={{ padding: '40px 6vw', background: NAVY, borderTop: `1px solid ${SILVER}20` }}>
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: SILVER_DIM, marginBottom: 16 }}>Connect</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10 }}>
+              {([
+                { key: 'instagram', icon: '📸', label: 'Instagram' },
+                { key: 'linkedin',  icon: '🔗', label: 'LinkedIn' },
+                { key: 'facebook',  icon: '👥', label: 'Facebook' },
+                { key: 'twitter',   icon: '🐦', label: 'Twitter / X' },
+                { key: 'website',   icon: '🌐', label: 'Website' },
+              ] as { key: keyof NonNullable<typeof basicInfo.socialLinks>; icon: string; label: string }[])
+                .filter(({ key }) => basicInfo.socialLinks?.[key])
+                .map(({ key, icon, label }) => (
+                  <a key={key} href={`https://${basicInfo.socialLinks![key]!.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 16px', border: `1px solid ${SILVER}40`, borderRadius: 999, fontSize: 13, fontWeight: 500, color: SILVER, textDecoration: 'none', background: NAVY2, transition: 'all 0.2s' }}>
+                    <span>{icon}</span> {label}
+                  </a>
+                ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* FOOTER */}
       <footer style={{ background: NAVY, padding: '40px 6vw', borderTop: `1px solid ${SILVER}15` }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
@@ -345,6 +370,35 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
           <p style={{ fontSize: 11, color: SILVER_DIM, letterSpacing: '0.12em', fontWeight: 600 }}>CREATED WITH WYMM</p>
         </div>
       </footer>
+
+      {/* DOCUMENTS */}
+      {media.documents && media.documents.length > 0 && (
+        <section style={{ padding: '60px 6vw', background: NAVY2 }}>
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: SILVER_DIM, marginBottom: 20 }}>Other Documents</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
+              {media.documents.map((doc, i) => (
+                <div key={i} style={{ padding: '18px 20px', border: `1px solid ${SILVER}20`, borderRadius: 12, background: NAVY, display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 24 }}>{doc.type === 'pdf' ? '📄' : '🖼️'}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: SILVER, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{doc.name}</p>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: doc.type === 'pdf' ? '#F87171' : '#93C5FD', textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>{doc.type}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { if (doc.type === 'image') setLightbox(doc.url); else window.open(doc.url, '_blank') }}
+                    style={{ padding: '6px 0', background: `linear-gradient(135deg, #6B7FD7, #9B8BD8)`, border: 'none', borderRadius: 6, color: 'white', fontSize: 12, fontWeight: 600, cursor: 'pointer', width: '100%' }}
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {lightbox && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setLightbox(null)}

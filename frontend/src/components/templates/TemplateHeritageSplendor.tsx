@@ -341,6 +341,31 @@ export default function TemplateHeritageSplendor({ biodata }: { biodata: Biodata
         </div>
       </section>
 
+      {/* SOCIAL LINKS */}
+      {basicInfo.socialLinks && Object.values(basicInfo.socialLinks).some(Boolean) && (
+        <section style={{ background: IVORY, padding: '40px 6vw', borderTop: `1px solid ${SAFFRON}30` }}>
+          <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: `${SAFFRON}80`, marginBottom: 16 }}>Connect</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10, justifyContent: 'center' }}>
+              {([
+                { key: 'instagram', icon: '📸', label: 'Instagram' },
+                { key: 'linkedin',  icon: '🔗', label: 'LinkedIn' },
+                { key: 'facebook',  icon: '👥', label: 'Facebook' },
+                { key: 'twitter',   icon: '🐦', label: 'Twitter / X' },
+                { key: 'website',   icon: '🌐', label: 'Website' },
+              ] as { key: keyof NonNullable<typeof basicInfo.socialLinks>; icon: string; label: string }[])
+                .filter(({ key }) => basicInfo.socialLinks?.[key])
+                .map(({ key, icon, label }) => (
+                  <a key={key} href={`https://${basicInfo.socialLinks![key]!.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 18px', border: `1.5px solid ${SAFFRON}`, borderRadius: 4, fontSize: 13, fontWeight: 600, color: RED, textDecoration: 'none', background: `${SAFFRON}15`, transition: 'all 0.2s' }}>
+                    <span>{icon}</span> {label}
+                  </a>
+                ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* FOOTER */}
       <footer style={{ background: RED, padding: '48px 6vw' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -360,6 +385,35 @@ export default function TemplateHeritageSplendor({ biodata }: { biodata: Biodata
           </div>
         </div>
       </footer>
+
+      {/* DOCUMENTS */}
+      {media.documents && media.documents.length > 0 && (
+        <section style={{ background: IVORY, padding: '60px 6vw' }}>
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: `${SAFFRON}80`, marginBottom: 20, textAlign: 'center' }}>Other Documents</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
+              {media.documents.map((doc, i) => (
+                <div key={i} style={{ padding: '18px 20px', border: `1.5px solid ${SAFFRON}40`, borderRadius: 8, background: 'white', display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 24 }}>{doc.type === 'pdf' ? '📄' : '🖼️'}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: RED, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{doc.name}</p>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: doc.type === 'pdf' ? '#DC2626' : SAFFRON, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>{doc.type}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { if (doc.type === 'image') setLightbox(doc.url); else window.open(doc.url, '_blank') }}
+                    style={{ padding: '6px 0', background: RED, border: 'none', borderRadius: 4, color: SAFFRON, fontSize: 12, fontWeight: 600, cursor: 'pointer', width: '100%' }}
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {lightbox && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setLightbox(null)}

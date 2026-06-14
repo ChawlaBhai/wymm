@@ -289,6 +289,31 @@ export default function TemplateTheModernist({ biodata }: { biodata: BiodataReco
         </div>
       </section>
 
+      {/* SOCIAL LINKS */}
+      {basicInfo.socialLinks && Object.values(basicInfo.socialLinks).some(Boolean) && (
+        <section style={{ padding: '40px 6vw', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: '#333', marginBottom: '16px' }}>Connect</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: '10px' }}>
+              {([
+                { key: 'instagram', icon: '📸', label: 'Instagram' },
+                { key: 'linkedin',  icon: '🔗', label: 'LinkedIn' },
+                { key: 'facebook',  icon: '👥', label: 'Facebook' },
+                { key: 'twitter',   icon: '🐦', label: 'Twitter / X' },
+                { key: 'website',   icon: '🌐', label: 'Website' },
+              ] as { key: keyof NonNullable<typeof basicInfo.socialLinks>; icon: string; label: string }[])
+                .filter(({ key }) => basicInfo.socialLinks?.[key])
+                .map(({ key, icon, label }) => (
+                  <a key={key} href={`https://${basicInfo.socialLinks![key]!.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 16px', border: `1px solid ${accent}`, borderRadius: '4px', fontSize: '13px', fontWeight: 600, color: accent, textDecoration: 'none', background: 'transparent', transition: 'all 0.2s' }}>
+                    <span>{icon}</span> {label}
+                  </a>
+                ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* FOOTER */}
       <footer style={{ padding: '48px 6vw', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
@@ -297,6 +322,35 @@ export default function TemplateTheModernist({ biodata }: { biodata: BiodataReco
         </div>
         <p style={{ fontSize: '10px', color: '#222', letterSpacing: '0.2em', textTransform: 'uppercase' }}>WYMM</p>
       </footer>
+
+      {/* DOCUMENTS */}
+      {media.documents && media.documents.length > 0 && (
+        <section style={{ padding: '60px 6vw', background: 'rgba(255,255,255,0.03)' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: '#333', marginBottom: '20px' }}>Other Documents</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '14px' }}>
+              {media.documents.map((doc, i) => (
+                <div key={i} style={{ padding: '18px 20px', border: `1px solid ${accent}30`, borderRadius: '8px', background: 'rgba(255,255,255,0.04)', display: 'flex', flexDirection: 'column' as const, gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '24px' }}>{doc.type === 'pdf' ? '📄' : '🖼️'}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#fff', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{doc.name}</p>
+                      <span style={{ fontSize: '10px', fontWeight: 700, color: doc.type === 'pdf' ? '#F87171' : accent, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>{doc.type}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { if (doc.type === 'image') setLightbox(doc.url); else window.open(doc.url, '_blank') }}
+                    style={{ padding: '6px 0', background: accent, border: 'none', borderRadius: '4px', color: 'white', fontSize: '12px', fontWeight: 700, cursor: 'pointer', width: '100%', letterSpacing: '0.06em' }}
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {lightbox && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setLightbox(null)}
