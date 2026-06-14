@@ -76,6 +76,9 @@ export default function PreviewPage() {
   const [publishError, setPublishError] = useState<string | null>(null)
   const slugCheckTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // PDF loading state
+  const [pdfLoading, setPdfLoading] = useState(false)
+
   // Copy state (for published link)
   const [copied, setCopied] = useState(false)
 
@@ -89,15 +92,25 @@ export default function PreviewPage() {
   function handleShareClick() {
     if (!user) {
       setShareStep('idle')
-    } else if (publishedSlug || savedSlug) {
-      setShareStep('published')
-      setPublishedSlug(publishedSlug || savedSlug)
     } else {
-      setShareStep('slug-picker')
-      // Pre-fill with AI-suggested slug from name
-      const suggested = suggestSlug(biodata.basicInfo.fullName)
-      setSlug(suggested)
-      checkSlug(suggested)
+      // savedSlug persists across sessions via Zustand persist; only treat it
+      // as "published" when it actually matches the current biodata.
+      const currentId = biodata.slug || biodata.id
+      const isCurrentProfilePublished =
+        publishedSlug != null ||
+        (savedSlug != null && currentId != null && savedSlug === currentId)
+
+      if (isCurrentProfilePublished) {
+        const slug = publishedSlug || savedSlug!
+        setShareStep('published')
+        setPublishedSlug(slug)
+      } else {
+        setShareStep('slug-picker')
+        // Pre-fill with AI-suggested slug from name
+        const suggested = suggestSlug(biodata.basicInfo.fullName)
+        setSlug(suggested)
+        checkSlug(suggested)
+      }
     }
     setShareOpen(true)
   }
@@ -163,62 +176,78 @@ export default function PreviewPage() {
 
   function handleWhatsApp() {
     if (!publishedUrl) return
-    const text = encodeURIComponent(`View my marriage biodata: ${publishedUrl}`)
+    const name = biodata.basicInfo.fullName
+    const role = biodata.career?.currentDesignation
+    const city = biodata.basicInfo.city
+    const details = [role, city].filter(Boolean).join(', ')
+    const text = encodeURIComponent(
+      `${name}'s marriage biodata\n${details ? details + '\n' : ''}View full profile: ${publishedUrl}`
+    )
     window.open(`https://wa.me/?text=${text}`, '_blank')
   }
 
-  // PDF download — inject print styles, trigger browser print dialog (Save as PDF)
-  function handleDownload() {
-    const fullName = biodata.basicInfo.fullName || 'biodata'
-    const date = new Date().toISOString().slice(0, 10)
-
-    // Inject a print stylesheet that hides everything except the template
-    const style = document.createElement('style')
-    style.id = 'wymm-print-style'
-    style.textContent = `
-      @media print {
-        @page { size: auto; margin: 0; }
-        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        html, body {
-          height: auto !important;
-          overflow: visible !important;
-          margin: 0 !important;
-          padding: 0 !important;
-        }
-        body * { visibility: hidden !important; }
-        .preview-header,
-        .mobile-template-strip-wrapper,
-        .preview-share-modal,
-        .mobile-share-bar { display: none !important; }
-        #preview-template-target,
-        #preview-template-target * { visibility: visible !important; page-break-inside: auto !important; break-inside: auto !important; }
-        #preview-template-target {
-          position: static !important;
-          width: 100% !important;
-          max-width: none !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          overflow: visible !important;
-          height: auto !important;
-        }
-      }
-    `
-    document.head.appendChild(style)
-
-    // Mark the template container
+  // PDF download — html2canvas capture → jsPDF single-page export
+  async function handleDownload() {
     const target = document.getElementById('preview-template-target')
-    if (target) target.classList.add('preview-print-target')
+    if (!target) return
 
-    // Set document title so the browser suggests the right filename
-    const prev = document.title
-    document.title = `wymm-biodata-${fullName.replace(/\s+/g, '-').toLowerCase()}-${date}`
+    const fullName = biodata.basicInfo.fullName || 'biodata'
+    const filename = `wymm-${fullName.replace(/\s+/g, '-').toLowerCase()}.pdf`
 
-    window.print()
+    setPdfLoading(true)
 
-    // Cleanup after print dialog closes
-    document.title = prev
-    document.getElementById('wymm-print-style')?.remove()
-    target?.classList.remove('preview-print-target')
+    try {
+      // Dynamic import to keep bundle size manageable
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ])
+
+      // Temporarily remove the max-width constraint for full-width capture
+      const wrapper = target.parentElement
+      const originalMaxWidth = wrapper?.style.maxWidth || ''
+      const originalPadding = wrapper?.style.padding || ''
+      if (wrapper) {
+        wrapper.style.maxWidth = 'none'
+        wrapper.style.padding = '0'
+      }
+
+      const canvas = await html2canvas(target, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: target.scrollWidth,
+        windowHeight: target.scrollHeight,
+      })
+
+      // Restore wrapper
+      if (wrapper) {
+        wrapper.style.maxWidth = originalMaxWidth
+        wrapper.style.padding = originalPadding
+      }
+
+      // Convert canvas dimensions to mm (scale:2 → divide by 2 first)
+      const pxToMm = 0.264583
+      const widthMm = (canvas.width / 2) * pxToMm
+      const heightMm = (canvas.height / 2) * pxToMm
+
+      // Create PDF with exact canvas dimensions — ONE long page, no cuts
+      const pdf = new jsPDF({
+        orientation: widthMm > heightMm ? 'landscape' : 'portrait',
+        unit: 'mm',
+        format: [widthMm, heightMm],
+      })
+
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, widthMm, heightMm)
+      pdf.save(filename)
+    } catch (err) {
+      console.error('PDF export failed:', err)
+    } finally {
+      setPdfLoading(false)
+    }
   }
 
   // Cleanup debounce on unmount
@@ -284,16 +313,23 @@ export default function PreviewPage() {
           <button
             type="button"
             onClick={handleDownload}
+            disabled={pdfLoading}
             className="btn-primary"
-            style={{ padding: '9px 20px', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '9px 20px', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px', opacity: pdfLoading ? 0.7 : 1 }}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span className="preview-header-download-full">Download PDF</span>
-            <span className="preview-header-download-short">PDF</span>
+            {pdfLoading ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 0.8s linear infinite' }}>
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+            ) : (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            )}
+            <span className="preview-header-download-full">{pdfLoading ? 'Generating…' : 'Download PDF'}</span>
+            <span className="preview-header-download-short">{pdfLoading ? '…' : 'PDF'}</span>
           </button>
         </div>
       </header>
@@ -536,7 +572,13 @@ export default function PreviewPage() {
                 {/* Change URL option */}
                 <button
                   type="button"
-                  onClick={() => { setShareStep('slug-picker'); setSlug(''); setSlugStatus('idle') }}
+                  onClick={() => {
+                    const currentSlug = publishedSlug || savedSlug || ''
+                    setShareStep('slug-picker')
+                    setSlug(currentSlug)
+                    if (currentSlug) checkSlug(currentSlug)
+                    else setSlugStatus('idle')
+                  }}
                   style={{
                     width: '100%', marginTop: '12px', padding: '10px', borderRadius: '10px',
                     border: '1px solid #E5E5E5', background: 'transparent',
