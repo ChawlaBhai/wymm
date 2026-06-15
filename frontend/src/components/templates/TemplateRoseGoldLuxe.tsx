@@ -307,7 +307,8 @@ export default function TemplateRoseGoldLuxe({ biodata }: { biodata: BiodataReco
             <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 24, fontWeight: 700, color: 'white' }}>{basicInfo.fullName}</p>
             <p style={{ fontSize: 13, color: `${ROSE_GOLD}CC`, marginTop: 4 }}>{basicInfo.city}{basicInfo.state ? `, ${basicInfo.state}` : ''}</p>
           </div>
-      {/* SOCIAL LINKS */}
+        </div>
+      </footer>
       {basicInfo.socialLinks && Object.values(basicInfo.socialLinks).some(Boolean) && (
         <section style={{ padding: '40px 6vw', background: BLUSH, borderTop: `1px solid ${ROSE_GOLD}30` }}>
           <div style={{ maxWidth: 900, margin: '0 auto' }}>

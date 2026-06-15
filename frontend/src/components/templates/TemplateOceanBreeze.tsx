@@ -297,7 +297,8 @@ export default function TemplateOceanBreeze({ biodata }: { biodata: BiodataRecor
             <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 24, fontWeight: 700, color: DARK_CORAL }}>{basicInfo.fullName}</p>
             <p style={{ fontSize: 13, color: '#999', marginTop: 4 }}>{basicInfo.city}{basicInfo.state ? `, ${basicInfo.state}` : ''}</p>
           </div>
-      {/* SOCIAL LINKS */}
+        </div>
+      </footer>
       {basicInfo.socialLinks && Object.values(basicInfo.socialLinks).some(Boolean) && (
         <section style={{ padding: '40px 6vw', background: SANDY, borderTop: `1px solid ${CORAL}20` }}>
           <div style={{ maxWidth: 900, margin: '0 auto' }}>
