@@ -15,6 +15,8 @@ const LoginPage          = lazy(() => import('@/pages/LoginPage'))
 const AdminPage          = lazy(() => import('@/pages/AdminPage'))
 const PrivacyPage        = lazy(() => import('@/pages/PrivacyPage'))
 const TermsPage          = lazy(() => import('@/pages/TermsPage'))
+const RefundPage         = lazy(() => import('@/pages/RefundPage'))
+const CheckoutPage       = lazy(() => import('@/pages/CheckoutPage'))
 const ContactPage        = lazy(() => import('@/pages/ContactPage'))
 
 function PageLoader() {
@@ -45,6 +47,8 @@ export default function App() {
           <Route path="/preview"   element={<PreviewPage />} />
           <Route path="/privacy"   element={<><Navbar /><PrivacyPage /></>} />
           <Route path="/terms"     element={<><Navbar /><TermsPage /></>} />
+          <Route path="/refund"    element={<><Navbar /><RefundPage /></>} />
+          <Route path="/checkout"  element={<CheckoutPage />} />
           <Route path="/contact"   element={<><Navbar /><ContactPage /></>} />
           <Route path="/pr/:slug"   element={<SharePage />} />
           <Route path="/:slug"     element={<SharePage />} />

@@ -11,29 +11,41 @@ export default function LandingPage() {
   return (
     <>
       <Helmet>
-        <title>wymm — Create Your Marriage Biodata Online | Free &amp; Beautiful</title>
+        <title>wymm — Create Beautiful Marriage Biodata Online | ₹20 per profile</title>
         <meta
           name="description"
-          content="Create a stunning marriage biodata that speaks for you. Elegant templates, shareable in seconds, free forever. Trusted by families across India."
+          content="Create stunning animated marriage biodata with shareable links, QR codes, and PDF downloads. 16 professional templates. Free preview, ₹20 to publish. Perfect for Indian arranged marriages."
         />
         <meta
           name="keywords"
-          content="marriage biodata, biodata for marriage, shaadi biodata, vivah biodata, marriage biodata online, biodata format for marriage, biodata maker, free biodata"
+          content="marriage biodata, biodata for marriage, shaadi biodata, vivah biodata, marriage biodata online, biodata banane ki website, biodata format for marriage, biodata maker, ₹20 biodata"
         />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="wymm — Create Your Marriage Biodata Online | Free & Beautiful" />
+        <meta property="og:title" content="wymm — Create Beautiful Marriage Biodata Online | ₹20 per profile" />
         <meta
           property="og:description"
-          content="Create a stunning marriage biodata that speaks for you. Elegant templates, shareable in seconds, free forever. Trusted by families across India."
+          content="Create stunning animated marriage biodata with shareable links, QR codes, and PDF downloads. 16 professional templates. Free preview, ₹20 to publish. Perfect for Indian arranged marriages."
         />
         <meta property="og:site_name" content="wymm" />
+        <meta property="og:url" content="https://wymm.store" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="wymm — Create Your Marriage Biodata Online | Free & Beautiful" />
+        <meta name="twitter:title" content="wymm — Create Beautiful Marriage Biodata Online | ₹20 per profile" />
         <meta
           name="twitter:description"
-          content="Create a stunning marriage biodata that speaks for you. Elegant templates, shareable in seconds, free forever."
+          content="Create stunning animated marriage biodata with shareable links, QR codes, and PDF downloads. 16 professional templates. Free preview, ₹20 to publish."
         />
-        <link rel="canonical" href="https://wymm.in/" />
+        <link rel="canonical" href="https://wymm.store" />
+        <meta name="robots" content="index, follow" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "wymm",
+          "applicationCategory": "LifestyleApplication",
+          "operatingSystem": "Web",
+          "description": "Create beautiful marriage biodata with shareable links",
+          "offers": { "@type": "Offer", "price": "20", "priceCurrency": "INR" },
+          "author": { "@type": "Person", "name": "Sahaj Chawla" }
+        })}</script>
       </Helmet>
 
       <div style={{ paddingTop: 64 }}>

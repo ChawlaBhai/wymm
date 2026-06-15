@@ -97,7 +97,7 @@ async function seed() {
       _createdAt: new Date().toISOString(),
     })
     if (error) console.error(`✗ demo${i+1} (${templateId}):`, error.message)
-    else console.log(`✓ demo${i+1} → willyoumarry-me.vercel.app/demo${i+1} (${templateId})`)
+    else console.log(`✓ demo${i+1} → wymm.store/demo${i+1} (${templateId})`)
   }
   console.log('\nDone! All 16 demos seeded.')
 }

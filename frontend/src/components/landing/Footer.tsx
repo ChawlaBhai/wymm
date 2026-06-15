@@ -42,6 +42,7 @@ export default function Footer() {
               {[
                 { label: 'Privacy Policy', to: '/privacy' },
                 { label: 'Terms of Service', to: '/terms' },
+                { label: 'Refund Policy', to: '/refund' },
               ].map(link => (
                 <Link key={link.label} to={link.to} style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#666', textDecoration: 'none', fontWeight: 500 }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#7C3AED')}

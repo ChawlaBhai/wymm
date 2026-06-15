@@ -253,9 +253,19 @@ export default function AboutPage() {
               fontSize: 'clamp(15px, 1.6vw, 18px)',
               color: '#444',
               lineHeight: 1.85,
+              marginBottom: 28,
             }}>
               When a biodata reaches a family, it carries the weight of that question before it's ever asked.
               We wanted to make that first impression worthy of what it represents.
+            </p>
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 'clamp(15px, 1.6vw, 18px)',
+              color: '#444',
+              lineHeight: 1.85,
+            }}>
+              wymm was built by <strong style={{ color: '#1A1A1A' }}>Sahaj Chawla</strong> — with the belief that
+              every person stepping into this journey deserves a first impression that truly represents them.
             </p>
           </FadeInSection>
         </div>
@@ -548,6 +558,26 @@ export default function AboutPage() {
               Create Your Biodata →
             </Link>
           </FadeInSection>
+        </div>
+      </section>
+
+      {/* LEGAL FOOTER */}
+      <section style={{
+        background: '#FAFAFA',
+        borderTop: '1px solid #F0F0F0',
+        padding: '28px 0',
+        textAlign: 'center',
+      }}>
+        <div className="container" style={{ maxWidth: 760, margin: '0 auto' }}>
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: 12,
+            color: '#BBBBBB',
+            lineHeight: 1.6,
+            margin: 0,
+          }}>
+            wymm is a product of Sahaj Chawla, a sole proprietorship registered in Ayodhya, Uttar Pradesh, India.
+          </p>
         </div>
       </section>
     </main>

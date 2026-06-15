@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { useBiodataStore } from '@/store/biodataStore'
 import { useAuthStore } from '@/store/authStore'
@@ -64,6 +64,7 @@ type ShareStep = 'idle' | 'slug-picker' | 'published'
 export default function PreviewPage() {
   const { biodata, savedSlug, setSavedSlug, setTemplate } = useBiodataStore()
   const { user } = useAuthStore()
+  const navigate = useNavigate()
 
   // Share modal state
   const [shareOpen, setShareOpen] = useState(false)
@@ -92,31 +93,41 @@ export default function PreviewPage() {
       ? `${window.location.origin}/pr/${savedSlug}`
       : null
 
-  // Open share modal — gate on auth
+  // Open share modal — gate on auth and payment
   function handleShareClick() {
     if (!user) {
       setShareStep('idle')
-    } else {
-      // savedSlug persists across sessions via Zustand persist; only treat it
-      // as "published" when it actually matches the current biodata.
-      const currentId = biodata.slug || biodata.id
-      const isCurrentProfilePublished =
-        publishedSlug != null ||
-        (savedSlug != null && currentId != null && savedSlug === currentId)
-
-      if (isCurrentProfilePublished) {
-        const slug = publishedSlug || savedSlug!
-        setShareStep('published')
-        setPublishedSlug(slug)
-      } else {
-        setShareStep('slug-picker')
-        // Pre-fill with AI-suggested slug from name
-        const suggested = suggestSlug(biodata.basicInfo.fullName)
-        setSlug(suggested)
-        checkSlug(suggested)
-      }
+      setShareOpen(true)
+      return
     }
-    setShareOpen(true)
+
+    const currentId = biodata.slug || biodata.id
+    const isCurrentProfilePublished =
+      publishedSlug != null ||
+      (savedSlug != null && currentId != null && savedSlug === currentId)
+
+    if (isCurrentProfilePublished) {
+      // Already published — show share options directly
+      const slug = publishedSlug || savedSlug!
+      setShareStep('published')
+      setPublishedSlug(slug)
+      setShareOpen(true)
+      return
+    }
+
+    // Not yet published — check if payment has been completed in this session
+    if (sessionStorage.getItem('payment-completed') === 'true') {
+      // Payment done, clear flag and go to slug picker
+      sessionStorage.removeItem('payment-completed')
+      setShareStep('slug-picker')
+      const suggested = suggestSlug(biodata.basicInfo.fullName)
+      setSlug(suggested)
+      checkSlug(suggested)
+      setShareOpen(true)
+    } else {
+      // Payment not done — redirect to checkout
+      navigate('/checkout')
+    }
   }
 
   function handleCloseShare() {
@@ -507,7 +518,7 @@ export default function PreviewPage() {
                     background: '#F8F9FB',
                   }}>
                     <span style={{ padding: '11px 0 11px 14px', fontSize: '13px', color: '#AAA', whiteSpace: 'nowrap', fontFamily: 'Inter, monospace' }}>
-                      willyoumarry-me.vercel.app/pr/
+                      wymm.store/pr/
                     </span>
                     <input
                       type="text"
