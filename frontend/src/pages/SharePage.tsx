@@ -127,38 +127,85 @@ export default function SharePage() {
         if (s.transform?.includes('translate')) s.transform = 'none'
         if (s.minHeight?.includes('100vh')) s.minHeight = 'auto'
         if (s.height?.includes('100vh')) s.height = 'auto'
-        if (h.tagName === 'IMG') {
-          const img = h as HTMLImageElement
-          const parent = img.parentElement
-          if (parent) {
-            const computed = window.getComputedStyle(parent)
-            if (computed.borderRadius === '50%' || computed.overflow === 'hidden') {
-              img.style.width = '100%'; img.style.height = '100%'
-              img.style.objectFit = 'cover'; img.style.display = 'block'
-              img.style.minWidth = '100%'; img.style.minHeight = '100%'
-              parent.style.overflow = 'hidden'
-            }
-          }
-        }
-        if (s.clipPath || window.getComputedStyle(h).clipPath !== 'none') {
-          const img = h.querySelector('img') as HTMLImageElement | null
-          if (img) { img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover' }
-        }
       })
       container.appendChild(clone)
-      const clonedImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
-      await Promise.all(clonedImgs.map(img => img.complete ? Promise.resolve() : new Promise<void>(r => { img.onload = () => r(); img.onerror = () => r() })))
-      await new Promise(r => setTimeout(r, 150))
 
-      // Collect links for PDF annotation
+      // Fix objectFit:cover for all images (html2canvas ignores objectFit)
+      const allImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
+
+      // First ensure all images are loaded
+      await Promise.all(allImgs.map(img => {
+        if (img.complete && img.naturalWidth > 0) return Promise.resolve()
+        return new Promise<void>(resolve => {
+          img.onload = () => resolve()
+          img.onerror = () => resolve()
+          if (!img.src && img.currentSrc) img.src = img.currentSrc
+        })
+      }))
+
+      // Now replace each image with a pre-cropped canvas data URL
+      for (const img of allImgs) {
+        if (!img.naturalWidth || !img.naturalHeight) continue
+        const parent = img.parentElement
+        if (!parent) continue
+
+        const containerW = parent.offsetWidth || parseInt(parent.style.width) || img.offsetWidth
+        const containerH = parent.offsetHeight || parseInt(parent.style.height) || img.offsetHeight
+        if (!containerW || !containerH) continue
+
+        const offCanvas = document.createElement('canvas')
+        offCanvas.width = containerW
+        offCanvas.height = containerH
+        const offCtx = offCanvas.getContext('2d')!
+
+        const iw = img.naturalWidth, ih = img.naturalHeight
+        const scale = Math.max(containerW / iw, containerH / ih)
+        const scaledW = iw * scale, scaledH = ih * scale
+        const offsetX = (containerW - scaledW) / 2
+        const offsetY = (containerH - scaledH) / 2
+
+        offCtx.drawImage(img, offsetX, offsetY, scaledW, scaledH)
+
+        img.src = offCanvas.toDataURL('image/jpeg', 0.95)
+        img.style.width = `${containerW}px`
+        img.style.height = `${containerH}px`
+        img.style.objectFit = 'fill'
+        img.style.display = 'block'
+
+        parent.style.overflow = 'hidden'
+        const parentBorderRadius = window.getComputedStyle(parent).borderRadius
+        if (parentBorderRadius && parentBorderRadius !== '0px') {
+          parent.style.borderRadius = parentBorderRadius
+        }
+      }
+
+      // Wait for pre-cropped images to be ready
+      await new Promise(r => setTimeout(r, 100))
+
+      // Collect links using offset position (getBoundingClientRect returns 0,0 off-screen)
+      function getOffsetPosition(el: HTMLElement, ancestor: HTMLElement): { x: number; y: number } {
+        let x = 0, y = 0, cur: HTMLElement | null = el
+        while (cur && cur !== ancestor) {
+          x += cur.offsetLeft
+          y += cur.offsetTop
+          cur = cur.offsetParent as HTMLElement | null
+        }
+        return { x, y }
+      }
+
       const pdfLinks: { x: number; y: number; w: number; h: number; url: string }[] = []
-      const cloneRect = clone.getBoundingClientRect()
       clone.querySelectorAll('a[href]').forEach(a => {
         const el = a as HTMLAnchorElement
         const href = el.getAttribute('href')
         if (!href || href.startsWith('#')) return
-        const rect = el.getBoundingClientRect()
-        pdfLinks.push({ x: rect.left - cloneRect.left, y: rect.top - cloneRect.top, w: rect.width, h: rect.height, url: href.startsWith('http') ? href : `https://${href}` })
+        const pos = getOffsetPosition(el, clone)
+        pdfLinks.push({
+          x: pos.x,
+          y: pos.y,
+          w: el.offsetWidth,
+          h: el.offsetHeight,
+          url: href.startsWith('http') ? href : `https://${href.replace(/^\/\//, '')}`,
+        })
       })
 
       const canvas = await html2canvas(container, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: 480, windowHeight: container.scrollHeight })
