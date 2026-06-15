@@ -233,7 +233,7 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
                 <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 18, fontWeight: 700, color: SILVER }}>{career.currentDesignation}</p>
                 {career.company && <p style={{ fontSize: 14, color: '#999', fontWeight: 500, marginTop: 4 }}>{career.company} · {career.industry}</p>}
                 {career.yearsOfExperience > 0 && <p style={{ fontSize: 13, color: '#555', marginTop: 2 }}>{career.yearsOfExperience} years experience</p>}
-                {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4, fontWeight: 600 }}>{career.annualIncome}</p>}
+                {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4, fontWeight: 600 }}>{career.annualIncome} per annum</p>}
               </motion.div>
             )}
           </motion.div>

@@ -106,14 +106,43 @@ export default function SharePage() {
   const handleDownloadPDF = async () => {
     if (!biodata) return
     setPdfError(null)
+    const source = document.getElementById(TEMPLATE_CONTAINER_ID)
+    if (!source) return
+    setPdfLoading(true)
     try {
-      const name = biodata.basicInfo.fullName
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '') || slug || 'biodata'
-      await exportToPDF(TEMPLATE_CONTAINER_ID, name, setPdfLoading)
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ])
+      const container = document.createElement('div')
+      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;'
+      document.body.appendChild(container)
+      const clone = source.cloneNode(true) as HTMLElement
+      clone.style.cssText = 'width:480px;height:auto;overflow:visible;position:static;'
+      clone.querySelectorAll('*').forEach((el) => {
+        const s = (el as HTMLElement).style
+        if (s.opacity === '0') s.opacity = '1'
+        if (s.visibility === 'hidden') s.visibility = 'visible'
+        if (s.transform?.includes('translate')) s.transform = 'none'
+        if (s.minHeight?.includes('100vh')) s.minHeight = 'auto'
+        if (s.height?.includes('100vh')) s.height = 'auto'
+        if (s.borderRadius === '50%') s.overflow = 'hidden'
+      })
+      container.appendChild(clone)
+      await new Promise(r => setTimeout(r, 100))
+      const canvas = await html2canvas(container, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: 480, windowHeight: container.scrollHeight })
+      document.body.removeChild(container)
+      const pxToMm = 0.264583
+      const w = (canvas.width / 2) * pxToMm
+      const h = (canvas.height / 2) * pxToMm
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [w, h] })
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, w, h)
+      const name = (biodata.basicInfo.fullName || slug || 'biodata').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      pdf.save(`wymm-${name}.pdf`)
     } catch {
       setPdfError('Could not generate PDF. Please try again.')
+    } finally {
+      setPdfLoading(false)
     }
   }
 

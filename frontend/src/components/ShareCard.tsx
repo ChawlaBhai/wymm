@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { QRCodeCanvas } from 'qrcode.react'
 import type { BiodataRecord } from '@/types/biodata'
 
 interface Props {
@@ -244,19 +244,14 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
                 {/* Profile photo / initials */}
                 <div style={{ textAlign: 'center', marginBottom: 14 }}>
                   {media.profilePhoto ? (
-                    <img
-                      src={media.profilePhoto}
-                      crossOrigin="anonymous"
-                      style={{
-                        width: 92,
-                        height: 92,
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        border: '3px solid #7C3AED',
-                        display: 'inline-block',
-                      }}
-                      alt=""
-                    />
+                    <div style={{ width: 92, height: 92, borderRadius: '50%', overflow: 'hidden', border: '3px solid #7C3AED', display: 'inline-block', flexShrink: 0 }}>
+                      <img
+                        src={media.profilePhoto}
+                        crossOrigin="anonymous"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        alt=""
+                      />
+                    </div>
                   ) : (
                     <div
                       style={{
@@ -388,7 +383,7 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
                       borderRadius: 8,
                     }}
                   >
-                    <QRCodeSVG
+                    <QRCodeCanvas
                       value={profileUrl}
                       size={96}
                       fgColor="#1A1A1A"

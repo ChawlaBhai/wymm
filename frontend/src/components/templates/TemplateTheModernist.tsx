@@ -157,7 +157,7 @@ export default function TemplateTheModernist({ biodata }: { biodata: BiodataReco
                     </>
                   )}
                   {career.industry && <p style={{ fontSize: '13px', color: '#555', marginTop: '8px' }}>{career.industry}{career.yearsOfExperience > 0 ? ` · ${career.yearsOfExperience} yrs` : ''}</p>}
-                  {career.showIncome && career.annualIncome && <p style={{ fontSize: '13px', color: '#10B981', marginTop: '8px', fontWeight: 600 }}>{career.annualIncome}</p>}
+                  {career.showIncome && career.annualIncome && <p style={{ fontSize: '13px', color: '#10B981', marginTop: '8px', fontWeight: 600 }}>{career.annualIncome} per annum</p>}
                 </motion.div>
               )}
               {education.highestQualification && (

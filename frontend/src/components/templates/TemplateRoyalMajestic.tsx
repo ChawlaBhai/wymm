@@ -202,7 +202,7 @@ export default function TemplateRoyalMajestic({ biodata }: { biodata: BiodataRec
                   <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 19, fontWeight: 700, color: PURPLE }}>{career.currentDesignation}</p>
                   {career.company && <p style={{ fontSize: 14, color: GOLD, fontWeight: 600, marginTop: 4 }}>{career.company}</p>}
                   {career.yearsOfExperience > 0 && <p style={{ fontSize: 13, color: '#999', marginTop: 2 }}>{career.yearsOfExperience} years · {career.industry}</p>}
-                  {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4, fontWeight: 600 }}>{career.annualIncome}</p>}
+                  {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4, fontWeight: 600 }}>{career.annualIncome} per annum</p>}
                 </motion.div>
               )}
             </motion.div>

@@ -204,7 +204,7 @@ export default function TemplateRoseGoldLuxe({ biodata }: { biodata: BiodataReco
                 <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 18, fontWeight: 700, color: ROSE }}>{career.currentDesignation}</p>
                 {career.company && <p style={{ fontSize: 14, color: '#AA7799', fontWeight: 500, marginTop: 4 }}>{career.company} · {career.industry}</p>}
                 {career.yearsOfExperience > 0 && <p style={{ fontSize: 13, color: '#AAAAAA', marginTop: 2 }}>{career.yearsOfExperience} years experience</p>}
-                {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4, fontWeight: 600 }}>{career.annualIncome}</p>}
+                {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4, fontWeight: 600 }}>{career.annualIncome} per annum</p>}
               </motion.div>
             )}
           </motion.div>

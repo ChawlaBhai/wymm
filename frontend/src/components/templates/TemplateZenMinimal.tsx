@@ -161,7 +161,7 @@ export default function TemplateZenMinimal({ biodata }: { biodata: BiodataRecord
                 <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 22, fontWeight: 400, color: '#1A1A1A', marginBottom: 4 }}>{career.currentDesignation}</p>
                 {career.company && <p style={{ fontSize: 15, color: '#888', marginBottom: 2 }}>{career.company} · {career.industry}</p>}
                 {career.yearsOfExperience > 0 && <p style={{ fontSize: 13, color: '#BBBBBB' }}>{career.yearsOfExperience} years</p>}
-                {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4 }}>{career.annualIncome}</p>}
+                {career.showIncome && career.annualIncome && <p style={{ fontSize: 13, color: '#10B981', marginTop: 4 }}>{career.annualIncome} per annum</p>}
               </motion.div>
             )}
           </motion.div>

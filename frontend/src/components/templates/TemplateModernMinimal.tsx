@@ -156,7 +156,7 @@ export default function TemplateModernMinimal({ biodata }: { biodata: BiodataRec
                   <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '18px', fontWeight: 700, color: '#1A1A1A' }}>{career.currentDesignation}</p>
                   {career.company && <p style={{ fontSize: '14px', color: '#7C3AED', fontWeight: 500, marginTop: '4px' }}>{career.company}</p>}
                   {career.yearsOfExperience > 0 && <p style={{ fontSize: '13px', color: '#AAAAAA', marginTop: '2px' }}>{career.yearsOfExperience} years experience · {career.industry}</p>}
-                  {career.showIncome && career.annualIncome && <p style={{ fontSize: '13px', color: '#10B981', marginTop: '4px', fontWeight: 600 }}>{career.annualIncome}</p>}
+                  {career.showIncome && career.annualIncome && <p style={{ fontSize: '13px', color: '#10B981', marginTop: '4px', fontWeight: 600 }}>{career.annualIncome} per annum</p>}
                 </motion.div>
               )}
             </motion.div>
