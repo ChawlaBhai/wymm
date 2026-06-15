@@ -9,60 +9,175 @@ interface Props {
 }
 
 export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
-  const cardRef = useRef<HTMLDivElement>(null)
+  const qrRef = useRef<HTMLCanvasElement>(null)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [generating, setGenerating] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [sharing, setSharing] = useState(false)
 
   const { basicInfo, career, media } = biodata
-
-  // Initials for avatar fallback
-  const initials = basicInfo.fullName
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-
+  const initials = basicInfo.fullName.split(' ').map(n => n[0] || '').join('').slice(0, 2).toUpperCase()
   const shortUrl = profileUrl.replace(/^https?:\/\//, '')
 
   useEffect(() => {
-    // Wait for fonts + QRCode SVG to render fully before capture
-    const timer = setTimeout(() => generateCard(), 800)
+    // Give QRCodeCanvas time to render its canvas
+    const timer = setTimeout(() => generateCard(), 600)
     return () => clearTimeout(timer)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []) // eslint-disable-line
 
   async function generateCard() {
-    if (!cardRef.current) return
     try {
-      const { default: html2canvas } = await import('html2canvas')
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        logging: false,
-        onclone: (doc) => {
-          // Ensure QR SVG is fully visible in the cloned doc
-          doc.querySelectorAll('svg').forEach((svg) => {
-            svg.style.display = 'block'
-            svg.style.visibility = 'visible'
-          })
-        },
+      // Card at 2x resolution: 390×560 logical → 780×1120 physical
+      const W = 780, H = 1120
+      const canvas = document.createElement('canvas')
+      canvas.width = W
+      canvas.height = H
+      const ctx = canvas.getContext('2d')!
+
+      // ── Background ──
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H)
+      bgGrad.addColorStop(0, '#f7f2ff')
+      bgGrad.addColorStop(1, '#fff5f8')
+      ctx.fillStyle = bgGrad
+      ctx.fillRect(0, 0, W, H)
+
+      // ── Top gradient strip ──
+      const stripGrad = ctx.createLinearGradient(0, 0, W, 0)
+      stripGrad.addColorStop(0, '#7C3AED')
+      stripGrad.addColorStop(1, '#EC4899')
+      ctx.fillStyle = stripGrad
+      ctx.fillRect(0, 0, W, 14)
+
+      // ── Profile photo circle ──
+      const cx = W / 2, cy = 220, r = 100
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(cx, cy, r, 0, Math.PI * 2)
+      ctx.clip()
+
+      if (media.profilePhoto) {
+        await new Promise<void>(resolve => {
+          const img = new Image()
+          img.crossOrigin = 'anonymous'
+          img.onload = () => {
+            // Cover: scale to fill circle, crop center
+            const iw = img.naturalWidth, ih = img.naturalHeight
+            const scale = Math.max((r * 2) / iw, (r * 2) / ih)
+            const dw = iw * scale, dh = ih * scale
+            const dx = cx - dw / 2, dy = cy - dh / 2
+            ctx.drawImage(img, dx, dy, dw, dh)
+            resolve()
+          }
+          img.onerror = () => { drawInitialsCircle(ctx, cx, cy, r, initials); resolve() }
+          img.src = media.profilePhoto!
+        })
+      } else {
+        drawInitialsCircle(ctx, cx, cy, r, initials)
+      }
+      ctx.restore()
+
+      // ── Circle border ──
+      ctx.strokeStyle = '#7C3AED'
+      ctx.lineWidth = 6
+      ctx.beginPath()
+      ctx.arc(cx, cy, r + 4, 0, Math.PI * 2)
+      ctx.stroke()
+
+      // ── Name ──
+      ctx.fillStyle = '#1A1A1A'
+      ctx.textAlign = 'center'
+      ctx.font = 'bold 52px "Sora", sans-serif'
+      ctx.fillText(basicInfo.fullName || 'Name', W / 2, 380)
+
+      // ── Subtitle ──
+      const sub = [career?.currentDesignation, basicInfo.city].filter(Boolean).join(' · ')
+      if (sub) {
+        ctx.fillStyle = '#777'
+        ctx.font = '28px "Inter", sans-serif'
+        ctx.fillText(sub, W / 2, 430)
+      }
+
+      // ── Divider ──
+      ctx.fillStyle = '#E5E5E5'
+      ctx.fillRect(60, 460, W - 120, 2)
+
+      // ── Info grid ──
+      const fields = [
+        { label: 'Age', value: basicInfo.age ? `${basicInfo.age} yrs` : '' },
+        { label: 'Height', value: basicInfo.height || '' },
+        { label: 'Religion', value: basicInfo.religion || '' },
+        { label: 'Location', value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', ') },
+      ].filter(f => f.value)
+
+      const colW = (W - 120) / 2
+      fields.forEach((f, i) => {
+        const col = i % 2, row = Math.floor(i / 2)
+        const x = 60 + col * colW, y = 490 + row * 80
+        ctx.fillStyle = '#BBBBBB'
+        ctx.font = 'bold 18px "Inter", sans-serif'
+        ctx.textAlign = 'left'
+        ctx.fillText(f.label.toUpperCase(), x, y)
+        ctx.fillStyle = '#1A1A1A'
+        ctx.font = 'bold 26px "Inter", sans-serif'
+        ctx.fillText(f.value, x, y + 30)
       })
+
+      // ── Divider ──
+      ctx.fillStyle = '#E5E5E5'
+      ctx.fillRect(60, fields.length > 2 ? 670 : 590, W - 120, 2)
+
+      // ── QR label ──
+      const qrY = fields.length > 2 ? 690 : 610
+      ctx.fillStyle = '#BBBBBB'
+      ctx.font = 'bold 18px "Inter", sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('SCAN TO VIEW FULL PROFILE', W / 2, qrY)
+
+      // ── QR code from rendered canvas ──
+      const qrCanvas = document.querySelector('#wymm-qr-hidden canvas') as HTMLCanvasElement
+      if (qrCanvas) {
+        const qrSize = 200
+        ctx.drawImage(qrCanvas, W / 2 - qrSize / 2, qrY + 16, qrSize, qrSize)
+      }
+
+      // ── Short URL ──
+      ctx.fillStyle = '#7C3AED'
+      ctx.font = 'bold 22px "Inter", sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText(shortUrl, W / 2, qrY + 16 + 210)
+
+      // ── wymm branding ──
+      ctx.fillStyle = '#CCCCCC'
+      ctx.font = '20px "Inter", sans-serif'
+      ctx.fillText('💍 Created with wymm', W / 2, H - 30)
+
       setImageUrl(canvas.toDataURL('image/jpeg', 0.95))
     } catch (e) {
-      console.error('[ShareCard] html2canvas error:', e)
+      console.error('[ShareCard] canvas error:', e)
     } finally {
       setGenerating(false)
     }
+  }
+
+  function drawInitialsCircle(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, text: string) {
+    const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r)
+    grad.addColorStop(0, '#7C3AED')
+    grad.addColorStop(1, '#EC4899')
+    ctx.fillStyle = grad
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2)
+    ctx.fillStyle = 'white'
+    ctx.font = `bold ${r}px "Sora", sans-serif`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(text, cx, cy)
+    ctx.textBaseline = 'alphabetic'
   }
 
   function downloadCard() {
     if (!imageUrl) return
     const a = document.createElement('a')
     a.href = imageUrl
-    a.download = `wymm-${basicInfo.fullName.replace(/\s+/g, '-').toLowerCase()}.jpg`
+    a.download = `wymm-${(basicInfo.fullName || 'biodata').replace(/\s+/g, '-').toLowerCase()}.jpg`
     a.click()
   }
 
@@ -73,544 +188,97 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
     })
   }
 
-  function shareWhatsApp() {
+  async function shareWhatsApp() {
+    if (sharing || !imageUrl) return
+    setSharing(true)
+
     const name = basicInfo.fullName
     const role = career?.currentDesignation
     const city = basicInfo.city
     const details = [role, city].filter(Boolean).join(', ')
-    const text = encodeURIComponent(
-      `${name}'s marriage biodata\n${details ? details + '\n' : ''}View full profile: ${profileUrl}`
-    )
-    // WhatsApp Web/Mobile — can't directly attach images via URL scheme.
-    // Best UX: prompt user to save image first, then open WhatsApp with text.
-    if (imageUrl) {
-      const a = document.createElement('a')
-      a.href = imageUrl
-      a.download = `wymm-${basicInfo.fullName.replace(/\s+/g, '-').toLowerCase()}.jpg`
-      a.click()
-      // Small delay then open WhatsApp so user has the image downloaded to share manually
-      setTimeout(() => {
-        window.open(`https://wa.me/?text=${text}`, '_blank')
-      }, 500)
-    } else {
-      window.open(`https://wa.me/?text=${text}`, '_blank')
-    }
-  }
+    const shareText = `${name}'s marriage biodata\n${details ? details + '\n' : ''}View profile: ${profileUrl}`
 
-  // Info grid rows — only show populated fields
-  const infoItems = [
-    { label: 'Age', value: basicInfo.age ? `${basicInfo.age} yrs` : '' },
-    { label: 'Height', value: basicInfo.height || '' },
-    { label: 'Religion', value: basicInfo.religion || '' },
-    {
-      label: 'Location',
-      value: [basicInfo.city, basicInfo.state].filter(Boolean).join(', '),
-    },
-    { label: 'Caste', value: basicInfo.caste || '' },
-    {
-      label: 'Profession',
-      value: career?.currentDesignation || '',
-    },
-  ].filter((x) => x.value)
+    try {
+      // Web Share API — works on iOS Safari & Android Chrome, opens native share sheet with WhatsApp
+      const blob = await fetch(imageUrl).then(r => r.blob())
+      const file = new File([blob], `wymm-${(name || 'biodata').replace(/\s+/g, '-').toLowerCase()}.jpg`, { type: 'image/jpeg' })
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text: shareText })
+        return
+      }
+    } catch (e) {
+      // User cancelled or browser doesn't support — fall through to text-only
+    }
+
+    // Fallback: download image + open WhatsApp with text
+    downloadCard()
+    setTimeout(() => window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank'), 400)
+    setSharing(false)
+  }
 
   return (
     <>
+      {/* Hidden QR canvas — rendered but off-screen so we can read it */}
+      <div id="wymm-qr-hidden" style={{ position: 'fixed', left: -9999, top: -9999, pointerEvents: 'none' }}>
+        <QRCodeCanvas value={profileUrl} size={200} fgColor="#1A1A1A" bgColor="white" level="M" />
+      </div>
+
       {/* Backdrop */}
-      <div
-        onClick={onClose}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(0,0,0,0.65)',
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)',
-          zIndex: 300,
-        }}
-        aria-hidden="true"
-      />
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', zIndex: 300 }} />
 
-      {/* Modal shell */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Share card"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 301,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px',
-          overflowY: 'auto',
-        }}
-      >
-        <div
-          style={{
-            background: 'white',
-            borderRadius: 24,
-            padding: '28px 28px 24px',
-            maxWidth: 460,
-            width: '100%',
-            fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 32px 80px rgba(0,0,0,0.20)',
-            position: 'relative',
-          }}
-        >
+      {/* Modal */}
+      <div role="dialog" style={{ position: 'fixed', inset: 0, zIndex: 301, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, overflowY: 'auto' }}>
+        <div style={{ background: 'white', borderRadius: 24, padding: '28px 28px 24px', maxWidth: 440, width: '100%', fontFamily: 'Inter, sans-serif', boxShadow: '0 32px 80px rgba(0,0,0,0.20)', position: 'relative' }}>
+
           {/* Header */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
             <div>
-              <h2
-                style={{
-                  fontFamily: 'Sora, sans-serif',
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: '#1A1A1A',
-                  margin: 0,
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                Share Card
-              </h2>
-              <p style={{ fontSize: 12, color: '#AAA', margin: '4px 0 0' }}>
-                Download or share this mini-biodata card
-              </p>
+              <h2 style={{ fontFamily: 'Sora, sans-serif', fontSize: 18, fontWeight: 700, color: '#1A1A1A', margin: 0 }}>Share Card</h2>
+              <p style={{ fontSize: 12, color: '#AAA', margin: '4px 0 0' }}>Branded card with QR code</p>
             </div>
-            <button
-              onClick={onClose}
-              aria-label="Close"
-              style={{
-                background: '#F5F5F5',
-                border: 'none',
-                borderRadius: '50%',
-                width: 32,
-                height: 32,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 18,
-                color: '#888',
-                flexShrink: 0,
-              }}
-            >
-              ×
-            </button>
+            <button onClick={onClose} style={{ background: '#F5F5F5', border: 'none', borderRadius: '50%', width: 32, height: 32, cursor: 'pointer', fontSize: 18, color: '#888', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
           </div>
 
-          {/* ─── Hidden card div — captured by html2canvas ─── */}
-          <div
-            style={{
-              position: 'absolute',
-              left: -9999,
-              top: 0,
-              pointerEvents: 'none',
-            }}
-            aria-hidden="true"
-          >
-            <div
-              ref={cardRef}
-              style={{
-                width: 390,
-                background: 'white',
-                fontFamily: 'Inter, sans-serif',
-                overflow: 'hidden',
-                position: 'relative',
-              }}
-            >
-              {/* Top gradient strip */}
-              <div
-                style={{
-                  height: 6,
-                  background: 'linear-gradient(90deg, #7C3AED, #EC4899)',
-                }}
-              />
-
-              {/* Card body */}
-              <div
-                style={{
-                  padding: '28px 28px 20px',
-                  background:
-                    'linear-gradient(135deg, rgba(232,223,245,0.25) 0%, rgba(252,232,235,0.18) 100%)',
-                }}
-              >
-                {/* Profile photo / initials */}
-                <div style={{ textAlign: 'center', marginBottom: 14 }}>
-                  {media.profilePhoto ? (
-                    <div style={{ width: 92, height: 92, borderRadius: '50%', overflow: 'hidden', border: '3px solid #7C3AED', display: 'inline-block', flexShrink: 0 }}>
-                      <img
-                        src={media.profilePhoto}
-                        crossOrigin="anonymous"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        alt=""
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        width: 92,
-                        height: 92,
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 34,
-                        fontWeight: 700,
-                        color: 'white',
-                        fontFamily: 'Sora, sans-serif',
-                        letterSpacing: '-0.02em',
-                      }}
-                    >
-                      {initials}
-                    </div>
-                  )}
-                </div>
-
-                {/* Name */}
-                <div
-                  style={{
-                    textAlign: 'center',
-                    fontFamily: 'Sora, sans-serif',
-                    fontSize: 24,
-                    fontWeight: 800,
-                    color: '#1A1A1A',
-                    letterSpacing: '-0.03em',
-                    lineHeight: 1.2,
-                    marginBottom: 6,
-                  }}
-                >
-                  {basicInfo.fullName}
-                </div>
-
-                {/* Role · City */}
-                {(career?.currentDesignation || basicInfo.city) && (
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      fontSize: 13,
-                      color: '#777',
-                      marginBottom: 18,
-                    }}
-                  >
-                    {[career?.currentDesignation, basicInfo.city]
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </div>
-                )}
-
-                {/* Divider */}
-                <div
-                  style={{
-                    height: 1,
-                    background: 'rgba(0,0,0,0.07)',
-                    marginBottom: 18,
-                  }}
-                />
-
-                {/* Info grid */}
-                {infoItems.length > 0 && (
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: '10px 20px',
-                      marginBottom: 20,
-                    }}
-                  >
-                    {infoItems.slice(0, 6).map(({ label, value }) => (
-                      <div key={label}>
-                        <div
-                          style={{
-                            fontSize: 9,
-                            fontWeight: 700,
-                            letterSpacing: '0.1em',
-                            textTransform: 'uppercase',
-                            color: '#BBBBBB',
-                            marginBottom: 2,
-                          }}
-                        >
-                          {label}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: 13,
-                            fontWeight: 600,
-                            color: '#1A1A1A',
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {value}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* QR section */}
-                <div
-                  style={{
-                    textAlign: 'center',
-                    padding: '14px 14px 12px',
-                    background: 'rgba(124,58,237,0.04)',
-                    borderRadius: 14,
-                    border: '1px solid rgba(124,58,237,0.10)',
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 9,
-                      color: '#BBBBBB',
-                      marginBottom: 10,
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    Scan to view full profile
-                  </div>
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      padding: 8,
-                      background: 'white',
-                      borderRadius: 8,
-                    }}
-                  >
-                    <QRCodeCanvas
-                      value={profileUrl}
-                      size={96}
-                      fgColor="#1A1A1A"
-                      bgColor="white"
-                      level="M"
-                    />
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 10,
-                      color: '#7C3AED',
-                      marginTop: 8,
-                      fontWeight: 600,
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    {shortUrl}
-                  </div>
-                </div>
-
-                {/* wymm branding */}
-                <div
-                  style={{
-                    textAlign: 'center',
-                    marginTop: 14,
-                    fontSize: 11,
-                    color: '#CCCCCC',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  💍 Created with wymm
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* ─── End hidden card ─── */}
-
-          {/* Preview area */}
+          {/* Preview */}
           {generating ? (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '48px 0',
-                color: '#BBB',
-                fontSize: 14,
-              }}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#CCCCCC"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ animation: 'spin 0.8s linear infinite', marginBottom: 12 }}
-              >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-              <br />
+            <div style={{ textAlign: 'center', padding: '48px 0', color: '#BBB', fontSize: 14 }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', border: '3px solid #E5E5E5', borderTopColor: '#7C3AED', animation: 'spin 0.7s linear infinite', margin: '0 auto 12px' }} />
+              <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
               Generating card…
             </div>
           ) : imageUrl ? (
             <div style={{ marginBottom: 20 }}>
-              <img
-                src={imageUrl}
-                style={{
-                  width: '100%',
-                  borderRadius: 14,
-                  border: '1px solid #F0F0F0',
-                  display: 'block',
-                }}
-                alt="Share card preview"
-              />
+              <img src={imageUrl} style={{ width: '100%', borderRadius: 14, border: '1px solid #F0F0F0', display: 'block' }} alt="Share card preview" />
             </div>
           ) : (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '24px 0',
-                color: '#EF4444',
-                fontSize: 13,
-              }}
-            >
-              Could not generate preview. Try downloading directly.
-            </div>
+            <div style={{ textAlign: 'center', padding: '24px 0', color: '#EF4444', fontSize: 13 }}>Could not generate. Try downloading directly.</div>
           )}
 
-          {/* Action buttons */}
+          {/* Actions */}
           {!generating && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+
               {/* Download */}
-              <button
-                onClick={downloadCard}
-                disabled={!imageUrl}
-                style={{
-                  width: '100%',
-                  padding: '13px',
-                  borderRadius: 12,
-                  border: 'none',
-                  background: imageUrl
-                    ? 'linear-gradient(135deg, #7C3AED, #EC4899)'
-                    : '#E5E5E5',
-                  color: imageUrl ? 'white' : '#AAA',
-                  fontFamily: 'Sora, sans-serif',
-                  fontSize: 15,
-                  fontWeight: 700,
-                  cursor: imageUrl ? 'pointer' : 'default',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  transition: 'opacity 200ms ease',
-                }}
-                onMouseEnter={(e) => {
-                  if (imageUrl) e.currentTarget.style.opacity = '0.9'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '1'
-                }}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                Download Share Card
+              <button onClick={downloadCard} disabled={!imageUrl} style={{ width: '100%', padding: 13, borderRadius: 12, border: 'none', background: imageUrl ? 'linear-gradient(135deg, #7C3AED, #EC4899)' : '#E5E5E5', color: imageUrl ? 'white' : '#AAA', fontFamily: 'Sora, sans-serif', fontSize: 15, fontWeight: 700, cursor: imageUrl ? 'pointer' : 'default' }}>
+                ⬇ Download Share Card
               </button>
 
               {/* Copy link */}
-              <button
-                onClick={copyLink}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: 12,
-                  border: `1.5px solid ${copied ? '#10B981' : '#E5E5E5'}`,
-                  background: copied ? 'rgba(16,185,129,0.06)' : 'white',
-                  color: copied ? '#10B981' : '#555',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  transition: 'all 200ms ease',
-                }}
-              >
-                {copied ? (
-                  <>
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    Link Copied!
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                    </svg>
-                    Copy Link
-                  </>
-                )}
+              <button onClick={copyLink} style={{ width: '100%', padding: 12, borderRadius: 12, border: `1.5px solid ${copied ? '#10B981' : '#E5E5E5'}`, background: copied ? 'rgba(16,185,129,0.06)' : 'white', color: copied ? '#10B981' : '#555', fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                {copied ? '✓ Link Copied!' : '🔗 Copy Profile Link'}
               </button>
 
               {/* WhatsApp */}
-              <button
-                onClick={shareWhatsApp}
-                style={{
-                  width: '100%',
-                  padding: '13px',
-                  borderRadius: 12,
-                  border: 'none',
-                  background: '#25D366',
-                  color: 'white',
-                  fontFamily: 'Sora, sans-serif',
-                  fontSize: 15,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  transition: 'opacity 200ms ease',
-                }}
-              >
-                📱 Save image + Open WhatsApp
+              <button onClick={shareWhatsApp} disabled={sharing || !imageUrl} style={{ width: '100%', padding: 13, borderRadius: 12, border: 'none', background: '#25D366', color: 'white', fontFamily: 'Sora, sans-serif', fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: sharing ? 0.7 : 1 }}>
+                {sharing ? 'Opening…' : '📱 Share on WhatsApp'}
               </button>
+              <p style={{ fontSize: 11, color: '#AAA', textAlign: 'center', margin: '4px 0 0' }}>
+                On mobile: opens WhatsApp directly with image. On desktop: image downloads + link opens.
+              </p>
             </div>
           )}
         </div>
       </div>
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </>
   )
 }
