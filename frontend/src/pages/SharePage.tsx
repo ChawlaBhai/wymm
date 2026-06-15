@@ -114,14 +114,41 @@ export default function SharePage() {
         import('html2canvas'),
         import('jspdf'),
       ])
+
+      // Step 1: Collect image and link data from LIVE DOM before cloning
+      const sourceRect = source.getBoundingClientRect()
+      const sourceWidth = sourceRect.width || 900
+      const scaleFactor = 480 / sourceWidth
+
+      const liveImgs = Array.from(source.querySelectorAll('img')) as HTMLImageElement[]
+      const imgMeta = liveImgs.map(img => {
+        const parent = img.parentElement
+        const pr = parent?.getBoundingClientRect()
+        return {
+          naturalW: img.naturalWidth, naturalH: img.naturalHeight,
+          containerW: pr ? Math.round(pr.width * scaleFactor) : 0,
+          containerH: pr ? Math.round(pr.height * scaleFactor) : 0,
+        }
+      })
+
+      const liveLinks = Array.from(source.querySelectorAll('a[href]')) as HTMLAnchorElement[]
+      const linkMeta = liveLinks.map(a => {
+        const href = a.getAttribute('href') || ''
+        const r = a.getBoundingClientRect()
+        return {
+          href, x: (r.left - sourceRect.left) * scaleFactor, y: (r.top - sourceRect.top) * scaleFactor,
+          w: r.width * scaleFactor, h: r.height * scaleFactor,
+        }
+      }).filter(l => l.href && !l.href.startsWith('#'))
+
+      // Step 2: Clone off-screen
       const container = document.createElement('div')
       container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;font-family:Inter,sans-serif;'
       document.body.appendChild(container)
       const clone = source.cloneNode(true) as HTMLElement
       clone.style.cssText = 'width:480px;height:auto;overflow:visible;position:static;'
       clone.querySelectorAll('*').forEach((el) => {
-        const h = el as HTMLElement
-        const s = h.style
+        const s = (el as HTMLElement).style
         if (s.opacity === '0') s.opacity = '1'
         if (s.visibility === 'hidden') s.visibility = 'visible'
         if (s.transform?.includes('translate')) s.transform = 'none'
@@ -130,92 +157,56 @@ export default function SharePage() {
       })
       container.appendChild(clone)
 
-      // Fix objectFit:cover for all images (html2canvas ignores objectFit)
-      const allImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
-
-      // First ensure all images are loaded
-      await Promise.all(allImgs.map(img => {
+      // Step 3: Pre-crop images using LIVE dimensions
+      const cloneImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
+      await Promise.all(cloneImgs.map(img => {
         if (img.complete && img.naturalWidth > 0) return Promise.resolve()
-        return new Promise<void>(resolve => {
-          img.onload = () => resolve()
-          img.onerror = () => resolve()
-          if (!img.src && img.currentSrc) img.src = img.currentSrc
-        })
+        return new Promise<void>(r => { img.onload = () => r(); img.onerror = () => r() })
       }))
 
-      // Now replace each image with a pre-cropped canvas data URL
-      for (const img of allImgs) {
-        if (!img.naturalWidth || !img.naturalHeight) continue
+      for (let i = 0; i < cloneImgs.length; i++) {
+        const img = cloneImgs[i]; const meta = imgMeta[i]
+        if (!meta || !meta.containerW || !meta.containerH) continue
+        const nw = img.naturalWidth || meta.naturalW, nh = img.naturalHeight || meta.naturalH
+        if (!nw || !nh) continue
+        const cw = meta.containerW, ch = meta.containerH
+        const oc = document.createElement('canvas'); oc.width = cw; oc.height = ch
+        const ctx = oc.getContext('2d')!
+        const s = Math.max(cw / nw, ch / nh)
+        ctx.drawImage(img, (cw - nw * s) / 2, (ch - nh * s) / 2, nw * s, nh * s)
+        img.src = oc.toDataURL('image/jpeg', 0.92)
+        img.style.width = `${cw}px`; img.style.height = `${ch}px`
+        img.style.objectFit = 'fill'; img.style.display = 'block'
         const parent = img.parentElement
-        if (!parent) continue
-
-        const containerW = parent.offsetWidth || parseInt(parent.style.width) || img.offsetWidth
-        const containerH = parent.offsetHeight || parseInt(parent.style.height) || img.offsetHeight
-        if (!containerW || !containerH) continue
-
-        const offCanvas = document.createElement('canvas')
-        offCanvas.width = containerW
-        offCanvas.height = containerH
-        const offCtx = offCanvas.getContext('2d')!
-
-        const iw = img.naturalWidth, ih = img.naturalHeight
-        const scale = Math.max(containerW / iw, containerH / ih)
-        const scaledW = iw * scale, scaledH = ih * scale
-        const offsetX = (containerW - scaledW) / 2
-        const offsetY = (containerH - scaledH) / 2
-
-        offCtx.drawImage(img, offsetX, offsetY, scaledW, scaledH)
-
-        img.src = offCanvas.toDataURL('image/jpeg', 0.95)
-        img.style.width = `${containerW}px`
-        img.style.height = `${containerH}px`
-        img.style.objectFit = 'fill'
-        img.style.display = 'block'
-
-        parent.style.overflow = 'hidden'
-        const parentBorderRadius = window.getComputedStyle(parent).borderRadius
-        if (parentBorderRadius && parentBorderRadius !== '0px') {
-          parent.style.borderRadius = parentBorderRadius
+        if (parent) {
+          parent.style.overflow = 'hidden'
+          const br = window.getComputedStyle(parent).borderRadius
+          if (br && br !== '0px') parent.style.borderRadius = br
         }
       }
 
-      // Wait for pre-cropped images to be ready
-      await new Promise(r => setTimeout(r, 100))
+      await new Promise(r => setTimeout(r, 150))
 
-      // Collect links using offset position (getBoundingClientRect returns 0,0 off-screen)
-      function getOffsetPosition(el: HTMLElement, ancestor: HTMLElement): { x: number; y: number } {
-        let x = 0, y = 0, cur: HTMLElement | null = el
-        while (cur && cur !== ancestor) {
-          x += cur.offsetLeft
-          y += cur.offsetTop
-          cur = cur.offsetParent as HTMLElement | null
-        }
-        return { x, y }
-      }
-
-      const pdfLinks: { x: number; y: number; w: number; h: number; url: string }[] = []
-      clone.querySelectorAll('a[href]').forEach(a => {
-        const el = a as HTMLAnchorElement
-        const href = el.getAttribute('href')
-        if (!href || href.startsWith('#')) return
-        const pos = getOffsetPosition(el, clone)
-        pdfLinks.push({
-          x: pos.x,
-          y: pos.y,
-          w: el.offsetWidth,
-          h: el.offsetHeight,
-          url: href.startsWith('http') ? href : `https://${href.replace(/^\/\//, '')}`,
-        })
+      const canvas = await html2canvas(container, {
+        scale: 2, useCORS: true, allowTaint: true,
+        backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
+        windowWidth: 480, windowHeight: container.scrollHeight,
       })
-
-      const canvas = await html2canvas(container, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: 480, windowHeight: container.scrollHeight })
       document.body.removeChild(container)
+
       const pxToMm = 0.264583
-      const w = (canvas.width / 2) * pxToMm
-      const h = (canvas.height / 2) * pxToMm
+      const w = (canvas.width / 2) * pxToMm, h = (canvas.height / 2) * pxToMm
+      const verticalScale = h / (source.scrollHeight * scaleFactor * pxToMm)
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [w, h] })
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, w, h)
-      pdfLinks.forEach(({ x, y, w: lw, h: lh, url }) => pdf.link(x * pxToMm, y * pxToMm, lw * pxToMm, lh * pxToMm, { url }))
+
+      linkMeta.forEach(({ href, x, y, w: lw, h: lh }) => {
+        const url = href.startsWith('http') ? href : `https://${href.replace(/^\/\//, '')}`
+        const xm = x * pxToMm, ym = y * pxToMm * verticalScale
+        const wm = lw * pxToMm, hm = lh * pxToMm
+        if (xm >= 0 && ym >= 0 && wm > 0 && hm > 0) pdf.link(xm, ym, wm, hm, { url })
+      })
+
       const name = (biodata.basicInfo.fullName || slug || 'biodata').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
       pdf.save(`wymm-${name}.pdf`)
     } catch {

@@ -206,9 +206,41 @@ export default function PreviewPage() {
         import('jspdf'),
       ])
 
-      // Collect all links from the live source BEFORE cloning (positions will shift, so record them after layout)
-      // We do this after rendering the clone instead
+      // ── STEP 1: Collect image info from LIVE DOM (before cloning) ──
+      // offsetWidth/offsetHeight = 0 in off-screen containers, so we must
+      // read dimensions from the live rendered elements.
+      const sourceRect = source.getBoundingClientRect()
+      const sourceWidth = sourceRect.width || 900 // live rendered width
+      const scaleFactor = 480 / sourceWidth // scale to our 480px PDF width
 
+      const liveImgs = Array.from(source.querySelectorAll('img')) as HTMLImageElement[]
+      const imgMeta = liveImgs.map(img => {
+        const parent = img.parentElement
+        const pr = parent?.getBoundingClientRect()
+        return {
+          src: img.src || img.currentSrc,
+          naturalW: img.naturalWidth,
+          naturalH: img.naturalHeight,
+          containerW: pr ? Math.round(pr.width * scaleFactor) : 0,
+          containerH: pr ? Math.round(pr.height * scaleFactor) : 0,
+        }
+      })
+
+      // ── STEP 2: Collect link positions from LIVE DOM ──
+      const liveLinks = Array.from(source.querySelectorAll('a[href]')) as HTMLAnchorElement[]
+      const linkMeta = liveLinks.map(a => {
+        const href = a.getAttribute('href') || ''
+        const r = a.getBoundingClientRect()
+        return {
+          href,
+          x: (r.left - sourceRect.left) * scaleFactor,
+          y: (r.top - sourceRect.top) * scaleFactor,
+          w: r.width * scaleFactor,
+          h: r.height * scaleFactor,
+        }
+      }).filter(l => l.href && !l.href.startsWith('#'))
+
+      // ── STEP 3: Clone into off-screen container ──
       const container = document.createElement('div')
       container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;font-family:Inter,sans-serif;'
       document.body.appendChild(container)
@@ -229,117 +261,68 @@ export default function PreviewPage() {
 
       container.appendChild(clone)
 
-      // Fix objectFit:cover for all images (html2canvas ignores objectFit)
-      const allImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
-
-      // First ensure all images are loaded
-      await Promise.all(allImgs.map(img => {
+      // ── STEP 4: Pre-crop each image using LIVE dimensions ──
+      const cloneImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
+      await Promise.all(cloneImgs.map(img => {
         if (img.complete && img.naturalWidth > 0) return Promise.resolve()
-        return new Promise<void>(resolve => {
-          img.onload = () => resolve()
-          img.onerror = () => resolve()
-          // If already loading, just wait
-          if (!img.src && img.currentSrc) img.src = img.currentSrc
-        })
+        return new Promise<void>(r => { img.onload = () => r(); img.onerror = () => r() })
       }))
 
-      // Now replace each image with a pre-cropped canvas data URL
-      for (const img of allImgs) {
-        if (!img.naturalWidth || !img.naturalHeight) continue
-        const parent = img.parentElement
-        if (!parent) continue
+      for (let i = 0; i < cloneImgs.length; i++) {
+        const img = cloneImgs[i]
+        const meta = imgMeta[i]
+        if (!meta || !meta.containerW || !meta.containerH) continue
+        const nw = img.naturalWidth || meta.naturalW
+        const nh = img.naturalHeight || meta.naturalH
+        if (!nw || !nh) continue
 
-        // Get the container's rendered size
-        const containerW = parent.offsetWidth || parseInt(parent.style.width) || img.offsetWidth
-        const containerH = parent.offsetHeight || parseInt(parent.style.height) || img.offsetHeight
-        if (!containerW || !containerH) continue
-
-        // Draw with objectFit:cover logic
+        const cw = meta.containerW, ch = meta.containerH
         const offCanvas = document.createElement('canvas')
-        offCanvas.width = containerW
-        offCanvas.height = containerH
-        const offCtx = offCanvas.getContext('2d')!
+        offCanvas.width = cw; offCanvas.height = ch
+        const ctx = offCanvas.getContext('2d')!
+        const scale = Math.max(cw / nw, ch / nh)
+        const sw = nw * scale, sh = nh * scale
+        ctx.drawImage(img, (cw - sw) / 2, (ch - sh) / 2, sw, sh)
 
-        const iw = img.naturalWidth, ih = img.naturalHeight
-        const scale = Math.max(containerW / iw, containerH / ih)
-        const scaledW = iw * scale, scaledH = ih * scale
-        const offsetX = (containerW - scaledW) / 2
-        const offsetY = (containerH - scaledH) / 2
-
-        offCtx.drawImage(img, offsetX, offsetY, scaledW, scaledH)
-
-        // Replace src with pre-cropped data URL
-        img.src = offCanvas.toDataURL('image/jpeg', 0.95)
-        img.style.width = `${containerW}px`
-        img.style.height = `${containerH}px`
-        img.style.objectFit = 'fill' // already cropped
-        img.style.display = 'block'
-
-        // Ensure parent clips correctly
-        parent.style.overflow = 'hidden'
-        const parentBorderRadius = window.getComputedStyle(parent).borderRadius
-        if (parentBorderRadius && parentBorderRadius !== '0px') {
-          parent.style.borderRadius = parentBorderRadius
+        img.src = offCanvas.toDataURL('image/jpeg', 0.92)
+        img.style.width = `${cw}px`; img.style.height = `${ch}px`
+        img.style.objectFit = 'fill'; img.style.display = 'block'
+        const parent = img.parentElement
+        if (parent) {
+          parent.style.overflow = 'hidden'
+          const br = window.getComputedStyle(parent).borderRadius
+          if (br && br !== '0px') parent.style.borderRadius = br
         }
       }
 
-      // Wait for pre-cropped images to be ready
-      await new Promise(r => setTimeout(r, 100))
-
-      // Collect clickable links using offset position (getBoundingClientRect returns 0,0 off-screen)
-      function getOffsetPosition(el: HTMLElement, ancestor: HTMLElement): { x: number; y: number } {
-        let x = 0, y = 0, cur: HTMLElement | null = el
-        while (cur && cur !== ancestor) {
-          x += cur.offsetLeft
-          y += cur.offsetTop
-          cur = cur.offsetParent as HTMLElement | null
-        }
-        return { x, y }
-      }
-
-      const pdfLinks: { x: number; y: number; w: number; h: number; url: string }[] = []
-      clone.querySelectorAll('a[href]').forEach(a => {
-        const el = a as HTMLAnchorElement
-        const href = el.getAttribute('href')
-        if (!href || href.startsWith('#')) return
-        const pos = getOffsetPosition(el, clone)
-        pdfLinks.push({
-          x: pos.x,
-          y: pos.y,
-          w: el.offsetWidth,
-          h: el.offsetHeight,
-          url: href.startsWith('http') ? href : `https://${href.replace(/^\/\//, '')}`,
-        })
-      })
+      await new Promise(r => setTimeout(r, 150))
 
       const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: 480,
-        windowHeight: container.scrollHeight,
+        scale: 2, useCORS: true, allowTaint: true,
+        backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
+        windowWidth: 480, windowHeight: container.scrollHeight,
       })
 
       document.body.removeChild(container)
 
       const pxToMm = 0.264583
-      const scale = 2 // html2canvas scale
-      const widthMm = (canvas.width / scale) * pxToMm
-      const heightMm = (canvas.height / scale) * pxToMm
+      const widthMm = (canvas.width / 2) * pxToMm
+      const heightMm = (canvas.height / 2) * pxToMm
+      const verticalScale = heightMm / (source.scrollHeight * scaleFactor * pxToMm)
 
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [widthMm, heightMm] })
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, widthMm, heightMm)
 
-      // Embed clickable links
-      pdfLinks.forEach(({ x, y, w, h, url }) => {
+      // ── Embed clickable links ──
+      linkMeta.forEach(({ href, x, y, w, h }) => {
+        const url = href.startsWith('http') ? href : `https://${href.replace(/^\/\//, '')}`
         const xMm = x * pxToMm
-        const yMm = y * pxToMm
+        const yMm = y * pxToMm * verticalScale
         const wMm = w * pxToMm
         const hMm = h * pxToMm
-        pdf.link(xMm, yMm, wMm, hMm, { url })
+        if (xMm >= 0 && yMm >= 0 && wMm > 0 && hMm > 0) {
+          pdf.link(xMm, yMm, wMm, hMm, { url })
+        }
       })
 
       pdf.save(filename)
