@@ -105,12 +105,21 @@ export default function StepEducationCareer() {
             </Field>
           </div>
 
-          {/* Annual Income */}
+          {/* Annual Income — free text input */}
           <Field label="Annual Income">
-            <select className="form-input" value={career.annualIncome ?? ''} onChange={e => setCareer('annualIncome', e.target.value)}>
-              <option value="">Select range</option>
-              {INCOME_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
-            </select>
+            <div style={{ position: 'relative' }}>
+              <input
+                className="form-input"
+                placeholder="e.g. 18 LPA, 2.4 CR, 85,000 USD"
+                value={career.annualIncome ?? ''}
+                onChange={e => setCareer('annualIncome', e.target.value)}
+                style={{ paddingRight: '90px' }}
+              />
+              <span style={{
+                position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+                fontSize: '12px', fontWeight: 600, color: '#AAAAAA', pointerEvents: 'none',
+              }}>per annum</span>
+            </div>
           </Field>
 
           {/* Show income toggle */}

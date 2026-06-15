@@ -191,82 +191,70 @@ export default function PreviewPage() {
     window.open(`https://wa.me/?text=${text}`, '_blank')
   }
 
-  // PDF download — html2canvas capture → jsPDF single-page export
+  // PDF download — renders template in a hidden full-width div, captures with html2canvas
   async function handleDownload() {
-    const target = document.getElementById('preview-template-target')
-    if (!target) return
+    const source = document.getElementById('preview-template-target')
+    if (!source) return
 
     const fullName = biodata.basicInfo.fullName || 'biodata'
     const filename = `wymm-${fullName.replace(/\s+/g, '-').toLowerCase()}.pdf`
-
     setPdfLoading(true)
 
     try {
-      // Dynamic import to keep bundle size manageable
       const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
         import('html2canvas'),
         import('jspdf'),
       ])
 
-      // Temporarily remove the max-width constraint for full-width capture
-      const wrapper = target.parentElement
-      const originalMaxWidth = wrapper?.style.maxWidth || ''
-      const originalPadding = wrapper?.style.padding || ''
-      if (wrapper) {
-        wrapper.style.maxWidth = 'none'
-        wrapper.style.padding = '0'
-      }
+      // Clone the template into an off-screen fixed-width container
+      // so ALL content is fully rendered (no viewport clipping, no scroll-hidden elements)
+      const container = document.createElement('div')
+      container.style.cssText = `
+        position: fixed; top: -9999px; left: -9999px;
+        width: 480px; background: white;
+        font-family: Inter, sans-serif;
+        overflow: visible; height: auto;
+      `
+      document.body.appendChild(container)
+      const clone = source.cloneNode(true) as HTMLElement
+      clone.style.cssText = 'width: 480px; height: auto; overflow: visible; position: static;'
 
-      const canvas = await html2canvas(target, {
+      // Force all framer-motion / scroll-animated elements visible
+      clone.querySelectorAll('*').forEach((el) => {
+        const s = (el as HTMLElement).style
+        if (s.opacity === '0') s.opacity = '1'
+        if (s.visibility === 'hidden') s.visibility = 'visible'
+        if (s.transform && (s.transform.includes('translateY') || s.transform.includes('translateX'))) {
+          s.transform = 'none'
+        }
+        if (s.minHeight?.includes('100vh')) s.minHeight = 'auto'
+        if (s.height?.includes('100vh')) s.height = 'auto'
+        if (s.borderRadius === '50%') s.overflow = 'hidden'
+      })
+      container.appendChild(clone)
+
+      // Wait a tick for layout
+      await new Promise(r => setTimeout(r, 100))
+
+      const canvas = await html2canvas(container, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
         scrollX: 0,
         scrollY: 0,
-        windowWidth: target.scrollWidth,
-        windowHeight: target.scrollHeight,
-        onclone: (doc) => {
-          // Make ALL scroll-animated elements visible regardless of scroll position
-          doc.querySelectorAll('*').forEach((el) => {
-            const s = (el as HTMLElement).style
-            // Framer Motion hides elements with opacity:0 before they scroll into view
-            if (s.opacity === '0') s.opacity = '1'
-            if (s.visibility === 'hidden') s.visibility = 'visible'
-            // Remove transforms that move elements off screen
-            if (s.transform && (s.transform.includes('translateY') || s.transform.includes('translateX'))) {
-              s.transform = 'none'
-            }
-            // Fix hero minHeight:100vh so it renders at content height
-            if (s.minHeight && s.minHeight.includes('100vh')) {
-              s.minHeight = 'auto'
-            }
-            if (s.borderRadius === '50%' || s.borderRadius?.includes('50%')) {
-              s.overflow = 'hidden'
-            }
-          })
-          // Also handle framer-motion CSS variables
-          doc.querySelectorAll('[style*="--motion"]').forEach((el) => {
-            (el as HTMLElement).style.opacity = '1'
-            ;(el as HTMLElement).style.transform = 'none'
-          })
-        },
+        windowWidth: 480,
+        windowHeight: container.scrollHeight,
       })
 
-      // Restore wrapper
-      if (wrapper) {
-        wrapper.style.maxWidth = originalMaxWidth
-        wrapper.style.padding = originalPadding
-      }
+      document.body.removeChild(container)
 
-      // Convert canvas dimensions to mm (scale:2 → divide by 2 first)
       const pxToMm = 0.264583
       const widthMm = (canvas.width / 2) * pxToMm
       const heightMm = (canvas.height / 2) * pxToMm
 
-      // Create PDF with exact canvas dimensions — ONE long page, no cuts
       const pdf = new jsPDF({
-        orientation: widthMm > heightMm ? 'landscape' : 'portrait',
+        orientation: 'portrait',
         unit: 'mm',
         format: [widthMm, heightMm],
       })
