@@ -206,35 +206,85 @@ export default function PreviewPage() {
         import('jspdf'),
       ])
 
-      // Clone the template into an off-screen fixed-width container
-      // so ALL content is fully rendered (no viewport clipping, no scroll-hidden elements)
-      const container = document.createElement('div')
-      container.style.cssText = `
-        position: fixed; top: -9999px; left: -9999px;
-        width: 480px; background: white;
-        font-family: Inter, sans-serif;
-        overflow: visible; height: auto;
-      `
-      document.body.appendChild(container)
-      const clone = source.cloneNode(true) as HTMLElement
-      clone.style.cssText = 'width: 480px; height: auto; overflow: visible; position: static;'
+      // Collect all links from the live source BEFORE cloning (positions will shift, so record them after layout)
+      // We do this after rendering the clone instead
 
-      // Force all framer-motion / scroll-animated elements visible
+      const container = document.createElement('div')
+      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;font-family:Inter,sans-serif;'
+      document.body.appendChild(container)
+
+      const clone = source.cloneNode(true) as HTMLElement
+      clone.style.cssText = 'width:480px;height:auto;overflow:visible;position:static;'
+
+      // Fix all animated/hidden elements + image sizing
       clone.querySelectorAll('*').forEach((el) => {
-        const s = (el as HTMLElement).style
+        const h = el as HTMLElement
+        const s = h.style
         if (s.opacity === '0') s.opacity = '1'
         if (s.visibility === 'hidden') s.visibility = 'visible'
-        if (s.transform && (s.transform.includes('translateY') || s.transform.includes('translateX'))) {
-          s.transform = 'none'
-        }
+        if (s.transform?.includes('translate')) s.transform = 'none'
         if (s.minHeight?.includes('100vh')) s.minHeight = 'auto'
         if (s.height?.includes('100vh')) s.height = 'auto'
-        if (s.borderRadius === '50%') s.overflow = 'hidden'
+        // Fix images: force fill their container (objectFit:cover via explicit dimensions)
+        if (h.tagName === 'IMG') {
+          const img = h as HTMLImageElement
+          const parent = img.parentElement
+          if (parent) {
+            const computed = window.getComputedStyle(parent)
+            // If parent is a circle or fixed-size container, make image fill it
+            if (computed.borderRadius === '50%' || computed.overflow === 'hidden') {
+              img.style.width = '100%'
+              img.style.height = '100%'
+              img.style.objectFit = 'cover'
+              img.style.display = 'block'
+              img.style.minWidth = '100%'
+              img.style.minHeight = '100%'
+              parent.style.overflow = 'hidden'
+            }
+          }
+        }
+        // Also handle hexagon/clip-path containers
+        if (s.clipPath || window.getComputedStyle(h).clipPath !== 'none') {
+          const img = h.querySelector('img') as HTMLImageElement | null
+          if (img) {
+            img.style.width = '100%'
+            img.style.height = '100%'
+            img.style.objectFit = 'cover'
+          }
+        }
       })
+
       container.appendChild(clone)
 
-      // Wait a tick for layout
-      await new Promise(r => setTimeout(r, 100))
+      // Wait for images to load in the cloned tree
+      const clonedImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
+      await Promise.all(clonedImgs.map(img => {
+        if (img.complete) return Promise.resolve()
+        return new Promise<void>(resolve => {
+          img.onload = () => resolve()
+          img.onerror = () => resolve()
+        })
+      }))
+
+      // Extra tick for layout reflow
+      await new Promise(r => setTimeout(r, 150))
+
+      // Collect clickable links from clone for PDF annotation
+      const pdfLinks: { x: number; y: number; w: number; h: number; url: string }[] = []
+      const cloneRect = clone.getBoundingClientRect()
+      clone.querySelectorAll('a[href]').forEach(a => {
+        const el = a as HTMLAnchorElement
+        const href = el.getAttribute('href')
+        if (!href || href.startsWith('#')) return
+        const rect = el.getBoundingClientRect()
+        pdfLinks.push({
+          x: rect.left - cloneRect.left,
+          y: rect.top - cloneRect.top,
+          w: rect.width,
+          h: rect.height,
+          url: href.startsWith('http') ? href : `https://${href}`,
+        })
+      })
 
       const canvas = await html2canvas(container, {
         scale: 2,
@@ -250,16 +300,22 @@ export default function PreviewPage() {
       document.body.removeChild(container)
 
       const pxToMm = 0.264583
-      const widthMm = (canvas.width / 2) * pxToMm
-      const heightMm = (canvas.height / 2) * pxToMm
+      const scale = 2 // html2canvas scale
+      const widthMm = (canvas.width / scale) * pxToMm
+      const heightMm = (canvas.height / scale) * pxToMm
 
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: [widthMm, heightMm],
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [widthMm, heightMm] })
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, widthMm, heightMm)
+
+      // Embed clickable links
+      pdfLinks.forEach(({ x, y, w, h, url }) => {
+        const xMm = x * pxToMm
+        const yMm = y * pxToMm
+        const wMm = w * pxToMm
+        const hMm = h * pxToMm
+        pdf.link(xMm, yMm, wMm, hMm, { url })
       })
 
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, widthMm, heightMm)
       pdf.save(filename)
     } catch (err) {
       console.error('PDF export failed:', err)

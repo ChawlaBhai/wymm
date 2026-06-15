@@ -115,21 +115,52 @@ export default function SharePage() {
         import('jspdf'),
       ])
       const container = document.createElement('div')
-      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;'
+      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;font-family:Inter,sans-serif;'
       document.body.appendChild(container)
       const clone = source.cloneNode(true) as HTMLElement
       clone.style.cssText = 'width:480px;height:auto;overflow:visible;position:static;'
       clone.querySelectorAll('*').forEach((el) => {
-        const s = (el as HTMLElement).style
+        const h = el as HTMLElement
+        const s = h.style
         if (s.opacity === '0') s.opacity = '1'
         if (s.visibility === 'hidden') s.visibility = 'visible'
         if (s.transform?.includes('translate')) s.transform = 'none'
         if (s.minHeight?.includes('100vh')) s.minHeight = 'auto'
         if (s.height?.includes('100vh')) s.height = 'auto'
-        if (s.borderRadius === '50%') s.overflow = 'hidden'
+        if (h.tagName === 'IMG') {
+          const img = h as HTMLImageElement
+          const parent = img.parentElement
+          if (parent) {
+            const computed = window.getComputedStyle(parent)
+            if (computed.borderRadius === '50%' || computed.overflow === 'hidden') {
+              img.style.width = '100%'; img.style.height = '100%'
+              img.style.objectFit = 'cover'; img.style.display = 'block'
+              img.style.minWidth = '100%'; img.style.minHeight = '100%'
+              parent.style.overflow = 'hidden'
+            }
+          }
+        }
+        if (s.clipPath || window.getComputedStyle(h).clipPath !== 'none') {
+          const img = h.querySelector('img') as HTMLImageElement | null
+          if (img) { img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover' }
+        }
       })
       container.appendChild(clone)
-      await new Promise(r => setTimeout(r, 100))
+      const clonedImgs = Array.from(clone.querySelectorAll('img')) as HTMLImageElement[]
+      await Promise.all(clonedImgs.map(img => img.complete ? Promise.resolve() : new Promise<void>(r => { img.onload = () => r(); img.onerror = () => r() })))
+      await new Promise(r => setTimeout(r, 150))
+
+      // Collect links for PDF annotation
+      const pdfLinks: { x: number; y: number; w: number; h: number; url: string }[] = []
+      const cloneRect = clone.getBoundingClientRect()
+      clone.querySelectorAll('a[href]').forEach(a => {
+        const el = a as HTMLAnchorElement
+        const href = el.getAttribute('href')
+        if (!href || href.startsWith('#')) return
+        const rect = el.getBoundingClientRect()
+        pdfLinks.push({ x: rect.left - cloneRect.left, y: rect.top - cloneRect.top, w: rect.width, h: rect.height, url: href.startsWith('http') ? href : `https://${href}` })
+      })
+
       const canvas = await html2canvas(container, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: 480, windowHeight: container.scrollHeight })
       document.body.removeChild(container)
       const pxToMm = 0.264583
@@ -137,6 +168,7 @@ export default function SharePage() {
       const h = (canvas.height / 2) * pxToMm
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [w, h] })
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, w, h)
+      pdfLinks.forEach(({ x, y, w: lw, h: lh, url }) => pdf.link(x * pxToMm, y * pxToMm, lw * pxToMm, lh * pxToMm, { url }))
       const name = (biodata.basicInfo.fullName || slug || 'biodata').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
       pdf.save(`wymm-${name}.pdf`)
     } catch {
