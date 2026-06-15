@@ -27,8 +27,8 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
   const shortUrl = profileUrl.replace(/^https?:\/\//, '')
 
   useEffect(() => {
-    // Small delay to let fonts/images settle before capture
-    const timer = setTimeout(() => generateCard(), 300)
+    // Wait for fonts + QRCode SVG to render fully before capture
+    const timer = setTimeout(() => generateCard(), 800)
     return () => clearTimeout(timer)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -42,6 +42,13 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
         allowTaint: true,
         backgroundColor: '#ffffff',
         logging: false,
+        onclone: (doc) => {
+          // Ensure QR SVG is fully visible in the cloned doc
+          doc.querySelectorAll('svg').forEach((svg) => {
+            svg.style.display = 'block'
+            svg.style.visibility = 'visible'
+          })
+        },
       })
       setImageUrl(canvas.toDataURL('image/jpeg', 0.95))
     } catch (e) {
@@ -74,7 +81,20 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
     const text = encodeURIComponent(
       `${name}'s marriage biodata\n${details ? details + '\n' : ''}View full profile: ${profileUrl}`
     )
-    window.open(`https://wa.me/?text=${text}`, '_blank')
+    // WhatsApp Web/Mobile — can't directly attach images via URL scheme.
+    // Best UX: prompt user to save image first, then open WhatsApp with text.
+    if (imageUrl) {
+      const a = document.createElement('a')
+      a.href = imageUrl
+      a.download = `wymm-${basicInfo.fullName.replace(/\s+/g, '-').toLowerCase()}.jpg`
+      a.click()
+      // Small delay then open WhatsApp so user has the image downloaded to share manually
+      setTimeout(() => {
+        window.open(`https://wa.me/?text=${text}`, '_blank')
+      }, 500)
+    } else {
+      window.open(`https://wa.me/?text=${text}`, '_blank')
+    }
   }
 
   // Info grid rows — only show populated fields
@@ -585,6 +605,8 @@ export default function ShareCard({ biodata, profileUrl, onClose }: Props) {
                   gap: 8,
                   transition: 'opacity 200ms ease',
                 }}
+              >
+                📱 Save image + Open WhatsApp
                 onMouseEnter={(e) => {
                   e.currentTarget.style.opacity = '0.9'
                 }}

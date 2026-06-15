@@ -227,16 +227,28 @@ export default function PreviewPage() {
         windowWidth: target.scrollWidth,
         windowHeight: target.scrollHeight,
         onclone: (doc) => {
-          // Fix hero sections: remove minHeight:100vh so hero is content-height only
-          doc.querySelectorAll('section, div').forEach((el) => {
+          // Make ALL scroll-animated elements visible regardless of scroll position
+          doc.querySelectorAll('*').forEach((el) => {
             const s = (el as HTMLElement).style
+            // Framer Motion hides elements with opacity:0 before they scroll into view
+            if (s.opacity === '0') s.opacity = '1'
+            if (s.visibility === 'hidden') s.visibility = 'visible'
+            // Remove transforms that move elements off screen
+            if (s.transform && (s.transform.includes('translateY') || s.transform.includes('translateX'))) {
+              s.transform = 'none'
+            }
+            // Fix hero minHeight:100vh so it renders at content height
             if (s.minHeight && s.minHeight.includes('100vh')) {
               s.minHeight = 'auto'
             }
-            // Fix object-fit:cover images inside circles — ensure no overflow
             if (s.borderRadius === '50%' || s.borderRadius?.includes('50%')) {
               s.overflow = 'hidden'
             }
+          })
+          // Also handle framer-motion CSS variables
+          doc.querySelectorAll('[style*="--motion"]').forEach((el) => {
+            (el as HTMLElement).style.opacity = '1'
+            ;(el as HTMLElement).style.transform = 'none'
           })
         },
       })
