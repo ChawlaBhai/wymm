@@ -25,7 +25,7 @@ Built specifically for the Indian matrimonial context, wymm understands the nuan
 
 ## 🔗 Live Demo
 
-**[try.wymm.in](https://wymm.in)** — no account required to create your first biodata.
+**Try [wymm.store](https://wymm.store)** — no account required to create your first biodata.
 
 ---
 
