@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useBiodataStore } from '@/store/biodataStore'
 import type { Sibling } from '@/types/biodata'
 
@@ -11,6 +12,7 @@ const FAMILY_TYPES: { value: FamilyType; label: string; desc: string }[] = [
 ]
 
 export default function StepFamily() {
+  const { t } = useTranslation()
   const { biodata, updateFamilyInfo } = useBiodataStore()
   const { familyInfo } = biodata
 
@@ -33,10 +35,10 @@ export default function StepFamily() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: 'inherit', marginBottom: '6px', letterSpacing: '-0.02em' }}>
           Your family
         </p>
-        <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
           Family background is an important part of a marriage biodata. Add as much detail as you are comfortable with.
         </p>
       </div>
@@ -116,9 +118,9 @@ export default function StepFamily() {
             {familyInfo.siblings.map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', background: '#F8F9FB', borderRadius: '10px', border: '1px solid #E5E5E5' }}>
                 <div style={{ flex: 1 }}>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>{s.name}</span>
-                  {s.age && <span style={{ fontSize: '13px', color: '#888', marginLeft: '8px' }}>{s.age} yrs</span>}
-                  {s.profession && <span style={{ fontSize: '13px', color: '#888', marginLeft: '8px' }}>· {s.profession}</span>}
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: 'inherit' }}>{s.name}</span>
+                  {s.age && <span style={{ fontSize: '13px', color: 'inherit', marginLeft: '8px' }}>{s.age} yrs</span>}
+                  {s.profession && <span style={{ fontSize: '13px', color: 'inherit', marginLeft: '8px' }}>· {s.profession}</span>}
                 </div>
                 <button
                   type="button"
@@ -136,7 +138,7 @@ export default function StepFamily() {
         {/* Add sibling form */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: '10px', alignItems: 'end' }}>
           <div>
-            <label style={{ fontSize: '11px', color: '#AAA', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Name</label>
+            <label style={{ fontSize: '11px', color: 'inherit', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Name</label>
             <input
               className="form-input"
               placeholder="Sibling's name"
@@ -147,7 +149,7 @@ export default function StepFamily() {
             />
           </div>
           <div>
-            <label style={{ fontSize: '11px', color: '#AAA', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Age</label>
+            <label style={{ fontSize: '11px', color: 'inherit', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Age</label>
             <input
               type="number"
               className="form-input"
@@ -158,7 +160,7 @@ export default function StepFamily() {
             />
           </div>
           <div>
-            <label style={{ fontSize: '11px', color: '#AAA', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Profession</label>
+            <label style={{ fontSize: '11px', color: 'inherit', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Profession</label>
             <input
               className="form-input"
               placeholder="Profession"

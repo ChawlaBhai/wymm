@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { TEMPLATE_META, type TemplateId } from '@/types/biodata'
@@ -30,6 +31,7 @@ const cardVariants = {
 }
 
 export default function TemplatesSection() {
+  const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const navigate = useNavigate()
@@ -76,7 +78,7 @@ export default function TemplatesSection() {
             fontWeight: 700,
             fontSize: 'clamp(24px, 3.6vw, 38px)',
             letterSpacing: '-0.02em',
-            color: '#1A1A1A',
+            ,
             marginBottom: 10,
           }}
         >

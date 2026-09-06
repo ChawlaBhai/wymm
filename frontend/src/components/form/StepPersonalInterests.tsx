@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useBiodataStore } from '@/store/biodataStore'
 
 type LifestyleOption = 'no' | 'occasionally' | 'yes'
@@ -71,7 +72,7 @@ function TagInput({
       {unusedSuggestions.length > 0 && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
           {unusedSuggestions.map(s => (
-            <button key={s} type="button" onClick={() => onAdd(s)} style={{ padding: '4px 12px', background: '#F8F9FB', color: '#666', border: '1px solid #E5E5E5', borderRadius: '99px', fontSize: '12px', fontWeight: 500, cursor: 'pointer', transition: 'all 150ms ease' }}>
+            <button key={s} type="button" onClick={() => onAdd(s)} style={{ padding: '4px 12px', background: '#F8F9FB', color: 'inherit', border: '1px solid #E5E5E5', borderRadius: '99px', fontSize: '12px', fontWeight: 500, cursor: 'pointer', transition: 'all 150ms ease' }}>
               + {s}
             </button>
           ))}
@@ -119,6 +120,7 @@ function PillGroup<T extends string>({
 }
 
 export default function StepPersonalInterests() {
+  const { t } = useTranslation()
   const { biodata, updatePersonalInterests } = useBiodataStore()
   const { personalInterests } = biodata
 
@@ -139,10 +141,10 @@ export default function StepPersonalInterests() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: 'inherit', marginBottom: '6px', letterSpacing: '-0.02em' }}>
           Interests & lifestyle
         </p>
-        <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
           Let your personality shine through. Type and press Enter to add your own, or pick from suggestions.
         </p>
       </div>
@@ -193,7 +195,7 @@ export default function StepPersonalInterests() {
       <div>
         <label className="form-label">
           Personality Traits
-          <span style={{ fontWeight: 400, textTransform: 'none', color: '#AAA', marginLeft: '8px', letterSpacing: 0, fontSize: '11px' }}>
+          <span style={{ fontWeight: 400, textTransform: 'none', color: 'inherit', marginLeft: '8px', letterSpacing: 0, fontSize: '11px' }}>
             ({personalInterests.personalityTraits.length}/5 selected)
           </span>
         </label>
@@ -226,7 +228,7 @@ export default function StepPersonalInterests() {
           })}
         </div>
         {personalInterests.personalityTraits.length >= 5 && (
-          <p style={{ fontSize: '12px', color: '#888', marginTop: '8px' }}>Maximum 5 traits selected</p>
+          <p style={{ fontSize: '12px', color: 'inherit', marginTop: '8px' }}>Maximum 5 traits selected</p>
         )}
       </div>
     </div>

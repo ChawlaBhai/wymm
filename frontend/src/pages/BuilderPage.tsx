@@ -201,7 +201,7 @@ export default function BuilderPage() {
                 >
                   <div className={`transition-all duration-300 ${active ? 'bg-white dark:bg-slate-900' : done ? 'bg-purple-600' : 'bg-gray-100 dark:bg-slate-800'}`} style={{
                     width: '28px', height: '28px', borderRadius: '50%',
-                    border: active ? '2.5px solid #7C3AED' : done ? '2.5px solid #7C3AED' : '2px solid transparent',
+                    border: active ? '2.5px solid #7C3AED' : done ? '2.5px solid #7C3AED' : '2px solid var(--color-border)',
                     borderColor: (!active && !done) ? 'var(--color-gray-200)' : '',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: active ? '0 0 0 4px rgba(124,58,237,0.12)' : 'none',
@@ -289,7 +289,7 @@ export default function BuilderPage() {
       }}>
         {/* Template selector */}
         <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 transition-colors duration-300" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, flexWrap: 'wrap' as const }}>
-          <span className="text-gray-400 dark:text-gray-500" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: '4px' }}>Template</span>
+          <span className="text-gray-400 dark:text-gray-500" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: '4px' }}>{t('builder.template')}</span>
           {TEMPLATE_IDS.map(id => {
             const meta = TEMPLATE_META[id]
             const active = biodata.templateId === id
@@ -322,7 +322,7 @@ export default function BuilderPage() {
           {/* Live label */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '12px', alignSelf: 'flex-start' }}>
             <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10B981', display: 'inline-block', animation: 'pulse-dot 2s ease-in-out infinite' }} />
-            <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Live Preview</span>
+            <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('builder.livepreview')}</span>
           </div>
 
           {/* Scaled preview container */}
@@ -364,7 +364,7 @@ export default function BuilderPage() {
       {mobilePreviewOpen && (
         <div className="bg-white dark:bg-slate-900 transition-colors duration-300" style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column' }}>
           <div className="border-b border-gray-200 dark:border-slate-700" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span className="text-gray-900 dark:text-white" style={{ fontFamily: 'inherit', fontSize: '16px', fontWeight: 700 }}>Live Preview</span>
+            <span className="text-gray-900 dark:text-white" style={{ fontFamily: 'inherit', fontSize: '16px', fontWeight: 700 }}>{t('builder.livepreview')}</span>
             <button type="button" onClick={() => setMobilePreviewOpen(false)} className="text-gray-600 dark:text-gray-300" style={{ background: 'none', border: 'none', fontSize: '15px', cursor: 'pointer', padding: '4px 8px' }}>
               Close
             </button>

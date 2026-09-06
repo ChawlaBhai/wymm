@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -30,6 +31,7 @@ function calcAge(dob: string): number {
 }
 
 export default function StepBasicInfo() {
+  const { t } = useTranslation()
   const { biodata, updateBasicInfo } = useBiodataStore()
   const { basicInfo } = biodata
 
@@ -77,12 +79,12 @@ export default function StepBasicInfo() {
   ])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className="text-gray-900 dark:text-gray-100" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px', letterSpacing: '-0.02em' }}>
-          Tell us about yourself
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: 'inherit', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+          {t('builder.step.basic')}
         </p>
-        <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
           This forms the core of your biodata. Fill in as much as you can — it updates the preview live.
         </p>
       </div>
@@ -155,7 +157,7 @@ export default function StepBasicInfo() {
             style={{ resize: 'vertical' }}
             {...register('aboutMe')}
           />
-          <span style={{ position: 'absolute', bottom: '10px', right: '14px', fontSize: '11px', color: '#AAA' }}>
+          <span style={{ position: 'absolute', bottom: '10px', right: '14px', fontSize: '11px', color: 'inherit' }}>
             {aboutMeVal.length}/300
           </span>
         </div>
@@ -163,10 +165,10 @@ export default function StepBasicInfo() {
 
       {/* Social Links */}
       <div style={{ paddingTop: '8px' }}>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '15px', fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }}>
-          Social Links <span style={{ fontWeight: 400, color: '#AAA', fontSize: '13px' }}>(optional)</span>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '15px', fontWeight: 700, color: 'inherit', marginBottom: '4px' }}>
+          Social Links <span style={{ fontWeight: 400, color: 'inherit', fontSize: '13px' }}>(optional)</span>
         </p>
-        <p style={{ fontSize: '13px', color: '#888', marginBottom: '16px', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '13px', color: 'inherit', marginBottom: '16px', lineHeight: 1.5 }}>
           Add your social profiles — they'll appear on your biodata.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { motion, useInView } from 'framer-motion'
 
 function BadBiodata() {
@@ -10,7 +11,7 @@ function BadBiodata() {
       overflow: 'hidden',
       fontFamily: '"Times New Roman", Times, serif',
       fontSize: 10,
-      color: '#1A1A1A',
+      ,
       padding: 12,
       height: 240,
       position: 'relative',
@@ -170,6 +171,7 @@ function GoodBiodata() {
 }
 
 export default function WhyMattersSection() {
+  const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
@@ -193,7 +195,7 @@ export default function WhyMattersSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#7C3AED',
+            color: '#A855F7',
           }}>
             Why it matters
           </span>
@@ -209,7 +211,7 @@ export default function WhyMattersSection() {
             fontWeight: 700,
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            color: '#1A1A1A',
+            ,
             marginBottom: 72,
           }}
         >
@@ -298,7 +300,7 @@ export default function WhyMattersSection() {
                   fontWeight: 700,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color: '#7C3AED',
+                  color: '#A855F7',
                   textAlign: 'center',
                 }}>
                   With wymm
@@ -325,7 +327,7 @@ export default function WhyMattersSection() {
                   fontFamily: 'Sora, sans-serif',
                   fontWeight: 800,
                   fontSize: 11,
-                  color: '#1A1A1A',
+                  ,
                   flexShrink: 0,
                   margin: '0 8px',
                   zIndex: 1,

@@ -1,8 +1,10 @@
 import { useRef } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 
 export default function CTABannerSection() {
+  const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
@@ -154,19 +156,19 @@ export default function CTABannerSection() {
                 fontWeight: 800,
                 fontSize: 'clamp(28px, 4.5vw, 52px)',
                 letterSpacing: '-0.03em',
-                color: '#1A1A1A',
+                ,
                 marginBottom: 18,
                 lineHeight: 1.1,
               }}
             >
-              Your story is worth{' '}
+              {t('cta.title1')}{' '}
               <span style={{
                 background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
               }}>
-                telling well.
+                {t('cta.title2')}
               </span>
             </motion.h2>
 
@@ -177,13 +179,13 @@ export default function CTABannerSection() {
               style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 'clamp(15px, 1.8vw, 18px)',
-                color: '#666',
+                color: 'var(--tw-prose-body)',
                 lineHeight: 1.65,
                 maxWidth: 420,
                 margin: '0 auto 36px',
               }}
             >
-              Free forever. No account needed. Ready in minutes.
+              {t('cta.desc')}
             </motion.p>
 
             <motion.div
@@ -197,15 +199,15 @@ export default function CTABannerSection() {
                 className="btn-primary"
                 style={{ fontSize: 16, padding: '15px 44px' }}
               >
-                Create My Biodata →
+                {t('cta.btn')}
               </Link>
               <span style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 13,
-                color: '#AAA',
+                color: 'var(--tw-prose-counters)',
                 fontWeight: 500,
               }}>
-                Join thousands of families across India
+                {t('cta.trust')}
               </span>
             </motion.div>
           </div>

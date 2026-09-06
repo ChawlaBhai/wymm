@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useBiodataStore } from '@/store/biodataStore'
 
 const QUALIFICATION_OPTIONS = [
@@ -100,6 +101,7 @@ function MultiCheckbox({
 }
 
 export default function StepMatchPreferences() {
+  const { t } = useTranslation()
   const { biodata, updateMatchPreferences } = useBiodataStore()
   const { matchPreferences } = biodata
 
@@ -108,10 +110,10 @@ export default function StepMatchPreferences() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: 'inherit', marginBottom: '6px', letterSpacing: '-0.02em' }}>
           Partner preferences
         </p>
-        <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
           What are you looking for in a life partner? This helps families understand your expectations.
         </p>
       </div>
@@ -121,7 +123,7 @@ export default function StepMatchPreferences() {
         <label className="form-label">Preferred Age Range</label>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ flex: 1 }}>
-            <label style={{ fontSize: '11px', color: '#AAA', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Min Age</label>
+            <label style={{ fontSize: '11px', color: 'inherit', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Min Age</label>
             <input
               type="number"
               className="form-input"
@@ -131,9 +133,9 @@ export default function StepMatchPreferences() {
               onChange={e => updateMatchPreferences({ ageRangeMin: Number(e.target.value) })}
             />
           </div>
-          <span style={{ color: '#AAA', marginTop: '20px', fontSize: '18px' }}>—</span>
+          <span style={{ color: 'inherit', marginTop: '20px', fontSize: '18px' }}>—</span>
           <div style={{ flex: 1 }}>
-            <label style={{ fontSize: '11px', color: '#AAA', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Max Age</label>
+            <label style={{ fontSize: '11px', color: 'inherit', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '5px' }}>Max Age</label>
             <input
               type="number"
               className="form-input"
@@ -159,7 +161,7 @@ export default function StepMatchPreferences() {
 
       {/* Education Preference */}
       <div>
-        <label className="form-label">Education Preference <span style={{ fontWeight: 400, textTransform: 'none', color: '#AAA', letterSpacing: 0, fontSize: '11px' }}>(select all that apply)</span></label>
+        <label className="form-label">Education Preference <span style={{ fontWeight: 400, textTransform: 'none', color: 'inherit', letterSpacing: 0, fontSize: '11px' }}>(select all that apply)</span></label>
         <MultiCheckbox
           options={QUALIFICATION_OPTIONS}
           selected={matchPreferences.education ?? []}
@@ -169,7 +171,7 @@ export default function StepMatchPreferences() {
 
       {/* Profession Preference */}
       <div>
-        <label className="form-label">Profession Preference <span style={{ fontWeight: 400, textTransform: 'none', color: '#AAA', letterSpacing: 0, fontSize: '11px' }}>(select all that apply)</span></label>
+        <label className="form-label">Profession Preference <span style={{ fontWeight: 400, textTransform: 'none', color: 'inherit', letterSpacing: 0, fontSize: '11px' }}>(select all that apply)</span></label>
         <MultiCheckbox
           options={INDUSTRY_OPTIONS}
           selected={matchPreferences.profession ?? []}
@@ -181,7 +183,7 @@ export default function StepMatchPreferences() {
       <div>
         <label className="form-label">
           Expectations
-          <span style={{ fontWeight: 400, textTransform: 'none', color: '#AAA', marginLeft: '8px', letterSpacing: 0, fontSize: '11px' }}>max 400 characters</span>
+          <span style={{ fontWeight: 400, textTransform: 'none', color: 'inherit', marginLeft: '8px', letterSpacing: 0, fontSize: '11px' }}>max 400 characters</span>
         </label>
         <div style={{ position: 'relative' }}>
           <textarea
@@ -193,7 +195,7 @@ export default function StepMatchPreferences() {
             value={expectations}
             onChange={e => updateMatchPreferences({ expectations: e.target.value })}
           />
-          <span style={{ position: 'absolute', bottom: '10px', right: '14px', fontSize: '11px', color: '#AAA' }}>
+          <span style={{ position: 'absolute', bottom: '10px', right: '14px', fontSize: '11px', color: 'inherit' }}>
             {expectations.length}/400
           </span>
         </div>

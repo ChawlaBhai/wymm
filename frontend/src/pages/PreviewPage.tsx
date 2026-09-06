@@ -222,7 +222,7 @@ export default function PreviewPage() {
       // read dimensions from the live rendered elements.
       const sourceRect = source.getBoundingClientRect()
       const sourceWidth = sourceRect.width || 900 // live rendered width
-      const scaleFactor = 480 / sourceWidth // scale to our 480px PDF width
+      const scaleFactor = 794 / sourceWidth // scale to our 794px PDF width
 
       const liveImgs = Array.from(source.querySelectorAll('img')) as HTMLImageElement[]
       const imgMeta = liveImgs.map(img => {
@@ -253,11 +253,11 @@ export default function PreviewPage() {
 
       // ── STEP 3: Clone into off-screen container ──
       const container = document.createElement('div')
-      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:480px;background:white;overflow:visible;height:auto;font-family:Inter,sans-serif;'
+      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:794px;background:white;overflow:visible;height:auto;font-family:Inter,sans-serif;'
       document.body.appendChild(container)
 
       const clone = source.cloneNode(true) as HTMLElement
-      clone.style.cssText = 'width:480px;height:auto;overflow:visible;position:static;'
+      clone.style.cssText = 'width:794px;height:auto;overflow:visible;position:static;'
 
       // Fix all animated/hidden elements
       clone.querySelectorAll('*').forEach((el) => {
@@ -311,7 +311,7 @@ export default function PreviewPage() {
       const canvas = await html2canvas(container, {
         scale: 2, useCORS: true, allowTaint: true,
         backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
-        windowWidth: 480, windowHeight: container.scrollHeight,
+        windowWidth: 794, windowHeight: container.scrollHeight,
       })
 
       document.body.removeChild(container)

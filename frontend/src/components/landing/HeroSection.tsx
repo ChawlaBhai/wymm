@@ -82,6 +82,7 @@ function BiodataMockup() {
 }
 
 export default function HeroSection() {
+  const { t } = useTranslation()
   const mockupRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
@@ -344,12 +345,12 @@ export default function HeroSection() {
               transition={{ delay: 0.88, duration: 0.4 }}
               style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
             >
-              {['16 premium templates', 'Share in seconds', 'Free preview'].map((signal, i) => (
+              {[t('hero.signal1'), t('hero.signal2'), t('hero.signal3')].map((signal, i) => (
                 <span key={signal} style={{ display: 'inline-flex', alignItems: 'center' }}>
                   <span style={{
                     fontFamily: 'inherit',
                     fontSize: 13,
-                    color: '#888',
+                    color: 'var(--tw-prose-counters, #888)',
                     fontWeight: 500,
                     whiteSpace: 'nowrap',
                   }}>
@@ -452,7 +453,7 @@ export default function HeroSection() {
                   animate={{ y: [0, -12, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                   style={{
-                    background: '#F8F9FB',
+                    background: 'var(--tw-prose-body, #F8F9FB)',
                     borderRadius: '6px 6px 0 0',
                     padding: '16px 14px',
                     minHeight: 300,

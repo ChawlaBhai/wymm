@@ -1,3 +1,4 @@
+import { useTranslation } from '@/lib/i18n'
 import { useBiodataStore } from '@/store/biodataStore'
 
 const QUALIFICATIONS = [
@@ -15,6 +16,7 @@ const INCOME_OPTIONS = [
 ]
 
 export default function StepEducationCareer() {
+  const { t } = useTranslation()
   const { biodata, updateEducation, updateCareer } = useBiodataStore()
   const { education, career } = biodata
 
@@ -29,10 +31,10 @@ export default function StepEducationCareer() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: 'inherit', marginBottom: '6px', letterSpacing: '-0.02em' }}>
           Education & career
         </p>
-        <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
           Your qualifications and professional background — important for potential matches.
         </p>
       </div>
@@ -142,8 +144,8 @@ export default function StepEducationCareer() {
                 }} />
               </div>
               <div>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A' }}>Show income on biodata</p>
-                <p style={{ fontSize: '12px', color: '#888', marginTop: '1px' }}>Currently {career.showIncome ? 'visible' : 'hidden'} to viewers</p>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: 'inherit' }}>Show income on biodata</p>
+                <p style={{ fontSize: '12px', color: 'inherit', marginTop: '1px' }}>Currently {career.showIncome ? 'visible' : 'hidden'} to viewers</p>
               </div>
             </div>
           )}

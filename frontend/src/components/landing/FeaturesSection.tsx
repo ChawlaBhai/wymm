@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { motion, useInView } from 'framer-motion'
 
 const FEATURES = [
@@ -63,6 +64,7 @@ const tileVariants = {
 }
 
 export default function FeaturesSection() {
+  const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
@@ -101,7 +103,7 @@ export default function FeaturesSection() {
             fontWeight: 700,
             fontSize: 'clamp(28px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            color: '#1A1A1A',
+            ,
             marginBottom: 56,
           }}
         >
@@ -174,7 +176,7 @@ export default function FeaturesSection() {
                 fontWeight: 700,
                 fontSize: 16,
                 letterSpacing: '-0.02em',
-                color: '#1A1A1A',
+                ,
                 marginBottom: 8,
               }}>
                 {feat.title}
@@ -183,7 +185,7 @@ export default function FeaturesSection() {
               <p style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 14,
-                color: '#666',
+                ,
                 lineHeight: 1.65,
               }}>
                 {feat.description}

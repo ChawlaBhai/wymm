@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from '@/lib/i18n'
 import { useDropzone } from 'react-dropzone'
 import imageCompression from 'browser-image-compression'
 import { useBiodataStore } from '@/store/biodataStore'
@@ -48,7 +49,7 @@ function ProfileDropzone() {
           <img src={profilePhoto} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div>
-          <p style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A', marginBottom: '6px' }}>Profile photo added</p>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: 'inherit', marginBottom: '6px' }}>Profile photo added</p>
           <button
             type="button"
             onClick={() => updateMedia({ profilePhoto: undefined })}
@@ -76,24 +77,24 @@ function ProfileDropzone() {
     >
       <input {...getInputProps()} />
       <div style={{ fontSize: '36px', marginBottom: '12px' }}>📸</div>
-      <p style={{ fontSize: '15px', fontWeight: 600, color: '#1A1A1A', marginBottom: '4px' }}>
+      <p style={{ fontSize: '15px', fontWeight: 600, color: 'inherit', marginBottom: '4px' }}>
         {isDragActive ? 'Drop it here' : 'Drop your photo here'}
       </p>
-      <p style={{ fontSize: '13px', color: '#888' }}>or click to upload · JPEG, PNG, WEBP</p>
+      <p style={{ fontSize: '13px', color: 'inherit' }}>or click to upload · JPEG, PNG, WEBP</p>
     </div>
   )
 }
 
 function GalleryDropzone() {
   const { biodata, updateMedia } = useBiodataStore()
-  const galleryPhotos = biodata.media.galleryPhotos
-  const remaining = 5 - galleryPhotos.length
+  const gallery{t('builder.step.media')} = biodata.media.gallery{t('builder.step.media')}
+  const remaining = 5 - gallery{t('builder.step.media')}.length
 
   const onDrop = useCallback(async (files: File[]) => {
     const toAdd = files.slice(0, remaining)
     const encoded = await Promise.all(toAdd.map(f => compressAndEncode(f, 0.3, 600)))
-    updateMedia({ galleryPhotos: [...galleryPhotos, ...encoded] })
-  }, [galleryPhotos, remaining, updateMedia])
+    updateMedia({ gallery{t('builder.step.media')}: [...gallery{t('builder.step.media')}, ...encoded] })
+  }, [gallery{t('builder.step.media')}, remaining, updateMedia])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -103,7 +104,7 @@ function GalleryDropzone() {
   })
 
   function removePhoto(idx: number) {
-    updateMedia({ galleryPhotos: galleryPhotos.filter((_, i) => i !== idx) })
+    updateMedia({ gallery{t('builder.step.media')}: gallery{t('builder.step.media')}.filter((_, i) => i !== idx) })
   }
 
   return (
@@ -111,15 +112,15 @@ function GalleryDropzone() {
       {/* Usage indicator */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
         <div style={{ flex: 1, height: '4px', background: '#F0F0F0', borderRadius: '99px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(galleryPhotos.length / 5) * 100}%`, background: 'linear-gradient(90deg, #7C3AED, #EC4899)', borderRadius: '99px', transition: 'width 300ms ease' }} />
+          <div style={{ height: '100%', width: `${(gallery{t('builder.step.media')}.length / 5) * 100}%`, background: 'linear-gradient(90deg, #7C3AED, #EC4899)', borderRadius: '99px', transition: 'width 300ms ease' }} />
         </div>
-        <span style={{ fontSize: '12px', color: '#888', fontWeight: 600, whiteSpace: 'nowrap' as const }}>{galleryPhotos.length} of 5 photos</span>
+        <span style={{ fontSize: '12px', color: 'inherit', fontWeight: 600, whiteSpace: 'nowrap' as const }}>{gallery{t('builder.step.media')}.length} of 5 photos</span>
       </div>
 
       {/* Thumbnails grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '16px' }}>
         {[0, 1, 2, 3, 4].map(idx => {
-          const photo = galleryPhotos[idx]
+          const photo = gallery{t('builder.step.media')}[idx]
           return (
             <div key={idx} style={{ aspectRatio: '1', borderRadius: '12px', overflow: 'hidden', position: 'relative', border: '1.5px solid #E5E5E5', background: '#F8F9FB' }}>
               {photo ? (
@@ -157,7 +158,7 @@ function GalleryDropzone() {
           }}
         >
           <input {...getInputProps()} />
-          <p style={{ fontSize: '14px', color: '#888' }}>
+          <p style={{ fontSize: '14px', color: 'inherit' }}>
             {isDragActive ? 'Drop photos here' : `Drop up to ${remaining} more photo${remaining !== 1 ? 's' : ''} · or click to browse`}
           </p>
         </div>
@@ -217,7 +218,7 @@ function DocumentsDropzone() {
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', border: '1.5px solid #E5E5E5', borderRadius: '10px', background: '#FAFAFA' }}>
               <span style={{ fontSize: '20px' }}>{doc.type === 'pdf' ? '📄' : '🖼️'}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: '14px', fontWeight: 600, color: '#1A1A1A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.name}</p>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: 'inherit', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.name}</p>
                 <span style={{ fontSize: '11px', fontWeight: 600, color: doc.type === 'pdf' ? '#DC2626' : '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{doc.type}</span>
               </div>
               <button
@@ -251,27 +252,28 @@ function DocumentsDropzone() {
           <p style={{ fontSize: '14px', fontWeight: 500, color: '#555', margin: 0, marginBottom: '4px' }}>
             {isDragActive ? 'Drop files here' : 'Drop PDFs or images here'}
           </p>
-          <p style={{ fontSize: '12px', color: '#AAA', margin: 0 }}>
+          <p style={{ fontSize: '12px', color: 'inherit', margin: 0 }}>
             or click to browse · up to {remaining} more file{remaining !== 1 ? 's' : ''}
           </p>
         </div>
       )}
       {remaining === 0 && (
-        <p style={{ fontSize: '13px', color: '#AAA', textAlign: 'center', padding: '12px 0' }}>Maximum 5 documents reached</p>
+        <p style={{ fontSize: '13px', color: 'inherit', textAlign: 'center', padding: '12px 0' }}>Maximum 5 documents reached</p>
       )}
     </div>
   )
 }
 
 export default function StepMedia() {
+  const { t } = useTranslation()
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px', letterSpacing: '-0.02em' }}>
-          Photos
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '22px', fontWeight: 700, color: 'inherit', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+          {t('builder.step.media')}
         </p>
-        <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.6 }}>
-          Add a clear profile photo and up to 5 gallery photos. Photos are compressed automatically.
+        <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
+          Add a clear profile photo and up to 5 gallery photos. {t('builder.step.media')} are compressed automatically.
         </p>
       </div>
 
@@ -286,7 +288,7 @@ export default function StepMedia() {
 
       {/* Gallery */}
       <div>
-        <label className="form-label" style={{ marginBottom: '14px', display: 'block' }}>Gallery Photos (up to 5)</label>
+        <label className="form-label" style={{ marginBottom: '14px', display: 'block' }}>Gallery {t('builder.step.media')} (up to 5)</label>
         <GalleryDropzone />
       </div>
 
@@ -299,7 +301,7 @@ export default function StepMedia() {
             'Avoid heavy filters — natural looks best',
             'Include a full-face shot as your profile photo',
           ].map((tip, i) => (
-            <li key={i} style={{ fontSize: '13px', color: '#666', display: 'flex', gap: '8px' }}>
+            <li key={i} style={{ fontSize: '13px', color: 'inherit', display: 'flex', gap: '8px' }}>
               <span style={{ color: '#7C3AED' }}>·</span> {tip}
             </li>
           ))}
@@ -311,10 +313,10 @@ export default function StepMedia() {
 
       {/* Documents */}
       <div>
-        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '15px', fontWeight: 700, color: '#1A1A1A', marginBottom: '4px' }}>
-          Other Documents <span style={{ fontWeight: 400, color: '#AAA', fontSize: '13px' }}>(optional)</span>
+        <p style={{ fontFamily: 'Sora, sans-serif', fontSize: '15px', fontWeight: 700, color: 'inherit', marginBottom: '4px' }}>
+          Other Documents <span style={{ fontWeight: 400, color: 'inherit', fontSize: '13px' }}>(optional)</span>
         </p>
-        <p style={{ fontSize: '13px', color: '#888', marginBottom: '16px', lineHeight: 1.5 }}>
+        <p style={{ fontSize: '13px', color: 'inherit', marginBottom: '16px', lineHeight: 1.5 }}>
           Add Kundli, horoscope, certificates or other supporting documents
         </p>
         <DocumentsDropzone />
