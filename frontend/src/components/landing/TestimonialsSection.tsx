@@ -76,7 +76,6 @@ export default function TestimonialsSection() {
             fontWeight: 700,
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            ,
             marginBottom: 56,
           }}
         >
@@ -103,7 +102,6 @@ export default function TestimonialsSection() {
                 transition: { duration: 0.22 },
               }}
               style={{
-                ,
                 borderRadius: 16,
                 padding: '28px 28px 24px',
                 border: '1px solid #E8E8E8',
@@ -149,7 +147,6 @@ export default function TestimonialsSection() {
               <p style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 15,
-                ,
                 lineHeight: 1.75,
                 flex: 1,
                 fontStyle: 'italic',
@@ -184,7 +181,6 @@ export default function TestimonialsSection() {
                     fontFamily: 'Inter, sans-serif',
                     fontSize: 13,
                     fontWeight: 600,
-                    ,
                     marginBottom: 2,
                   }}>
                     {t.name}

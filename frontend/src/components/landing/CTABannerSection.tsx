@@ -156,7 +156,6 @@ export default function CTABannerSection() {
                 fontWeight: 800,
                 fontSize: 'clamp(28px, 4.5vw, 52px)',
                 letterSpacing: '-0.03em',
-                ,
                 marginBottom: 18,
                 lineHeight: 1.1,
               }}

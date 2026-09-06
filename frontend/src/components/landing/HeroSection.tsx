@@ -84,7 +84,6 @@ function BiodataMockup() {
 export default function HeroSection() {
   const { t } = useTranslation()
   const mockupRef = useRef<HTMLDivElement>(null)
-  const { t } = useTranslation()
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)

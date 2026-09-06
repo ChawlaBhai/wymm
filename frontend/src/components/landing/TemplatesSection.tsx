@@ -78,7 +78,6 @@ export default function TemplatesSection() {
             fontWeight: 700,
             fontSize: 'clamp(24px, 3.6vw, 38px)',
             letterSpacing: '-0.02em',
-            ,
             marginBottom: 10,
           }}
         >

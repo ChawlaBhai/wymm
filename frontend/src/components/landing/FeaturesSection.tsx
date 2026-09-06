@@ -103,7 +103,6 @@ export default function FeaturesSection() {
             fontWeight: 700,
             fontSize: 'clamp(28px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            ,
             marginBottom: 56,
           }}
         >
@@ -176,7 +175,6 @@ export default function FeaturesSection() {
                 fontWeight: 700,
                 fontSize: 16,
                 letterSpacing: '-0.02em',
-                ,
                 marginBottom: 8,
               }}>
                 {feat.title}
@@ -185,7 +183,6 @@ export default function FeaturesSection() {
               <p style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 14,
-                ,
                 lineHeight: 1.65,
               }}>
                 {feat.description}

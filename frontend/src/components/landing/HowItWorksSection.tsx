@@ -16,7 +16,6 @@ function TemplatesThumbnails() {
         <div key={i} style={{
           height: 72,
           borderRadius: 10,
-          ,
           border: `1.5px solid ${c}33`,
           overflow: 'hidden',
           boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
@@ -45,7 +44,6 @@ function BuilderIllustration() {
     <div style={{
       width: '100%',
       maxWidth: 240,
-      ,
       borderRadius: 12,
       border: '1px solid #E5E5E5',
       overflow: 'hidden',
@@ -124,7 +122,7 @@ function ShareIllustration() {
         boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
       }}>
         <div style={{ width: 36, height: 5, background: '#333', borderRadius: 3, margin: '0 auto 6px' }} />
-        <div style={{ , borderRadius: 10, overflow: 'hidden', padding: '10px 8px' }}>
+        <div style={{ borderRadius: 10, overflow: 'hidden', padding: '10px 8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 6 }}>
             <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(135deg, #E8DFF5, #FCE8EB)' }} />
             <div>
@@ -236,7 +234,6 @@ export default function HowItWorksSection() {
             fontWeight: 700,
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            ,
             marginBottom: 80,
           }}
         >
@@ -317,7 +314,6 @@ export default function HowItWorksSection() {
                       fontWeight: 700,
                       fontSize: 'clamp(22px, 3vw, 30px)',
                       letterSpacing: '-0.02em',
-                      ,
                       marginBottom: 16,
                     }}>
                       {step.title}
@@ -325,7 +321,6 @@ export default function HowItWorksSection() {
                     <p style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: 16,
-                      ,
                       lineHeight: 1.75,
                       maxWidth: 400,
                       textAlign: 'left',
@@ -342,7 +337,6 @@ export default function HowItWorksSection() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  ,
                   borderRadius: 20,
                   padding: 32,
                   border: '1px solid #E8E8E8',

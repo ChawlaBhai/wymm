@@ -87,14 +87,14 @@ function ProfileDropzone() {
 
 function GalleryDropzone() {
   const { biodata, updateMedia } = useBiodataStore()
-  const gallery{t('builder.step.media')} = biodata.media.gallery{t('builder.step.media')}
-  const remaining = 5 - gallery{t('builder.step.media')}.length
+  const galleryPhotos = biodata.media.galleryPhotos
+  const remaining = 5 - galleryPhotos.length
 
   const onDrop = useCallback(async (files: File[]) => {
     const toAdd = files.slice(0, remaining)
     const encoded = await Promise.all(toAdd.map(f => compressAndEncode(f, 0.3, 600)))
-    updateMedia({ gallery{t('builder.step.media')}: [...gallery{t('builder.step.media')}, ...encoded] })
-  }, [gallery{t('builder.step.media')}, remaining, updateMedia])
+    updateMedia({ galleryPhotos: [...galleryPhotos, ...encoded] })
+  }, [galleryPhotos, remaining, updateMedia])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -104,7 +104,7 @@ function GalleryDropzone() {
   })
 
   function removePhoto(idx: number) {
-    updateMedia({ gallery{t('builder.step.media')}: gallery{t('builder.step.media')}.filter((_, i) => i !== idx) })
+    updateMedia({ galleryPhotos: galleryPhotos.filter((_, i) => i !== idx) })
   }
 
   return (
@@ -112,15 +112,15 @@ function GalleryDropzone() {
       {/* Usage indicator */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
         <div style={{ flex: 1, height: '4px', background: '#F0F0F0', borderRadius: '99px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(gallery{t('builder.step.media')}.length / 5) * 100}%`, background: 'linear-gradient(90deg, #7C3AED, #EC4899)', borderRadius: '99px', transition: 'width 300ms ease' }} />
+          <div style={{ height: '100%', width: `${(galleryPhotos.length / 5) * 100}%`, background: 'linear-gradient(90deg, #7C3AED, #EC4899)', borderRadius: '99px', transition: 'width 300ms ease' }} />
         </div>
-        <span style={{ fontSize: '12px', color: 'inherit', fontWeight: 600, whiteSpace: 'nowrap' as const }}>{gallery{t('builder.step.media')}.length} of 5 photos</span>
+        <span style={{ fontSize: '12px', color: 'inherit', fontWeight: 600, whiteSpace: 'nowrap' as const }}>{galleryPhotos.length} of 5 photos</span>
       </div>
 
       {/* Thumbnails grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '16px' }}>
         {[0, 1, 2, 3, 4].map(idx => {
-          const photo = gallery{t('builder.step.media')}[idx]
+          const photo = galleryPhotos[idx]
           return (
             <div key={idx} style={{ aspectRatio: '1', borderRadius: '12px', overflow: 'hidden', position: 'relative', border: '1.5px solid #E5E5E5', background: '#F8F9FB' }}>
               {photo ? (
@@ -273,7 +273,7 @@ export default function StepMedia() {
           {t('builder.step.media')}
         </p>
         <p style={{ fontSize: '14px', color: 'inherit', lineHeight: 1.6 }}>
-          Add a clear profile photo and up to 5 gallery photos. {t('builder.step.media')} are compressed automatically.
+          Add a clear profile photo and up to 5 gallery photos. Photos are compressed automatically.
         </p>
       </div>
 
@@ -288,7 +288,7 @@ export default function StepMedia() {
 
       {/* Gallery */}
       <div>
-        <label className="form-label" style={{ marginBottom: '14px', display: 'block' }}>Gallery {t('builder.step.media')} (up to 5)</label>
+        <label className="form-label" style={{ marginBottom: '14px', display: 'block' }}>Gallery Photos (up to 5)</label>
         <GalleryDropzone />
       </div>
 

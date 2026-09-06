@@ -41,20 +41,13 @@ export async function checkSlugAvailable(slug: string): Promise<boolean> {
   return count === null || count === 0
 }
 
-export async function saveBiodata(biodata: BiodataRecord): Promise<string> {
-  const myBiodatas = await getMyBiodatas()
-  const unpaidCount = myBiodatas.filter(b => !b.is_paid).length
-  if (unpaidCount >= 5) {
-    throw new Error('You have reached the limit of 5 free drafts. Please upgrade a profile to create more.')
-  }
-
+export async function saveBiodataWithSlug(biodata: BiodataRecord, slug: string, oldSlug?: string): Promise<string> {
   const { data: { user } } = await supabase.auth.getUser()
-  const firstName = biodata.basicInfo.fullName.split(' ')[0] ?? 'user'
-  const lastName = biodata.basicInfo.fullName.split(' ').slice(1).join('-') || 'biodata'
-  const slug = `${firstName}-${lastName}-${nanoid(5)}`.toLowerCase().replace(/[^a-z0-9-]/g, '')
-  
-  const row = buildRow(biodata, slug, user?.id, user?.email ?? undefined)
-  const { error } = await supabase.from('biodatas').insert(row)
+  // If renaming (oldSlug differs), delete the old record first
+  if (oldSlug && oldSlug !== slug) {
+    await supabase.from('biodatas').delete().eq('id', oldSlug)
+  }
+  const { error } = await supabase.from('biodatas').upsert(buildRow(biodata, slug, user?.id, user?.email ?? undefined))
   if (error) throw error
   return slug
 }

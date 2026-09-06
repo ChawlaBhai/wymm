@@ -11,7 +11,6 @@ function BadBiodata() {
       overflow: 'hidden',
       fontFamily: '"Times New Roman", Times, serif',
       fontSize: 10,
-      ,
       padding: 12,
       height: 240,
       position: 'relative',
@@ -211,7 +210,6 @@ export default function WhyMattersSection() {
             fontWeight: 700,
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            ,
             marginBottom: 72,
           }}
         >
@@ -327,7 +325,6 @@ export default function WhyMattersSection() {
                   fontFamily: 'Sora, sans-serif',
                   fontWeight: 800,
                   fontSize: 11,
-                  ,
                   flexShrink: 0,
                   margin: '0 8px',
                   zIndex: 1,

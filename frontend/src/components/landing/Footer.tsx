@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 export default function Footer() {
   const { t } = useTranslation()
   return (
-    <footer className="bg-gray-50 dark:bg-slate-900 transition-colors duration-300" style={{ , borderTop: '1px solid rgba(150,150,150,0.2)', padding: '56px 0 36px' }}>
+    <footer className="bg-gray-50 dark:bg-slate-900 transition-colors duration-300" style={{  borderTop: '1px solid rgba(150,150,150,0.2)', padding: '56px 0 36px' }}>
       <div className="container">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 40, marginBottom: 48 }}>
           {/* Brand */}
