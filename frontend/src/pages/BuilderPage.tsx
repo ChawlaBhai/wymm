@@ -5,6 +5,7 @@ import { useBiodataStore } from '@/store/biodataStore'
 import { STEP_LABELS, TEMPLATE_META } from '@/types/biodata'
 import type { FormStep, TemplateId } from '@/types/biodata'
 import { DEMO_BIODATA } from '@/data/demoData'
+import { useTranslation } from '@/lib/i18n'
 import StepBasicInfo from '@/components/form/StepBasicInfo'
 import StepFamily from '@/components/form/StepFamily'
 import StepEducationCareer from '@/components/form/StepEducationCareer'
@@ -78,6 +79,7 @@ function TemplateRenderer({ templateId, biodata }: {
 
 export default function BuilderPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { biodata, currentStep, nextStep, prevStep, setStep, setTemplate, updateBasicInfo, updateFamilyInfo, updateEducation, updateCareer, updatePersonalInterests, updateMatchPreferences, updateMedia, resetBiodata } = useBiodataStore()
   const [direction, setDirection] = useState(1)
   const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false)
@@ -86,7 +88,6 @@ export default function BuilderPage() {
     const isDemo = sessionStorage.getItem('demo-mode') === 'true'
     const templateId = sessionStorage.getItem('selected-template-id')
     if (isDemo && templateId) {
-      // Reset first to clear any persisted localStorage state, then load demo
       resetBiodata()
       setTimeout(() => {
         updateBasicInfo(DEMO_BIODATA.basicInfo)
@@ -138,52 +139,45 @@ export default function BuilderPage() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
+    <div className="bg-white dark:bg-slate-950 transition-colors duration-300" style={{ display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: 'inherit' }}>
 
       {/* ===== LEFT PANEL — Form ===== */}
-      <div style={{
+      <div className="bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 builder-left-panel transition-colors duration-300" style={{
         width: '50%',
         minWidth: '320px',
-        background: 'white',
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        borderRight: '1px solid #E5E5E5',
         position: 'relative',
         zIndex: 10,
-      }}
-        className="builder-left-panel"
-      >
+      }}>
         {/* Top bar */}
-        <div style={{ padding: '20px 32px', borderBottom: '1px solid #F0F0F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', color: '#888', fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 500, transition: 'color 150ms' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#1A1A1A')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#888')}
-          >
+        <div className="border-b border-gray-100 dark:border-slate-800" style={{ padding: '20px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <Link to="/" className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'inherit', fontSize: '14px', fontWeight: 500, transition: 'color 150ms' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
             Back
           </Link>
-          <span style={{ fontFamily: 'Sora, sans-serif', fontSize: '20px', fontWeight: 800, letterSpacing: '-0.03em', background: 'linear-gradient(135deg, #7C3AED, #EC4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+          <span style={{ fontFamily: 'inherit', fontSize: '20px', fontWeight: 800, letterSpacing: '-0.03em', background: 'linear-gradient(135deg, #7C3AED, #EC4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             wymm
           </span>
           {/* Mobile preview toggle */}
           <button
             type="button"
             onClick={() => setMobilePreviewOpen(true)}
-            className="mobile-preview-btn"
-            style={{ display: 'none', padding: '6px 14px', borderRadius: '8px', border: '1px solid #E5E5E5', background: 'white', color: '#666', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}
+            className="mobile-preview-btn bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300"
+            style={{ display: 'none', padding: '6px 14px', borderRadius: '8px', borderWidth: '1px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}
           >
             Preview
           </button>
         </div>
 
         {/* Step progress */}
-        <div style={{ padding: '20px 32px 16px', borderBottom: '1px solid #F0F0F0', flexShrink: 0 }}>
+        <div className="border-b border-gray-100 dark:border-slate-800" style={{ padding: '20px 32px 16px', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0', position: 'relative' }}>
             {/* Progress line */}
-            <div style={{ position: 'absolute', top: '14px', left: '14px', right: '14px', height: '2px', background: '#F0F0F0', zIndex: 0 }} />
+            <div className="bg-gray-100 dark:bg-slate-800" style={{ position: 'absolute', top: '14px', left: '14px', right: '14px', height: '2px', zIndex: 0 }} />
             <div style={{
               position: 'absolute', top: '14px', left: '14px', height: '2px', background: 'linear-gradient(90deg, #7C3AED, #A855F7)',
               width: `${((currentStep - 1) / 5) * 100}%`,
@@ -205,12 +199,11 @@ export default function BuilderPage() {
                   }}
                   aria-label={`Step ${step}: ${STEP_LABELS[step]}`}
                 >
-                  <div style={{
+                  <div className={`transition-all duration-300 ${active ? 'bg-white dark:bg-slate-900' : done ? 'bg-purple-600' : 'bg-gray-100 dark:bg-slate-800'}`} style={{
                     width: '28px', height: '28px', borderRadius: '50%',
-                    background: done ? '#7C3AED' : active ? 'white' : '#F0F0F0',
-                    border: active ? '2.5px solid #7C3AED' : done ? '2.5px solid #7C3AED' : '2px solid #E5E5E5',
+                    border: active ? '2.5px solid #7C3AED' : done ? '2.5px solid #7C3AED' : '2px solid transparent',
+                    borderColor: (!active && !done) ? 'var(--color-gray-200)' : '',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'all 300ms ease',
                     boxShadow: active ? '0 0 0 4px rgba(124,58,237,0.12)' : 'none',
                   }}>
                     {done ? (
@@ -218,10 +211,10 @@ export default function BuilderPage() {
                         <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     ) : (
-                      <span style={{ fontSize: '11px', fontWeight: 700, color: active ? '#7C3AED' : '#AAA' }}>{step}</span>
+                      <span className={active ? 'text-purple-600' : 'text-gray-400 dark:text-gray-500'} style={{ fontSize: '11px', fontWeight: 700 }}>{step}</span>
                     )}
                   </div>
-                  <span className="step-label" style={{ fontSize: '10px', fontWeight: active ? 700 : 500, color: active ? '#7C3AED' : done ? '#7C3AED' : '#AAA', letterSpacing: '0.03em', whiteSpace: 'nowrap' as const, textTransform: 'uppercase' }}>
+                  <span className={`step-label ${active || done ? 'text-purple-600' : 'text-gray-400 dark:text-gray-500'}`} style={{ fontSize: '10px', fontWeight: active ? 700 : 500, letterSpacing: '0.03em', whiteSpace: 'nowrap' as const, textTransform: 'uppercase' }}>
                     {STEP_LABELS[step]}
                   </span>
                 </button>
@@ -248,10 +241,10 @@ export default function BuilderPage() {
         </div>
 
         {/* Bottom nav */}
-        <div style={{ padding: '16px 32px', borderTop: '1px solid #F0F0F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, background: 'white' }}>
+        <div className="bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 transition-colors duration-300" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <button
             type="button"
-            className="btn-ghost"
+            className="btn-ghost dark:text-gray-300 dark:hover:bg-slate-800"
             onClick={goPrev}
             disabled={currentStep === 1}
             style={{ opacity: currentStep === 1 ? 0.3 : 1, pointerEvents: currentStep === 1 ? 'none' : 'auto' }}
@@ -262,7 +255,7 @@ export default function BuilderPage() {
             Previous
           </button>
 
-          <span style={{ fontSize: '12px', color: '#AAA', fontWeight: 500 }}>
+          <span className="text-gray-400 dark:text-gray-500" style={{ fontSize: '12px', fontWeight: 500 }}>
             Step {currentStep} of 6
           </span>
 
@@ -278,7 +271,7 @@ export default function BuilderPage() {
               fontSize: '14px',
             }}
           >
-            {isLastStep ? 'Preview My Biodata' : 'Next'}
+            {isLastStep ? 'Preview' : 'Next'}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6" />
             </svg>
@@ -287,19 +280,16 @@ export default function BuilderPage() {
       </div>
 
       {/* ===== RIGHT PANEL — Preview ===== */}
-      <div style={{
+      <div className="bg-gray-50 dark:bg-slate-950 builder-right-panel transition-colors duration-300" style={{
         flex: 1,
-        background: '#F8F9FB',
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
         overflow: 'hidden',
-      }}
-        className="builder-right-panel"
-      >
+      }}>
         {/* Template selector */}
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid #E5E5E5', background: 'white', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, flexWrap: 'wrap' as const }}>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: '#AAA', letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: '4px' }}>Template</span>
+        <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 transition-colors duration-300" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, flexWrap: 'wrap' as const }}>
+          <span className="text-gray-400 dark:text-gray-500" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: '4px' }}>Template</span>
           {TEMPLATE_IDS.map(id => {
             const meta = TEMPLATE_META[id]
             const active = biodata.templateId === id
@@ -308,14 +298,16 @@ export default function BuilderPage() {
                 key={id}
                 type="button"
                 onClick={() => setTemplate(id)}
+                className={`transition-all duration-150 ${active ? '' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-700'}`}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '7px',
                   padding: '7px 14px', borderRadius: '10px',
-                  border: `1.5px solid ${active ? meta.accent : '#E5E5E5'}`,
-                  background: active ? `${meta.accent}14` : 'white',
-                  color: active ? meta.accent : '#666',
-                  fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: active ? 700 : 500,
-                  cursor: 'pointer', transition: 'all 150ms ease',
+                  borderWidth: '1.5px',
+                  borderColor: active ? meta.accent : '',
+                  background: active ? `${meta.accent}14` : '',
+                  color: active ? meta.accent : '',
+                  fontFamily: 'inherit', fontSize: '13px', fontWeight: active ? 700 : 500,
+                  cursor: 'pointer',
                 }}
               >
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: meta.accent, flexShrink: 0 }} />
@@ -330,14 +322,14 @@ export default function BuilderPage() {
           {/* Live label */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '12px', alignSelf: 'flex-start' }}>
             <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10B981', display: 'inline-block', animation: 'pulse-dot 2s ease-in-out infinite' }} />
-            <span style={{ fontSize: '11px', fontWeight: 600, color: '#888', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Live Preview</span>
+            <span className="text-gray-500 dark:text-gray-400" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Live Preview</span>
           </div>
 
           {/* Scaled preview container */}
-          <div style={{
+          <div className="bg-white dark:bg-black border-gray-200 dark:border-slate-800 transition-colors duration-300" style={{
             flex: 1, width: '100%', overflow: 'hidden',
-            borderRadius: '16px', border: '1px solid #E5E5E5',
-            background: 'white', boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            borderRadius: '16px', borderWidth: '1px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
             position: 'relative',
           }}>
             <div style={{
@@ -370,10 +362,10 @@ export default function BuilderPage() {
 
       {/* Mobile preview overlay */}
       {mobilePreviewOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'white', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid #E5E5E5', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'Sora, sans-serif', fontSize: '16px', fontWeight: 700 }}>Live Preview</span>
-            <button type="button" onClick={() => setMobilePreviewOpen(false)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '15px', cursor: 'pointer', padding: '4px 8px' }}>
+        <div className="bg-white dark:bg-slate-900 transition-colors duration-300" style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column' }}>
+          <div className="border-b border-gray-200 dark:border-slate-700" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span className="text-gray-900 dark:text-white" style={{ fontFamily: 'inherit', fontSize: '16px', fontWeight: 700 }}>Live Preview</span>
+            <button type="button" onClick={() => setMobilePreviewOpen(false)} className="text-gray-600 dark:text-gray-300" style={{ background: 'none', border: 'none', fontSize: '15px', cursor: 'pointer', padding: '4px 8px' }}>
               Close
             </button>
           </div>

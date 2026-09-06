@@ -1,12 +1,11 @@
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
-// A4 dimensions in mm
-const A4_WIDTH_MM = 210
-const A4_HEIGHT_MM = 297
+// Base A4 width in mm (we'll scale the height proportionally)
+const BASE_WIDTH_MM = 210
 
 /**
- * Export any HTMLElement to a multi-page A4 PDF and trigger a download.
+ * Export any HTMLElement to a single-page PDF that exactly fits its content.
  * The element should already be rendered at the desired width before calling.
  *
  * @param templateElement - The DOM element to capture (should be 800px wide, off-screen)
@@ -43,47 +42,17 @@ export async function exportTemplateToPDF(
   onProgress?.(70)
 
   const imgData = canvas.toDataURL('image/jpeg', 0.95)
-  const pxPerMm = canvas.width / A4_WIDTH_MM
+  const pxPerMm = canvas.width / BASE_WIDTH_MM
   const contentHeightMm = canvas.height / pxPerMm
 
+  // Create a single-page PDF with custom dimensions matching the exact content ratio
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
-    format: 'a4',
+    format: [BASE_WIDTH_MM, contentHeightMm],
   })
 
-  if (contentHeightMm <= A4_HEIGHT_MM) {
-    pdf.addImage(imgData, 'JPEG', 0, 0, A4_WIDTH_MM, contentHeightMm)
-  } else {
-    const pageHeightPx = A4_HEIGHT_MM * pxPerMm
-    let remainingHeightPx = canvas.height
-    let sourceY = 0
-    let isFirstPage = true
-
-    while (remainingHeightPx > 0) {
-      const sliceHeightPx = Math.min(pageHeightPx, remainingHeightPx)
-
-      const pageCanvas = document.createElement('canvas')
-      pageCanvas.width = canvas.width
-      pageCanvas.height = sliceHeightPx
-      const ctx = pageCanvas.getContext('2d')
-      if (!ctx) break
-
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height)
-      ctx.drawImage(canvas, 0, sourceY, canvas.width, sliceHeightPx, 0, 0, canvas.width, sliceHeightPx)
-
-      const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95)
-      const sliceHeightMm = sliceHeightPx / pxPerMm
-
-      if (!isFirstPage) pdf.addPage()
-      pdf.addImage(pageImgData, 'JPEG', 0, 0, A4_WIDTH_MM, sliceHeightMm)
-
-      sourceY += sliceHeightPx
-      remainingHeightPx -= sliceHeightPx
-      isFirstPage = false
-    }
-  }
+  pdf.addImage(imgData, 'JPEG', 0, 0, BASE_WIDTH_MM, contentHeightMm)
 
   onProgress?.(95)
   pdf.save(filename)
@@ -91,7 +60,7 @@ export async function exportTemplateToPDF(
 }
 
 /**
- * Export a DOM element to a multi-page A4 PDF and trigger a download.
+ * Export a DOM element to a single-page PDF that exactly fits its content and trigger a download.
  *
  * @param elementId   - The `id` attribute of the element to capture
  * @param filename    - Base filename (will be prefixed with "wymm-biodata-")
@@ -134,54 +103,18 @@ export async function exportToPDF(
 
     const imgData = canvas.toDataURL('image/jpeg', 0.95)
 
-    // Calculate the pixel-to-mm ratio so the image fits A4 width exactly
-    const pxPerMm = canvas.width / A4_WIDTH_MM
+    // Calculate the pixel-to-mm ratio so the image fits the width exactly
+    const pxPerMm = canvas.width / BASE_WIDTH_MM
     const contentHeightMm = canvas.height / pxPerMm
 
+    // Single custom-sized page matching exactly the full height
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4',
+      format: [BASE_WIDTH_MM, contentHeightMm],
     })
 
-    if (contentHeightMm <= A4_HEIGHT_MM) {
-      // Single page — content fits on one A4 sheet
-      pdf.addImage(imgData, 'JPEG', 0, 0, A4_WIDTH_MM, contentHeightMm)
-    } else {
-      // Multi-page — slice the canvas into A4-height segments
-      const pageHeightPx = A4_HEIGHT_MM * pxPerMm
-      let remainingHeightPx = canvas.height
-      let sourceY = 0
-      let isFirstPage = true
-
-      while (remainingHeightPx > 0) {
-        const sliceHeightPx = Math.min(pageHeightPx, remainingHeightPx)
-
-        // Draw a slice of the original canvas onto a temp canvas
-        const pageCanvas = document.createElement('canvas')
-        pageCanvas.width = canvas.width
-        pageCanvas.height = sliceHeightPx
-        const ctx = pageCanvas.getContext('2d')
-        if (!ctx) break
-
-        ctx.fillStyle = '#ffffff'
-        ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height)
-        ctx.drawImage(canvas, 0, sourceY, canvas.width, sliceHeightPx, 0, 0, canvas.width, sliceHeightPx)
-
-        const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95)
-        const sliceHeightMm = sliceHeightPx / pxPerMm
-
-        if (!isFirstPage) {
-          pdf.addPage()
-        }
-
-        pdf.addImage(pageImgData, 'JPEG', 0, 0, A4_WIDTH_MM, sliceHeightMm)
-
-        sourceY += sliceHeightPx
-        remainingHeightPx -= sliceHeightPx
-        isFirstPage = false
-      }
-    }
+    pdf.addImage(imgData, 'JPEG', 0, 0, BASE_WIDTH_MM, contentHeightMm)
 
     pdf.save(`wymm-biodata-${filename}.pdf`)
   } catch (err) {

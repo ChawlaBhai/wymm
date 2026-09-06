@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import Navbar from '@/components/layout/Navbar'
 import ScrollToTop from '@/components/ScrollToTop'
 import { useAuthStore } from '@/store/authStore'
+import { useAppStore } from '@/store/appStore'
 
 const LandingPage        = lazy(() => import('@/pages/LandingPage'))
 const BuilderPage        = lazy(() => import('@/pages/BuilderPage'))
@@ -21,7 +22,7 @@ const ContactPage        = lazy(() => import('@/pages/ContactPage'))
 
 function PageLoader() {
   return (
-    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh' }}>
+    <div className="bg-white dark:bg-slate-950 flex items-center justify-center min-h-screen transition-colors duration-300">
       <div style={{ width:32, height:32, borderRadius:'50%', border:'2.5px solid #E5E5E5', borderTopColor:'#7C3AED', animation:'spin 0.7s linear infinite' }} />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
@@ -30,7 +31,28 @@ function PageLoader() {
 
 export default function App() {
   const initialize = useAuthStore((s) => s.initialize)
+  const theme = useAppStore((s) => s.theme)
+  const language = useAppStore((s) => s.language)
+
   useEffect(() => { return initialize() }, [initialize])
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+  }, [theme])
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (language === 'hi') {
+      root.classList.add('lang-hi')
+    } else {
+      root.classList.remove('lang-hi')
+    }
+  }, [language])
 
   return (
     <BrowserRouter>

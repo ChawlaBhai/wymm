@@ -1,18 +1,24 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Sun, Moon, Languages } from 'lucide-react'
+import { useAppStore } from '@/store/appStore'
+import { useTranslation } from '@/lib/i18n'
 
 const NAV_LINKS = [
-  { label: 'Templates', sectionId: null, href: '/templates' },
-  { label: 'How it works', sectionId: 'how-it-works', href: null },
-  { label: 'About', sectionId: null, href: '/about' },
-  { label: 'Manage', sectionId: null, href: '/manage' },
+  { key: 'nav.templates', sectionId: null, href: '/templates' },
+  { key: 'nav.howItWorks', sectionId: 'how-it-works', href: null },
+  { key: 'nav.about', sectionId: null, href: '/about' },
+  { key: 'nav.manage', sectionId: null, href: '/manage' },
 ]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+  
+  const { theme, language, toggleTheme, toggleLanguage } = useAppStore()
+  const { t } = useTranslation()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -35,14 +41,18 @@ export default function Navbar() {
     }
   }
 
+  const isDark = theme === 'dark'
+
   return (
     <>
       <motion.header
         style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}
         animate={{
-          backgroundColor: scrolled ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0)',
+          backgroundColor: scrolled 
+            ? (isDark ? 'rgba(15, 23, 42, 0.92)' : 'rgba(255,255,255,0.92)') 
+            : 'rgba(0,0,0,0)',
           boxShadow: scrolled
-            ? '0 1px 0 rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)'
+            ? (isDark ? '0 1px 0 rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.2)' : '0 1px 0 rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)')
             : '0 1px 0 rgba(0,0,0,0)',
           backdropFilter: scrolled ? 'blur(12px)' : 'blur(0px)',
         }}
@@ -75,67 +85,95 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="btn-ghost"
-                  style={{ fontSize: 14, fontFamily: 'Inter, sans-serif', textDecoration: 'none' }}
+                  className="btn-ghost dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
+                  style={{ fontSize: 14, fontFamily: 'inherit', textDecoration: 'none' }}
                 >
-                  {link.label}
+                  {t(link.key)}
                 </Link>
               ) : (
                 <button
                   key={link.sectionId!}
                   onClick={() => scrollTo(link.sectionId!)}
-                  className="btn-ghost"
-                  style={{ fontSize: 14, fontFamily: 'Inter, sans-serif' }}
+                  className="btn-ghost dark:text-gray-300 dark:hover:text-white dark:hover:bg-slate-800"
+                  style={{ fontSize: 14, fontFamily: 'inherit' }}
                 >
-                  {link.label}
+                  {t(link.key)}
                 </button>
               )
             ))}
           </nav>
 
-          {/* Desktop CTA */}
+          {/* Desktop CTA & Toggles */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="desktop-cta">
+            <button 
+              onClick={toggleLanguage}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors text-gray-600 dark:text-gray-300"
+              aria-label="Toggle Language"
+            >
+              <span className="font-semibold text-sm">{language === 'en' ? 'HI' : 'EN'}</span>
+            </button>
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors text-gray-600 dark:text-gray-300"
+              aria-label="Toggle Theme"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             <Link
               to="/create"
               className="btn-primary"
               style={{ padding: '9px 20px', fontSize: 14 }}
             >
-              Create Biodata
+              {t('nav.createBiodata')}
             </Link>
           </div>
 
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            className="mobile-hamburger"
-            aria-label="Toggle navigation menu"
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 8,
-              display: 'none',
-              flexDirection: 'column',
-              gap: 5,
-              alignItems: 'flex-end',
-            }}
-          >
-            <motion.span
-              animate={menuOpen ? { rotate: 45, y: 7, width: 22 } : { rotate: 0, y: 0, width: 22 }}
-              style={{ display: 'block', height: 2, background: '#1A1A1A', borderRadius: 2, width: 22, transformOrigin: 'center' }}
-              transition={{ duration: 0.2 }}
-            />
-            <motion.span
-              animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-              style={{ display: 'block', height: 2, background: '#1A1A1A', borderRadius: 2, width: 16 }}
-              transition={{ duration: 0.15 }}
-            />
-            <motion.span
-              animate={menuOpen ? { rotate: -45, y: -7, width: 22 } : { rotate: 0, y: 0, width: 22 }}
-              style={{ display: 'block', height: 2, background: '#1A1A1A', borderRadius: 2, width: 22, transformOrigin: 'center' }}
-              transition={{ duration: 0.2 }}
-            />
-          </button>
+          {/* Mobile Actions */}
+          <div className="mobile-actions flex md:hidden items-center gap-2">
+            <button 
+              onClick={toggleLanguage}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors text-gray-600 dark:text-gray-300"
+            >
+              <span className="font-semibold text-sm">{language === 'en' ? 'HI' : 'EN'}</span>
+            </button>
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors text-gray-600 dark:text-gray-300"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Toggle navigation menu"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 5,
+                alignItems: 'flex-end',
+              }}
+            >
+              <motion.span
+                animate={menuOpen ? { rotate: 45, y: 7, width: 22 } : { rotate: 0, y: 0, width: 22 }}
+                style={{ display: 'block', height: 2, background: isDark ? '#fff' : '#1A1A1A', borderRadius: 2, width: 22, transformOrigin: 'center' }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span
+                animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                style={{ display: 'block', height: 2, background: isDark ? '#fff' : '#1A1A1A', borderRadius: 2, width: 16 }}
+                transition={{ duration: 0.15 }}
+              />
+              <motion.span
+                animate={menuOpen ? { rotate: -45, y: -7, width: 22 } : { rotate: 0, y: 0, width: 22 }}
+                style={{ display: 'block', height: 2, background: isDark ? '#fff' : '#1A1A1A', borderRadius: 2, width: 22, transformOrigin: 'center' }}
+                transition={{ duration: 0.2 }}
+              />
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -148,8 +186,8 @@ export default function Navbar() {
               transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
               style={{
                 overflow: 'hidden',
-                borderTop: '1px solid rgba(0,0,0,0.06)',
-                background: 'rgba(255,255,255,0.97)',
+                borderTop: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
+                background: isDark ? 'rgba(15, 23, 42, 0.97)' : 'rgba(255,255,255,0.97)',
                 backdropFilter: 'blur(12px)',
               }}
             >
@@ -170,15 +208,15 @@ export default function Navbar() {
                             width: '100%',
                             textAlign: 'left',
                             padding: '12px 0',
-                            borderBottom: '1px solid #F0F0F0',
-                            fontFamily: 'Inter, sans-serif',
+                            borderBottom: isDark ? '1px solid #334155' : '1px solid #F0F0F0',
+                            fontFamily: 'inherit',
                             fontSize: 16,
-                            color: '#1A1A1A',
+                            color: isDark ? '#F8FAFC' : '#1A1A1A',
                             fontWeight: 500,
                             textDecoration: 'none',
                           }}
                         >
-                          {link.label}
+                          {t(link.key)}
                         </Link>
                       ) : (
                         <button
@@ -190,15 +228,15 @@ export default function Navbar() {
                             padding: '12px 0',
                             background: 'none',
                             border: 'none',
-                            borderBottom: '1px solid #F0F0F0',
+                            borderBottom: isDark ? '1px solid #334155' : '1px solid #F0F0F0',
                             cursor: 'pointer',
-                            fontFamily: 'Inter, sans-serif',
+                            fontFamily: 'inherit',
                             fontSize: 16,
-                            color: '#1A1A1A',
+                            color: isDark ? '#F8FAFC' : '#1A1A1A',
                             fontWeight: 500,
                           }}
                         >
-                          {link.label}
+                          {t(link.key)}
                         </button>
                       )}
                     </motion.div>
@@ -215,7 +253,7 @@ export default function Navbar() {
                     onClick={() => setMenuOpen(false)}
                     style={{ width: '100%', justifyContent: 'center' }}
                   >
-                    Create Biodata
+                    {t('nav.createBiodata')}
                   </Link>
                 </motion.div>
               </div>
@@ -229,7 +267,9 @@ export default function Navbar() {
         @media (max-width: 767px) {
           .desktop-nav { display: none !important; }
           .desktop-cta { display: none !important; }
-          .mobile-hamburger { display: flex !important; }
+        }
+        @media (min-width: 768px) {
+          .mobile-actions { display: none !important; }
         }
       `}</style>
     </>

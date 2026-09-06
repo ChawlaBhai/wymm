@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { useTranslation } from '@/lib/i18n'
 
 // Particle configuration
 const PARTICLES = [
@@ -14,10 +15,6 @@ const PARTICLES = [
   { size: 32, color: '#F9A8D4', top: '35%', left: '2%', duration: 8, dx: 30, dy: -15 },
   { size: 42, color: '#8B5CF6', top: '90%', left: '70%', duration: 16, dx: -15, dy: -25 },
 ]
-
-const H1_WORDS = ['The', 'first', 'impression', 'that']
-const H1_GRADIENT_PLAIN = 'starts a '
-const H1_GRADIENT_WORD = 'lifetime.'
 
 function BiodataMockup() {
   return (
@@ -86,6 +83,7 @@ function BiodataMockup() {
 
 export default function HeroSection() {
   const mockupRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -119,13 +117,13 @@ export default function HeroSection() {
 
   return (
     <section
+      className="bg-white dark:bg-slate-900 transition-colors duration-300"
       style={{
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         paddingTop: 100,
         paddingBottom: 80,
-        background: '#FFFFFF',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -223,7 +221,7 @@ export default function HeroSection() {
                 fontSize: 13,
                 fontWeight: 600,
                 color: '#7C3AED',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'inherit',
                 letterSpacing: '-0.01em',
               }}>
                 ✦ Trusted by families across India
@@ -231,43 +229,27 @@ export default function HeroSection() {
             </motion.div>
 
             {/* H1 with word stagger */}
-            <h1 className="hero-h1" style={{
+            <h1 className="hero-h1 text-gray-900 dark:text-white" style={{
               fontSize: 'clamp(38px, 5.5vw, 68px)',
-              fontFamily: 'Sora, sans-serif',
+              fontFamily: 'inherit',
               fontWeight: 800,
               lineHeight: 1.08,
               letterSpacing: '-0.03em',
-              color: '#1A1A1A',
               marginBottom: 28,
             }}>
               {/* Line 1 */}
               <div style={{ display: 'block' }}>
-                {H1_WORDS.map((word, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: 0.1 + i * 0.08,
-                      duration: 0.5,
-                      ease: [0.23, 1, 0.32, 1],
-                    }}
-                    style={{ display: 'inline-block', marginRight: '0.28em' }}
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </div>
-              {/* Line 2 */}
-              <div style={{ display: 'block' }}>
                 <motion.span
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.42, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-                  style={{ display: 'inline-block', marginRight: '0.22em' }}
+                  transition={{ delay: 0.1, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+                  style={{ display: 'inline-block', marginRight: '0.28em' }}
                 >
-                  {H1_GRADIENT_PLAIN}
+                  {t('landing.title1')}
                 </motion.span>
+              </div>
+              {/* Line 2 */}
+              <div style={{ display: 'block' }}>
                 <motion.span
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -280,7 +262,7 @@ export default function HeroSection() {
                     backgroundClip: 'text',
                   }}
                 >
-                  {H1_GRADIENT_WORD}
+                  {t('landing.title2')}
                 </motion.span>
               </div>
             </h1>
@@ -290,18 +272,17 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.60, duration: 0.55, ease: [0.23, 1, 0.32, 1] }}
+              className="text-gray-600 dark:text-gray-300"
               style={{
                 fontSize: 'clamp(16px, 1.8vw, 19px)',
-                color: '#555',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'inherit',
                 fontWeight: 400,
                 lineHeight: 1.7,
                 maxWidth: 500,
                 marginBottom: 40,
               }}
             >
-              Your biodata reaches families you've never met, in cities you may never visit.
-              It speaks before you do. Make it say the right things.
+              {t('landing.subtitle')}
             </motion.p>
 
             {/* CTAs */}
@@ -313,7 +294,7 @@ export default function HeroSection() {
               style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}
             >
               <Link to="/create" className="btn-primary" style={{ fontSize: 16, padding: '14px 32px' }}>
-                Create Your Biodata →
+                {t('landing.cta')} →
               </Link>
               <a
                 href="#how-it-works"
@@ -321,6 +302,7 @@ export default function HeroSection() {
                   e.preventDefault()
                   document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })
                 }}
+                className="dark:border-slate-700 dark:text-gray-300 dark:hover:border-purple-500 dark:hover:text-purple-400"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -328,7 +310,7 @@ export default function HeroSection() {
                   padding: '13px 24px',
                   borderRadius: 99,
                   fontSize: 15,
-                  fontFamily: 'Sora, sans-serif',
+                  fontFamily: 'inherit',
                   fontWeight: 600,
                   color: '#555',
                   background: 'transparent',
@@ -346,12 +328,12 @@ export default function HeroSection() {
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement
-                  el.style.borderColor = '#E0E0E0'
-                  el.style.color = '#555'
+                  el.style.borderColor = ''
+                  el.style.color = ''
                   el.style.background = 'transparent'
                 }}
               >
-                See how it works
+                {t('nav.howItWorks')}
               </a>
             </motion.div>
 
@@ -362,10 +344,10 @@ export default function HeroSection() {
               transition={{ delay: 0.88, duration: 0.4 }}
               style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
             >
-              {['16 stunning templates', 'Share in seconds', 'Free forever'].map((signal, i) => (
+              {['16 premium templates', 'Share in seconds', 'Free preview'].map((signal, i) => (
                 <span key={signal} style={{ display: 'inline-flex', alignItems: 'center' }}>
                   <span style={{
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'inherit',
                     fontSize: 13,
                     color: '#888',
                     fontWeight: 500,

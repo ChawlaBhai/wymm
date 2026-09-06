@@ -1,24 +1,34 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, lazy, Suspense } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
-import { TEMPLATE_META, type TemplateId } from '@/types/biodata'
+import { TEMPLATE_META, type TemplateId, type BiodataRecord } from '@/types/biodata'
+import { useBiodataStore } from '@/store/biodataStore'
+import { useTranslation } from '@/lib/i18n'
+
+// Lazy load templates for performance
+const TemplateModernMinimal = lazy(() => import('@/components/templates/TemplateModernMinimal'))
+const TemplateRefinedElegance = lazy(() => import('@/components/templates/TemplateRefinedElegance'))
+const TemplateProfessionalPremium = lazy(() => import('@/components/templates/TemplateProfessionalPremium'))
+const TemplateCulturalGrace = lazy(() => import('@/components/templates/TemplateCulturalGrace'))
+const TemplateTheModernist = lazy(() => import('@/components/templates/TemplateTheModernist'))
+const TemplateMountainSoul = lazy(() => import('@/components/templates/TemplateMountainSoul'))
+const TemplateVintageWarmth = lazy(() => import('@/components/templates/TemplateVintageWarmth'))
+const TemplateAuroraGlass = lazy(() => import('@/components/templates/TemplateAuroraGlass'))
+const TemplateOceanBreeze = lazy(() => import('@/components/templates/TemplateOceanBreeze'))
+const TemplateRoyalMajestic = lazy(() => import('@/components/templates/TemplateRoyalMajestic'))
+const TemplateBotanicalFresh = lazy(() => import('@/components/templates/TemplateBotanicalFresh'))
+const TemplateCelestialNight = lazy(() => import('@/components/templates/TemplateCelestialNight'))
+const TemplateRoseGoldLuxe = lazy(() => import('@/components/templates/TemplateRoseGoldLuxe'))
+const TemplateZenMinimal = lazy(() => import('@/components/templates/TemplateZenMinimal'))
+const TemplatePastelDreams = lazy(() => import('@/components/templates/TemplatePastelDreams'))
+const TemplateHeritageSplendor = lazy(() => import('@/components/templates/TemplateHeritageSplendor'))
 
 const TEMPLATE_CATEGORIES: Record<TemplateId, string> = {
-  'modern-minimal': 'Minimal',
-  'refined-elegance': 'Elegant',
-  'professional-premium': 'Premium',
-  'cultural-grace': 'Cultural',
-  'the-modernist': 'Dark',
-  'mountain-soul': 'Nature',
-  'vintage-warmth': 'Warm',
-  'aurora-glass': 'Glass',
-  'ocean-breeze': 'Nature',
-  'royal-majestic': 'Premium',
-  'botanical-fresh': 'Nature',
-  'celestial-night': 'Dark',
-  'rose-gold-luxe': 'Elegant',
-  'zen-minimal': 'Minimal',
-  'pastel-dreams': 'Soft',
+  'modern-minimal': 'Minimal', 'refined-elegance': 'Elegant', 'professional-premium': 'Premium',
+  'cultural-grace': 'Cultural', 'the-modernist': 'Dark', 'mountain-soul': 'Nature',
+  'vintage-warmth': 'Warm', 'aurora-glass': 'Glass', 'ocean-breeze': 'Nature',
+  'royal-majestic': 'Premium', 'botanical-fresh': 'Nature', 'celestial-night': 'Dark',
+  'rose-gold-luxe': 'Elegant', 'zen-minimal': 'Minimal', 'pastel-dreams': 'Soft',
   'heritage-splendor': 'Cultural',
 }
 
@@ -27,15 +37,8 @@ const CATEGORY_FILTERS = ['All', 'Light', 'Dark', 'Cultural', 'Nature', 'Minimal
 const FILTER_MAP: Record<string, string[]> = {
   All: [],
   Light: ['Minimal', 'Elegant', 'Premium', 'Warm', 'Glass', 'Soft', 'Nature', 'Cultural'],
-  Dark: ['Dark'],
-  Cultural: ['Cultural'],
-  Nature: ['Nature'],
-  Minimal: ['Minimal'],
-  Elegant: ['Elegant'],
-  Premium: ['Premium'],
-  Warm: ['Warm'],
-  Glass: ['Glass'],
-  Soft: ['Soft'],
+  Dark: ['Dark'], Cultural: ['Cultural'], Nature: ['Nature'], Minimal: ['Minimal'],
+  Elegant: ['Elegant'], Premium: ['Premium'], Warm: ['Warm'], Glass: ['Glass'], Soft: ['Soft'],
 }
 
 const TEMPLATE_DEMO_SLUGS: Partial<Record<TemplateId, string>> = {
@@ -52,57 +55,85 @@ const TEMPLATE_IDS = Object.keys(TEMPLATE_META) as TemplateId[]
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] } },
 }
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06 } },
+const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }
+
+// Helper to render the correct template component
+function LiveTemplateRenderer({ templateId, biodata }: { templateId: TemplateId, biodata: BiodataRecord }) {
+  switch (templateId) {
+    case 'modern-minimal': return <TemplateModernMinimal biodata={biodata} />
+    case 'refined-elegance': return <TemplateRefinedElegance biodata={biodata} />
+    case 'professional-premium': return <TemplateProfessionalPremium biodata={biodata} />
+    case 'cultural-grace': return <TemplateCulturalGrace biodata={biodata} />
+    case 'the-modernist': return <TemplateTheModernist biodata={biodata} />
+    case 'mountain-soul': return <TemplateMountainSoul biodata={biodata} />
+    case 'vintage-warmth': return <TemplateVintageWarmth biodata={biodata} />
+    case 'aurora-glass': return <TemplateAuroraGlass biodata={biodata} />
+    case 'ocean-breeze': return <TemplateOceanBreeze biodata={biodata} />
+    case 'royal-majestic': return <TemplateRoyalMajestic biodata={biodata} />
+    case 'botanical-fresh': return <TemplateBotanicalFresh biodata={biodata} />
+    case 'celestial-night': return <TemplateCelestialNight biodata={biodata} />
+    case 'rose-gold-luxe': return <TemplateRoseGoldLuxe biodata={biodata} />
+    case 'zen-minimal': return <TemplateZenMinimal biodata={biodata} />
+    case 'pastel-dreams': return <TemplatePastelDreams biodata={biodata} />
+    case 'heritage-splendor': return <TemplateHeritageSplendor biodata={biodata} />
+    default: return <TemplateModernMinimal biodata={biodata} />
+  }
 }
 
-function TemplateMockupPreview({ id, accent }: { id: TemplateId; accent: string }) {
+function LivePreviewCard({ id, meta, biodata }: { id: TemplateId, meta: any, biodata: BiodataRecord }) {
+  const [isHovered, setIsHovered] = useState(false)
   const isDark = DARK_TEMPLATES.includes(id)
-  const bg = isDark ? '#0A0A0A' : '#FAFAFA'
-  const textColor = isDark ? '#FFFFFF' : '#1A1A1A'
-  const subColor = isDark ? '#333' : '#E5E5E5'
 
   return (
-    <div style={{
-      background: bg,
-      borderRadius: 8,
-      padding: '10px 10px 8px',
-      flex: 1,
-      border: `1px solid ${isDark ? '#2A2A2A' : '#F0F0F0'}`,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 6,
-    }}>
-      <div style={{ height: 3, background: `linear-gradient(90deg, ${accent}, ${accent}90)`, borderRadius: 999, marginBottom: 2 }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-        <div style={{ width: 24, height: 24, borderRadius: '50%', background: `${accent}22`, border: `1.5px solid ${accent}45`, flexShrink: 0 }} />
-        <div style={{ flex: 1 }}>
-          <div style={{ height: 4, background: textColor, borderRadius: 3, width: '55%', marginBottom: 3, opacity: isDark ? 0.9 : 0.8 }} />
-          <div style={{ height: 3, background: `${accent}65`, borderRadius: 2, width: '32%' }} />
+    <div 
+      style={{
+        background: isDark ? '#0A0A0A' : '#FFFFFF',
+        borderRadius: 8,
+        flex: 1,
+        border: `1px solid ${isDark ? '#2A2A2A' : '#F0F0F0'}`,
+        overflow: 'hidden',
+        position: 'relative',
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div style={{ height: 4, background: `linear-gradient(90deg, ${meta.accent}, ${meta.accent}90)`, zIndex: 10, position: 'absolute', top: 0, left: 0, right: 0 }} />
+      
+      {/* Scaled down container */}
+      <div style={{ 
+        width: '400%', 
+        height: '400%', 
+        transform: 'scale(0.25)', 
+        transformOrigin: 'top left',
+        position: 'absolute',
+        top: 4,
+        left: 0,
+      }}>
+        <div style={{
+          width: '100%',
+          height: 'max-content',
+          transition: 'transform 8s linear',
+          transform: isHovered ? 'translateY(calc(-100% + 700px))' : 'translateY(0)',
+        }}>
+          <Suspense fallback={<div style={{ width: '100%', height: 800, background: isDark ? '#111' : '#f9f9f9' }} />}>
+            <LiveTemplateRenderer templateId={id} biodata={biodata} />
+          </Suspense>
         </div>
       </div>
-      {[['30%', '50%'], ['38%', '60%'], ['26%', '42%']].map(([lw, vw], i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <div style={{ height: 3, background: `${accent}55`, borderRadius: 2, width: lw, flexShrink: 0 }} />
-          <div style={{ height: 3, background: subColor, borderRadius: 2, width: vw }} />
-        </div>
-      ))}
+      
+      {/* Overlay to catch clicks and prevent interaction with the scaled template */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 5, background: 'transparent' }} />
     </div>
   )
 }
 
 const BADGE_STYLES: Record<string, { bg: string; color: string }> = {
-  Minimal: { bg: '#F3F4F6', color: '#374151' },
-  Elegant: { bg: '#FDF2F8', color: '#9D174D' },
-  Premium: { bg: '#FFFBEB', color: '#92400E' },
-  Cultural: { bg: '#FFF7ED', color: '#C2410C' },
-  Dark: { bg: '#1F2937', color: '#9CA3AF' },
-  Nature: { bg: '#F0FDF4', color: '#166534' },
-  Warm: { bg: '#FFF8F1', color: '#92400E' },
-  Glass: { bg: '#EEF2FF', color: '#3730A3' },
+  Minimal: { bg: '#F3F4F6', color: '#374151' }, Elegant: { bg: '#FDF2F8', color: '#9D174D' },
+  Premium: { bg: '#FFFBEB', color: '#92400E' }, Cultural: { bg: '#FFF7ED', color: '#C2410C' },
+  Dark: { bg: '#1F2937', color: '#9CA3AF' }, Nature: { bg: '#F0FDF4', color: '#166534' },
+  Warm: { bg: '#FFF8F1', color: '#92400E' }, Glass: { bg: '#EEF2FF', color: '#3730A3' },
   Soft: { bg: '#F5F3FF', color: '#6D28D9' },
 }
 
@@ -110,16 +141,9 @@ function CategoryBadge({ category }: { category: string }) {
   const style = BADGE_STYLES[category] || { bg: '#F3F4F6', color: '#374151' }
   return (
     <span style={{
-      padding: '2px 8px',
-      background: style.bg,
-      color: style.color,
-      borderRadius: 999,
-      fontSize: 10,
-      fontWeight: 700,
-      letterSpacing: '0.07em',
-      textTransform: 'uppercase' as const,
-      fontFamily: 'Inter, sans-serif',
-      flexShrink: 0,
+      padding: '2px 8px', background: style.bg, color: style.color, borderRadius: 999,
+      fontSize: 10, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase',
+      fontFamily: 'Inter, sans-serif', flexShrink: 0,
     }}>
       {category}
     </span>
@@ -128,9 +152,25 @@ function CategoryBadge({ category }: { category: string }) {
 
 export default function TemplatesPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [activeFilter, setActiveFilter] = useState('All')
   const gridRef = useRef<HTMLDivElement>(null)
   const inView = useInView(gridRef, { once: true, margin: '-60px' })
+  
+  // Get dummy biodata for live preview
+  const defaultBiodata = useBiodataStore(s => s.biodata)
+  // Fill it with some nice demo data so it looks good
+  const demoBiodata: BiodataRecord = {
+    ...defaultBiodata,
+    basicInfo: {
+      ...defaultBiodata.basicInfo,
+      fullName: 'Aarav Sharma', age: 28, height: "5'10\"", city: 'Mumbai', state: 'MH',
+      religion: 'Hindu', caste: 'Brahmin', motherTongue: 'Hindi',
+      aboutMe: 'I am a software engineer who loves traveling, photography, and spending time with family.'
+    },
+    career: { ...defaultBiodata.career, currentDesignation: 'Senior Developer', company: 'Google', industry: 'IT' },
+    education: { ...defaultBiodata.education, highestQualification: 'B.Tech', institution: 'IIT Bombay' },
+  }
 
   const filteredTemplates = TEMPLATE_IDS.filter(id => {
     if (activeFilter === 'All') return true
@@ -157,43 +197,44 @@ export default function TemplatesPage() {
   }
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+    <div className="bg-white dark:bg-slate-950 transition-colors duration-300" style={{ minHeight: '100vh', fontFamily: 'inherit' }}>
 
       {/* PAGE HEADER */}
-      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #F0F0F0', padding: '60px 6vw 36px' }}>
+      <div className="bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 transition-colors duration-300" style={{ padding: '60px 6vw 36px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-            <Link to="/" style={{ fontSize: 13, color: '#AAAAAA', textDecoration: 'none' }}>Home</Link>
+            <Link to="/" className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" style={{ fontSize: 13, textDecoration: 'none' }}>Home</Link>
             <span style={{ color: '#DDDDDD', fontSize: 13 }}>/</span>
-            <span style={{ fontSize: 13, color: '#1A1A1A' }}>Templates</span>
+            <span className="text-gray-900 dark:text-gray-100" style={{ fontSize: 13 }}>Templates</span>
           </div>
 
           <motion.h1
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+            className="text-gray-900 dark:text-white"
             style={{
-              fontFamily: 'Sora, sans-serif',
+              fontFamily: 'inherit',
               fontSize: 'clamp(28px, 4.5vw, 52px)',
               fontWeight: 800,
               letterSpacing: '-0.03em',
-              color: '#1A1A1A',
               marginBottom: 12,
               lineHeight: 1.1,
             }}
           >
-            All Templates
+            {t('templates.title')}
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.08 }}
-            style={{ fontSize: 'clamp(15px, 1.6vw, 17px)', color: '#777777', lineHeight: 1.6, maxWidth: 480 }}
+            className="text-gray-500 dark:text-gray-400"
+            style={{ fontSize: 'clamp(15px, 1.6vw, 17px)', lineHeight: 1.6, maxWidth: 480 }}
           >
-            16 carefully crafted designs. One for every personality.
+            {t('templates.subtitle')}
           </motion.p>
         </div>
       </div>
 
       {/* FILTER TABS — sticky */}
-      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #F0F0F0', padding: '0 6vw', position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 1px 0 #F0F0F0' }}>
+      <div className="bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 transition-colors duration-300" style={{ padding: '0 6vw', position: 'sticky', top: 64, zIndex: 40, boxShadow: '0 1px 0 rgba(0,0,0,0.05)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15, duration: 0.4 }}
@@ -203,22 +244,14 @@ export default function TemplatesPage() {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                style={{
-                  padding: '6px 15px',
-                  borderRadius: 999,
-                  border: activeFilter === filter ? '1.5px solid #7C3AED' : '1.5px solid #E5E5E5',
-                  background: activeFilter === filter ? '#7C3AED' : 'white',
-                  color: activeFilter === filter ? 'white' : '#666666',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  fontFamily: 'Inter, sans-serif',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap' as const,
-                  transition: 'all 150ms ease',
-                  flexShrink: 0,
-                }}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 flex-shrink-0 ${
+                  activeFilter === filter
+                    ? 'bg-purple-600 text-white border-1.5 border-purple-600'
+                    : 'bg-white dark:bg-slate-900 text-gray-600 dark:text-gray-300 border-1.5 border-gray-200 dark:border-slate-700 hover:border-purple-300'
+                }`}
+                style={{ fontFamily: 'inherit' }}
               >
-                {filter}
+                {t(`filter.${filter.toLowerCase()}`) !== `filter.${filter.toLowerCase()}` ? t(`filter.${filter.toLowerCase()}`) : filter}
               </button>
             ))}
           </motion.div>
@@ -226,10 +259,10 @@ export default function TemplatesPage() {
       </div>
 
       {/* TEMPLATE GRID */}
-      <div style={{ padding: '36px 6vw 80px', background: '#FAFAFA' }}>
+      <div className="bg-gray-50 dark:bg-slate-900 transition-colors duration-300" style={{ padding: '36px 6vw 80px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }} ref={gridRef}>
           {filteredTemplates.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '80px 0', color: '#AAAAAA' }}>
+            <div style={{ textAlign: 'center', padding: '80px 0' }} className="text-gray-400">
               <p style={{ fontSize: 15 }}>No templates found for this filter.</p>
             </div>
           ) : (
@@ -238,7 +271,7 @@ export default function TemplatesPage() {
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
               className="tpl-page-grid"
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 24 }}
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 24 }}
             >
               {filteredTemplates.map((id) => {
                 const meta = TEMPLATE_META[id]
@@ -249,37 +282,32 @@ export default function TemplatesPage() {
                   <motion.div
                     key={id}
                     variants={cardVariants}
-                    whileHover={{ y: -4, boxShadow: '0 16px 40px rgba(0,0,0,0.10)', transition: { duration: 0.2 } }}
+                    whileHover={{ y: -4, boxShadow: '0 16px 40px rgba(0,0,0,0.15)', transition: { duration: 0.2 } }}
+                    className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 transition-colors duration-300"
                     style={{
-                      background: isDark ? '#0A0A0A' : 'white',
                       borderRadius: 16,
                       overflow: 'hidden',
-                      border: isDark ? '1px solid #2A2A2A' : '1px solid #EBEBEB',
+                      borderWidth: '1px',
                       display: 'flex',
                       flexDirection: 'column',
-                      height: 280,
+                      height: 380, // Taller to show live preview nicely
                       boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                      transition: 'border-color 0.2s ease',
                     }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${meta.accent}55` }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = isDark ? '#2A2A2A' : '#EBEBEB' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${meta.accent}80` }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '' }}
                   >
-                    {/* Top color strip */}
-                    <div style={{ height: 8, background: `linear-gradient(90deg, ${meta.accent} 0%, ${meta.accent}AA 100%)`, flexShrink: 0 }} />
-
-                    {/* Mockup */}
-                    <div style={{ padding: '12px 14px 0', flex: 1, display: 'flex' }}>
-                      <TemplateMockupPreview id={id} accent={meta.accent} />
+                    {/* Live Preview Container */}
+                    <div style={{ padding: '16px 16px 0', flex: 1, display: 'flex', overflow: 'hidden' }}>
+                      <LivePreviewCard id={id} meta={meta} biodata={{...demoBiodata, templateId: id}} />
                     </div>
 
                     {/* Footer */}
-                    <div style={{ padding: '11px 14px 14px', flexShrink: 0 }}>
+                    <div className="bg-white dark:bg-slate-800 transition-colors duration-300" style={{ padding: '14px 16px 16px', flexShrink: 0, zIndex: 10 }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
-                        <span style={{
-                          fontFamily: 'Sora, sans-serif',
+                        <span className="text-gray-900 dark:text-white" style={{
+                          fontFamily: 'inherit',
                           fontWeight: 700,
-                          fontSize: 13,
-                          color: isDark ? '#FFFFFF' : '#1A1A1A',
+                          fontSize: 14,
                           letterSpacing: '-0.01em',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -290,12 +318,11 @@ export default function TemplatesPage() {
                         </span>
                         <CategoryBadge category={category} />
                       </div>
-                      <p style={{
-                        fontSize: 11,
-                        color: isDark ? '#666' : '#BBBBBB',
+                      <p className="text-gray-400 dark:text-gray-400" style={{
+                        fontSize: 12,
                         fontStyle: 'italic',
-                        marginBottom: 10,
-                        fontFamily: 'Inter, sans-serif',
+                        marginBottom: 12,
+                        fontFamily: 'inherit',
                         lineHeight: 1.4,
                         whiteSpace: 'nowrap' as const,
                         overflow: 'hidden',
@@ -303,54 +330,55 @@ export default function TemplatesPage() {
                       }}>
                         {meta.tagline}
                       </p>
-                      <div style={{ display: 'flex', gap: 7 }}>
+                      <div style={{ display: 'flex', gap: 8 }}>
                         <button
                           onClick={() => useTemplate(id)}
                           style={{
                             flex: 1,
-                            padding: '6px 10px',
+                            padding: '8px 10px',
                             background: meta.accent,
                             color: 'white',
                             border: 'none',
-                            borderRadius: 7,
-                            fontSize: 11,
+                            borderRadius: 8,
+                            fontSize: 12,
                             fontWeight: 700,
-                            fontFamily: 'Inter, sans-serif',
+                            fontFamily: 'inherit',
                             cursor: 'pointer',
                             transition: 'opacity 150ms ease',
                           }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.82' }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
                           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
                         >
-                          Use this template
+                          {t('templates.use')}
                         </button>
                         <button
                           onClick={() => previewTemplate(id)}
+                          className="dark:text-gray-300"
                           style={{
                             flex: 1,
-                            padding: '6px 10px',
-                            background: 'none',
+                            padding: '8px 10px',
+                            background: 'transparent',
                             color: meta.accent,
                             border: `1.5px solid ${meta.accent}45`,
-                            borderRadius: 7,
-                            fontSize: 11,
+                            borderRadius: 8,
+                            fontSize: 12,
                             fontWeight: 700,
-                            fontFamily: 'Inter, sans-serif',
+                            fontFamily: 'inherit',
                             cursor: 'pointer',
                             transition: 'all 150ms ease',
                           }}
                           onMouseEnter={e => {
                             const el = e.currentTarget as HTMLButtonElement
-                            el.style.background = `${meta.accent}12`
+                            el.style.background = `${meta.accent}15`
                             el.style.borderColor = meta.accent
                           }}
                           onMouseLeave={e => {
                             const el = e.currentTarget as HTMLButtonElement
-                            el.style.background = 'none'
+                            el.style.background = 'transparent'
                             el.style.borderColor = `${meta.accent}45`
                           }}
                         >
-                          Preview demo
+                          {t('templates.preview')}
                         </button>
                       </div>
                     </div>
@@ -360,7 +388,7 @@ export default function TemplatesPage() {
             </motion.div>
           )}
 
-          <p style={{ textAlign: 'center', marginTop: 36, fontSize: 12, color: '#CCCCCC', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-gray-400 dark:text-gray-500" style={{ textAlign: 'center', marginTop: 36, fontSize: 13, fontFamily: 'inherit' }}>
             Showing {filteredTemplates.length} of 16 templates
           </p>
         </div>

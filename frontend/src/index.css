@@ -39,10 +39,32 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hindi Font Support */
+@font-face {
+  font-family: 'AMS Aakul 4';
+  src: local('AMS Aakul 4'),
+       local('AMSAakul4'),
+       url('/fonts/AMS-Aakul-4.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html.lang-hi {
+  font-family: 'AMS Aakul 4', 'Noto Sans Devanagari', 'Yatra One', 'Inter', sans-serif;
+  font-size: 110%; /* Slightly bigger font size as requested */
+}
+
+html.lang-hi h1, html.lang-hi h2, html.lang-hi h3, html.lang-hi h4, html.lang-hi h5, html.lang-hi h6 {
+  font-family: 'AMS Aakul 4', 'Noto Sans Devanagari', 'Sora', sans-serif;
 }
 
 body {
@@ -52,6 +74,16 @@ body {
   background: #FFFFFF;
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+html.lang-hi body {
+  font-family: 'AMS Aakul 4', 'Noto Sans Devanagari', 'Inter', sans-serif;
 }
 
 #root {
@@ -250,5 +282,5 @@ p { margin: 0; }
 /* ===== DARK MODE — only for explicit dark-mode pages like The Modernist ===== */
 /* We force light mode for the main app. Dark templates use inline styles. */
 :root {
-  color-scheme: light only;
+  /* color-scheme: light only; */ /* Removed to allow global dark mode */
 }
