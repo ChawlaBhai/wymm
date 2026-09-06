@@ -123,6 +123,8 @@ export interface BiodataRecord {
   createdAt?: string
   updatedAt?: string
   isPublic: boolean
+  isPaid?: boolean
+  paymentSessionId?: string
   // CRM fields — stored at top level for Firestore querying
   _createdBy?: string | null
   _email?: string | null
