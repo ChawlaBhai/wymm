@@ -158,8 +158,10 @@ function ShareIllustration() {
   )
 }
 
-const STEPS = [
-  {
+export default function HowItWorksSection() {
+  const { t } = useTranslation()
+  const STEPS = [
+{
     number: '01',
     title: t('how.step1.title') || 'Choose your canvas',
     description: t('how.step1.desc') || 'Five templates, five personalities. Modern Minimal, Refined Elegance, Professional Premium, Cultural Grace, The Modernist. Pick the one that feels like you.',
@@ -177,10 +179,8 @@ const STEPS = [
     description: t('how.step3.desc') || 'Get a beautiful link and QR code in seconds. Share on WhatsApp, email it to families, print it — however you reach people.',
     visual: <ShareIllustration />,
     accent: '#7C3AED'},
-]
+  ]
 
-export default function HowItWorksSection() {
-  const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 

@@ -4,6 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
+  build: { sourcemap: true },
+  build: { sourcemap: true },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
