@@ -59,9 +59,7 @@ export default function TemplatesSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#7C3AED'}}>
-            Templates
-          </span>
+            color: '#7C3AED'}}>{t('templates.badge')}</span>
         </motion.div>
 
         <motion.h2
@@ -75,11 +73,10 @@ export default function TemplatesSection() {
             fontSize: 'clamp(24px, 3.6vw, 38px)',
             letterSpacing: '-0.02em',
             marginBottom: 10}}
-        >
-          Choose from 16 beautiful templates
-        </motion.h2>
+        >{t('templates.title_home')}</motion.h2>
 
         <motion.p
+          className="text-gray-600 dark:text-gray-300"
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.45, delay: 0.14 }}
@@ -91,9 +88,7 @@ export default function TemplatesSection() {
             lineHeight: 1.6,
             maxWidth: 480,
             margin: '0 auto 44px'}}
-        >
-          Every design is fully animated and shareable. Not a PDF — a living profile.
-        </motion.p>
+        >{t('templates.subtitle_home')}</motion.p>
 
         {/* Compact template grid */}
         <motion.div
@@ -117,7 +112,7 @@ export default function TemplatesSection() {
                 whileHover={{ y: -4, boxShadow: `0 16px 36px rgba(0,0,0,0.09)`, transition: { duration: 0.2 } }}
                 onClick={() => selectTemplate(id)}
                 style={{
-                  background: isDark ? '#0A0A0A' : 'white',
+                  background: isDark ? '#0A0A0A' : 'var(--card-bg, white)',
                   borderRadius: 14,
                   overflow: 'hidden',
                   border: isDark ? '1px solid #333' : '1px solid #E8E8E8',
@@ -144,7 +139,7 @@ export default function TemplatesSection() {
                     fontFamily: 'Sora, sans-serif',
                     fontWeight: 700,
                     fontSize: 13,
-                    color: isDark ? '#FFFFFF' : '#1A1A1A',
+                    color: isDark ? '#FFFFFF' : 'var(--card-text, #1A1A1A)',
                     letterSpacing: '-0.01em'}}>
                     {meta.name}
                   </span>
@@ -180,9 +175,7 @@ export default function TemplatesSection() {
                       e.currentTarget.style.background = 'none'
                       e.currentTarget.style.borderColor = `${meta.accent}45`
                     }}
-                  >
-                    Try demo
-                  </button>
+                  >{t('templates.try_demo') || 'Try demo'}</button>
                 </div>
               </motion.div>
             )
@@ -221,9 +214,7 @@ export default function TemplatesSection() {
               el.style.background = 'transparent'
               el.style.borderColor = '#7C3AED30'
             }}
-          >
-            View all 16 templates →
-          </Link>
+          >{t('templates.view_all') || 'View all 16 templates →'}</Link>
         </motion.div>
       </div>
 

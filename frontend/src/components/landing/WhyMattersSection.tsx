@@ -188,9 +188,7 @@ export default function WhyMattersSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#A855F7'}}>
-            Why it matters
-          </span>
+            color: '#A855F7'}}>{t('why.badge')}</span>
         </motion.div>
 
         <motion.h2
@@ -205,7 +203,7 @@ export default function WhyMattersSection() {
             letterSpacing: '-0.02em',
             marginBottom: 72}}
         >
-          Because first impressions write futures.
+          {t('why.title')}
         </motion.h2>
 
         {/* Two-column layout */}
@@ -220,16 +218,13 @@ export default function WhyMattersSection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.12, ease: [0.23, 1, 0.32, 1] }}
           >
-            <p style={{
+            <p className="text-gray-600 dark:text-gray-300" style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 17px)',
               
               lineHeight: 1.85,
               marginBottom: 32}}>
-              In India, a biodata travels farther than a resume. It reaches parents in distant
-              cities, relatives you've never met, families who will judge a person by a page.
-              Most biodatas look like they were made in a hurry — because they were. Generic
-              templates. Misaligned fonts. Information without soul.
+              {t('why.p1')}
             </p>
 
             <div style={{
@@ -240,13 +235,12 @@ export default function WhyMattersSection() {
               marginBottom: 32,
               opacity: 0.4}} />
 
-            <p style={{
+            <p className="text-gray-600 dark:text-gray-300" style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 17px)',
               
               lineHeight: 1.85}}>
-              wymm is different. We built templates that tell your story with the elegance it
-              deserves. Not a form. Not a PDF. A first impression you'd actually be proud of.
+              {t('why.p2')}
             </p>
           </motion.div>
 
@@ -272,9 +266,7 @@ export default function WhyMattersSection() {
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   color: '#AAA',
-                  textAlign: 'center'}}>
-                  Before wymm
-                </div>
+                  textAlign: 'center'}}>{t('why.before')}</div>
                 {/* Spacer for the vs badge */}
                 <div style={{ width: 48 }} />
                 <div style={{
@@ -285,9 +277,7 @@ export default function WhyMattersSection() {
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   color: '#A855F7',
-                  textAlign: 'center'}}>
-                  With wymm
-                </div>
+                  textAlign: 'center'}}>{t('why.with')}</div>
               </div>
 
               {/* Cards row with floating vs badge */}
@@ -313,9 +303,7 @@ export default function WhyMattersSection() {
                   flexShrink: 0,
                   margin: '0 8px',
                   zIndex: 1,
-                  position: 'relative'}}>
-                  vs
-                </div>
+                  position: 'relative'}}>{t('why.vs')}</div>
 
                 {/* After card */}
                 <div style={{ flex: 1 }}>

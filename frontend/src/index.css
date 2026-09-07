@@ -331,3 +331,30 @@ html.dark .card {
     font-size: 14px;
   }
 }
+
+/* Testimonial Card Dark Mode */
+.testimonial-card {
+  background-image: linear-gradient(white, white), linear-gradient(to bottom, #7C3AED, transparent);
+  border: 1px solid #E8E8E8;
+}
+.dark .testimonial-card {
+  background-image: linear-gradient(#18181B, #18181B), linear-gradient(to bottom, #7C3AED, transparent);
+  border-color: #3f3f46;
+}
+.testimonial-card p {
+  color: #333;
+}
+.dark .testimonial-card p {
+  color: #D4D4D8;
+}
+
+:root {
+  --card-bg: white;
+  --card-text: #1A1A1A;
+  --phone-bg: #1C1C1E;
+}
+.dark {
+  --card-bg: #18181B;
+  --card-text: #F4F4F5;
+  --phone-bg: #09090B;
+}

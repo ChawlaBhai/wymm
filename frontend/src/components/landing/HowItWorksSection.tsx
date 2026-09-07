@@ -86,7 +86,7 @@ function BuilderIllustration() {
             <div key={i} style={{
               height: 18,
               borderRadius: 5,
-              background: '#F8F9FB',
+              /* background: '#F8F9FB' */
               border: '1px solid #E5E5E5',
               width: w,
               marginBottom: 6}} />
@@ -108,7 +108,7 @@ function ShareIllustration() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, maxWidth: 200 }}>
       <div style={{
         width: 110,
-        background: '#1C1C1E',
+        background: 'var(--phone-bg, #1C1C1E)',
         borderRadius: 18,
         padding: '8px 6px',
         boxShadow: '0 8px 24px rgba(0,0,0,0.15)'}}>
@@ -125,7 +125,7 @@ function ShareIllustration() {
           <div style={{
             width: '100%',
             height: 48,
-            background: '#F8F9FB',
+            /* background: '#F8F9FB' */
             borderRadius: 6,
             border: '1px dashed #D0D0D0',
             display: 'flex',
@@ -188,7 +188,7 @@ export default function HowItWorksSection() {
     <section
       id="how-it-works"
       ref={ref}
-      style={{ padding: '104px 0', background: '#F8F9FB' }}
+      className="bg-gray-50 dark:bg-slate-900" style={{ padding: '104px 0' }}
     >
       <div className="container">
         <motion.div

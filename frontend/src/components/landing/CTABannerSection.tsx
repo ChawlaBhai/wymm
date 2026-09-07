@@ -11,7 +11,7 @@ export default function CTABannerSection() {
   return (
     <section
       ref={ref}
-      style={{ padding: '104px 0', background: 'white' }}
+      className="bg-white dark:bg-slate-950" style={{ padding: '104px 0' }}
     >
       <div className="container">
         <motion.div
@@ -24,7 +24,8 @@ export default function CTABannerSection() {
             textAlign: 'center',
             position: 'relative',
             overflow: 'hidden',
-            background: 'white',
+            className: "bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800",
+            // background: 'white',
             border: '1px solid rgba(124,58,237,0.10)'}}
         >
           {/* Animated aurora blobs */}

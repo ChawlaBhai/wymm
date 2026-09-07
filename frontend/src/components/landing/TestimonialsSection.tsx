@@ -39,7 +39,7 @@ export default function TestimonialsSection() {
   return (
     <section
       ref={ref}
-      style={{ padding: '104px 0', background: '#F8F9FB' }}
+      className="bg-gray-50 dark:bg-slate-900" style={{ padding: '104px 0' }}
     >
       <div className="container">
         {/* Section label */}
@@ -55,9 +55,7 @@ export default function TestimonialsSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#EC4899'}}>
-            Stories
-          </span>
+            color: '#EC4899'}}>{t('testimonials.badge')}</span>
         </motion.div>
 
         <motion.h2
@@ -71,9 +69,7 @@ export default function TestimonialsSection() {
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
             marginBottom: 56}}
-        >
-          Families who trusted wymm
-        </motion.h2>
+        >{t('testimonials.title')}</motion.h2>
 
         <motion.div
           variants={containerVariants}
@@ -95,7 +91,7 @@ export default function TestimonialsSection() {
               style={{
                 borderRadius: 16,
                 padding: '28px 28px 24px',
-                border: '1px solid #E8E8E8',
+                
                 boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -104,7 +100,8 @@ export default function TestimonialsSection() {
                 overflow: 'hidden',
                 // Gradient left border via box-shadow trick
                 borderLeft: '3px solid transparent',
-                backgroundImage: 'linear-gradient(white, white), linear-gradient(to bottom, #7C3AED, transparent)',
+                className: "testimonial-card",
+                // backgroundImage
                 backgroundOrigin: 'border-box',
                 backgroundClip: 'padding-box, border-box'}}
             >
@@ -195,9 +192,7 @@ export default function TestimonialsSection() {
             color: '#BBBBBB',
             marginTop: 28,
             letterSpacing: '0.04em'}}
-        >
-          Illustrative testimonials
-        </motion.p>
+        >{t('testimonials.subtitle')}</motion.p>
       </div>
     </section>
   )
