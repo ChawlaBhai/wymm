@@ -75,8 +75,7 @@ export default function LoginPage() {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '24px 16px',
-    }}>
+      padding: '24px 16px'}}>
       {/* Back to home */}
       <div style={{ position: 'absolute', top: 24, left: 24 }}>
         <Link
@@ -88,8 +87,7 @@ export default function LoginPage() {
             textDecoration: 'none',
             color: '#555',
             fontSize: 14,
-            fontFamily: 'Inter, sans-serif',
-          }}
+            fontFamily: 'Inter, sans-serif'}}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -105,8 +103,7 @@ export default function LoginPage() {
         borderRadius: 16,
         border: '1px solid #EBEBEB',
         padding: '40px 36px',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-      }}>
+        boxShadow: '0 4px 24px rgba(0,0,0,0.06)'}}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
@@ -117,8 +114,7 @@ export default function LoginPage() {
                 fontFamily: 'Sora, sans-serif',
                 fontWeight: 700,
                 fontSize: 26,
-                letterSpacing: '-0.03em',
-              }}
+                letterSpacing: '-0.03em'}}
             >
               wymm
             </span>
@@ -128,8 +124,7 @@ export default function LoginPage() {
             color: '#666',
             fontFamily: 'Inter, sans-serif',
             fontSize: 14,
-            lineHeight: 1.5,
-          }}>
+            lineHeight: 1.5}}>
             Sign in to manage your biodatas
           </p>
         </div>
@@ -138,8 +133,7 @@ export default function LoginPage() {
           /* Success state */
           <div style={{
             textAlign: 'center',
-            padding: '24px 0',
-          }}>
+            padding: '24px 0'}}>
             <div style={{
               width: 56,
               height: 56,
@@ -148,8 +142,7 @@ export default function LoginPage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 16px',
-            }}>
+              margin: '0 auto 16px'}}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2z" stroke="#16A34A" strokeWidth="1.5"/>
                 <path d="M2 6l10 7 10-7" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round"/>
@@ -175,8 +168,7 @@ export default function LoginPage() {
                 fontSize: 13,
                 fontFamily: 'Inter, sans-serif',
                 cursor: 'pointer',
-                textDecoration: 'underline',
-              }}
+                textDecoration: 'underline'}}
             >
               Use a different email
             </button>
@@ -192,8 +184,7 @@ export default function LoginPage() {
                   fontSize: 13,
                   fontWeight: 500,
                   color: '#333',
-                  marginBottom: 6,
-                }}>
+                  marginBottom: 6}}>
                   Email address
                 </label>
                 <input
@@ -216,8 +207,7 @@ export default function LoginPage() {
                   marginBottom: 12,
                   padding: '8px 12px',
                   background: '#FEF2F2',
-                  borderRadius: 8,
-                }}>
+                  borderRadius: 8}}>
                   {error}
                 </p>
               )}
@@ -237,8 +227,7 @@ export default function LoginPage() {
               display: 'flex',
               alignItems: 'center',
               gap: 12,
-              marginBottom: 16,
-            }}>
+              marginBottom: 16}}>
               <div style={{ flex: 1, height: 1, background: '#EBEBEB' }} />
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#AAA' }}>OR</span>
               <div style={{ flex: 1, height: 1, background: '#EBEBEB' }} />
@@ -253,8 +242,7 @@ export default function LoginPage() {
                 width: '100%',
                 justifyContent: 'center',
                 gap: 10,
-                opacity: googleLoading ? 0.7 : 1,
-              }}
+                opacity: googleLoading ? 0.7 : 1}}
             >
               {!googleLoading && (
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -275,8 +263,7 @@ export default function LoginPage() {
         fontFamily: 'Inter, sans-serif',
         fontSize: 12,
         color: '#AAA',
-        textAlign: 'center',
-      }}>
+        textAlign: 'center'}}>
         By signing in, you agree to our terms of service and privacy policy.
       </p>
     </div>

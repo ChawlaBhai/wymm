@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } }
 
 const C = {
@@ -16,8 +15,7 @@ const C = {
   amber: '#C4956A',
   stone: '#F0EDE6',
   border: '#E8E4DC',
-  hero: '#1C2B1E',
-}
+  hero: '#1C2B1E'}
 
 function SectionLeaf() {
   return (
@@ -59,15 +57,13 @@ export default function TemplateMountainSoul({ biodata }: { biodata: BiodataReco
     vegetarian: 'Vegetarian',
     'non-vegetarian': 'Non-Vegetarian',
     vegan: 'Vegan',
-    eggetarian: 'Eggetarian',
-  }
+    eggetarian: 'Eggetarian'}
 
   const hobbyEmojis: Record<string, string> = {
     hiking: '🏔️', trekking: '🥾', reading: '📚', cooking: '🍳', music: '🎵', travel: '✈️',
     photography: '📸', yoga: '🧘', fitness: '🏋️', cycling: '🚴', swimming: '🏊', painting: '🎨',
     gardening: '🌱', movies: '🎬', gaming: '🎮', dancing: '💃', writing: '✍️', sports: '⚽',
-    meditation: '🧘', chess: '♟️',
-  }
+    meditation: '🧘', chess: '♟️'}
 
   function getEmoji(hobby: string) {
     const lower = hobby.toLowerCase()

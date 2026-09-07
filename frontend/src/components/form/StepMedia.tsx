@@ -20,8 +20,7 @@ async function compressAndEncode(file: File, maxSizeMB: number, maxDim: number):
   const compressed = await imageCompression(file, {
     maxSizeMB,
     maxWidthOrHeight: maxDim,
-    useWebWorker: true,
-  })
+    useWebWorker: true})
   return toBase64(compressed)
 }
 
@@ -39,8 +38,7 @@ function ProfileDropzone() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'image/jpeg': [], 'image/png': [], 'image/webp': [] },
-    maxFiles: 1,
-  })
+    maxFiles: 1})
 
   if (profilePhoto) {
     return (
@@ -72,8 +70,7 @@ function ProfileDropzone() {
         textAlign: 'center',
         background: isDragActive ? 'rgba(124,58,237,0.04)' : '#FAFAFA',
         cursor: 'pointer',
-        transition: 'all 200ms ease',
-      }}
+        transition: 'all 200ms ease'}}
     >
       <input {...getInputProps()} />
       <div style={{ fontSize: '36px', marginBottom: '12px' }}>📸</div>
@@ -100,8 +97,7 @@ function GalleryDropzone() {
     onDrop,
     accept: { 'image/jpeg': [], 'image/png': [], 'image/webp': [] },
     maxFiles: remaining,
-    disabled: remaining === 0,
-  })
+    disabled: remaining === 0})
 
   function removePhoto(idx: number) {
     updateMedia({ galleryPhotos: galleryPhotos.filter((_, i) => i !== idx) })
@@ -154,8 +150,7 @@ function GalleryDropzone() {
             textAlign: 'center',
             background: isDragActive ? 'rgba(124,58,237,0.04)' : '#FAFAFA',
             cursor: 'pointer',
-            transition: 'all 200ms ease',
-          }}
+            transition: 'all 200ms ease'}}
         >
           <input {...getInputProps()} />
           <p style={{ fontSize: '14px', color: 'inherit' }}>
@@ -186,8 +181,7 @@ function DocumentsDropzone() {
         return {
           name: file.name.replace(/\.[^.]+$/, ''),
           url,
-          type: (isImage ? 'image' : 'pdf') as 'pdf' | 'image',
-        }
+          type: (isImage ? 'image' : 'pdf') as 'pdf' | 'image'}
       })
     )
     updateMedia({ documents: [...documents, ...entries] })
@@ -199,11 +193,9 @@ function DocumentsDropzone() {
       'application/pdf': [],
       'image/jpeg': [],
       'image/png': [],
-      'image/webp': [],
-    },
+      'image/webp': []},
     maxFiles: remaining,
-    disabled: remaining === 0,
-  })
+    disabled: remaining === 0})
 
   function removeDoc(idx: number) {
     updateMedia({ documents: documents.filter((_, i) => i !== idx) })
@@ -244,8 +236,7 @@ function DocumentsDropzone() {
             textAlign: 'center',
             background: isDragActive ? 'rgba(124,58,237,0.04)' : '#FAFAFA',
             cursor: 'pointer',
-            transition: 'all 200ms ease',
-          }}
+            transition: 'all 200ms ease'}}
         >
           <input {...getInputProps()} />
           <div style={{ fontSize: '28px', marginBottom: '8px' }}>📎</div>

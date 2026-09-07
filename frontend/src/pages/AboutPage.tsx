@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from '@/lib/i18n'
 import { motion, useInView } from 'framer-motion'
 
 const FEATURE_CARDS = [
@@ -8,44 +9,37 @@ const FEATURE_CARDS = [
     title: 'Five crafted templates',
     description: 'Not themes, not skins. Five distinct design personalities built for five types of people. Each one considered, each one deliberate.',
     accent: '#7C3AED',
-    bg: 'rgba(124,58,237,0.06)',
-  },
+    bg: 'rgba(124,58,237,0.06)'},
   {
     icon: '⚡',
     title: 'Share in seconds',
     description: 'A link your family can send. A QR code for the phone screen. No app downloads, no registrations. Just a beautiful page that travels with you.',
     accent: '#EC4899',
-    bg: 'rgba(236,72,153,0.06)',
-  },
+    bg: 'rgba(236,72,153,0.06)'},
   {
     icon: '∞',
     title: 'Free, always',
     description: 'We believe beautiful things shouldn\'t be gated behind a paywall when something as important as marriage is at stake.',
     accent: '#10B981',
-    bg: 'rgba(16,185,129,0.06)',
-  },
+    bg: 'rgba(16,185,129,0.06)'},
 ]
 
 const VALUES = [
   {
     title: 'Dignity',
-    body: 'Every person deserves a profile that represents them with the respect they carry. We don\'t cut corners on that.',
-  },
+    body: 'Every person deserves a profile that represents them with the respect they carry. We don\'t cut corners on that.'},
   {
     title: 'Simplicity',
-    body: 'The best technology disappears. You should never notice the tool, only the result.',
-  },
+    body: 'The best technology disappears. You should never notice the tool, only the result.'},
   {
     title: 'Inclusivity',
-    body: 'We support all communities, all religions, all languages. This is for every Indian family.',
-  },
+    body: 'We support all communities, all religions, all languages. This is for every Indian family.'},
 ]
 
 function FadeInSection({
   children,
   delay = 0,
-  direction = 'up',
-}: {
+  direction = 'up'}: {
   children: React.ReactNode
   delay?: number
   direction?: 'up' | 'left' | 'right'
@@ -69,20 +63,19 @@ function FadeInSection({
 }
 
 export default function AboutPage() {
+  const { t } = useTranslation()
   const heroRef = useRef<HTMLDivElement>(null)
   const heroInView = useInView(heroRef, { once: true })
 
   return (
-    <main style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <main style={{  minHeight: '100vh' }}>
 
       {/* HERO SECTION */}
-      <section style={{
-        background: '#FFFFFF',
+      <section className="bg-white dark:bg-slate-950 transition-colors" style={{
         paddingTop: 140,
         paddingBottom: 100,
         position: 'relative',
-        overflow: 'hidden',
-      }}>
+        overflow: 'hidden'}}>
         {/* Aurora gradient background */}
         <motion.div
           aria-hidden="true"
@@ -96,8 +89,7 @@ export default function AboutPage() {
               'radial-gradient(ellipse 60% 45% at 85% 65%, rgba(236,72,153,0.07) 0%, transparent 55%)',
             ].join(', '),
             backgroundSize: '200% 200%',
-            pointerEvents: 'none',
-          }}
+            pointerEvents: 'none'}}
         />
 
         <div className="container" style={{ position: 'relative', zIndex: 1, maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
@@ -122,9 +114,8 @@ export default function AboutPage() {
                 color: '#7C3AED',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-              }}>
-                Our Story
+                textTransform: 'uppercase'}}>
+                {t('about.badge') || 'Our Story'}
               </span>
             </motion.div>
 
@@ -139,17 +130,15 @@ export default function AboutPage() {
                 fontSize: 'clamp(32px, 5vw, 60px)',
                 lineHeight: 1.1,
                 letterSpacing: '-0.03em',
-                color: '#1A1A1A',
-                marginBottom: 28,
-              }}
+                
+                marginBottom: 28}}
             >
               Four words that{' '}
               <span style={{
                 background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}>
+                backgroundClip: 'text'}}>
                 change everything.
               </span>
             </motion.h1>
@@ -165,23 +154,20 @@ export default function AboutPage() {
                 color: '#555',
                 lineHeight: 1.75,
                 maxWidth: 640,
-                margin: '0 auto',
-              }}
+                margin: '0 auto'}}
             >
-              Will You Marry Me? — wymm was built for the journey that leads to that question.
+              {t('about.subtitle') || 'Will You Marry Me? — wymm was built for the journey that leads to that question.'}
             </motion.p>
           </div>
         </div>
       </section>
 
       {/* WHY WYMM SECTION */}
-      <section style={{
-        background: '#FFFFFF',
+      <section className="bg-white dark:bg-slate-950 transition-colors" style={{
         padding: '96px 0',
-        borderTop: '1px solid #F0F0F0',
+        
         position: 'relative',
-        overflow: 'hidden',
-      }}>
+        overflow: 'hidden'}}>
         {/* Background watermark */}
         <div aria-hidden="true" style={{
           position: 'absolute',
@@ -191,8 +177,7 @@ export default function AboutPage() {
           justifyContent: 'center',
           pointerEvents: 'none',
           zIndex: 0,
-          overflow: 'hidden',
-        }}>
+          overflow: 'hidden'}}>
           <span style={{
             fontFamily: 'Sora, sans-serif',
             fontWeight: 800,
@@ -204,8 +189,7 @@ export default function AboutPage() {
             backgroundClip: 'text',
             opacity: 0.08,
             whiteSpace: 'nowrap',
-            userSelect: 'none',
-          }}>
+            userSelect: 'none'}}>
             Will You Marry Me?
           </span>
         </div>
@@ -219,9 +203,8 @@ export default function AboutPage() {
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#7C3AED',
-              }}>
-                Why wymm?
+                color: '#7C3AED'}}>
+                {t('about.why_badge') || 'Why wymm?'}
               </span>
             </div>
             <h2 style={{
@@ -229,10 +212,9 @@ export default function AboutPage() {
               fontWeight: 700,
               fontSize: 'clamp(26px, 4vw, 40px)',
               letterSpacing: '-0.02em',
-              color: '#1A1A1A',
-              marginBottom: 40,
-            }}>
-              Four words that change everything.
+              
+              marginBottom: 40}}>
+              {t('about.title_full') || 'Four words that change everything.'}
             </h2>
           </FadeInSection>
 
@@ -240,31 +222,28 @@ export default function AboutPage() {
             <p style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 18px)',
-              color: '#444',
+              
               lineHeight: 1.85,
-              marginBottom: 28,
-            }}>
-              wymm stands for <strong style={{ color: '#1A1A1A' }}>Will You Marry Me?</strong> — the four words that change everything.
+              marginBottom: 28}}>
+              wymm stands for <strong style={{ }}>Will You Marry Me?</strong> — the four words that change everything.
               The question every arranged marriage journey is quietly building towards. We named our platform after that moment
               because we believe every step of the journey deserves the same intention and care as that question itself.
             </p>
             <p style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 18px)',
-              color: '#444',
+              
               lineHeight: 1.85,
-              marginBottom: 28,
-            }}>
+              marginBottom: 28}}>
               When a biodata reaches a family, it carries the weight of that question before it's ever asked.
               We wanted to make that first impression worthy of what it represents.
             </p>
             <p style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 18px)',
-              color: '#444',
-              lineHeight: 1.85,
-            }}>
-              wymm was built by <strong style={{ color: '#1A1A1A' }}>Sahaj Chawla</strong> — with the belief that
+              
+              lineHeight: 1.85}}>
+              wymm was built by <strong style={{ }}>Sahaj Chawla</strong> — with the belief that
               every person stepping into this journey deserves a first impression that truly represents them.
             </p>
           </FadeInSection>
@@ -272,19 +251,16 @@ export default function AboutPage() {
       </section>
 
       {/* MISSION SECTION */}
-      <section style={{
-        background: '#FAFAFA',
+      <section className="bg-gray-50 dark:bg-slate-900 transition-colors" style={{
         padding: '96px 0',
-        borderTop: '1px solid #F0F0F0',
-        borderBottom: '1px solid #F0F0F0',
-      }}>
+        
+        borderBottom: '1px solid #F0F0F0'}}>
         <div className="container">
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: 64,
-            alignItems: 'start',
-          }}>
+            alignItems: 'start'}}>
             {/* Left: Pullquote */}
             <FadeInSection direction="left">
               <blockquote style={{
@@ -293,13 +269,12 @@ export default function AboutPage() {
                 fontWeight: 700,
                 lineHeight: 1.2,
                 letterSpacing: '-0.03em',
-                color: '#1A1A1A',
+                
                 margin: 0,
                 padding: 0,
                 borderLeft: '4px solid',
                 borderImage: 'linear-gradient(180deg, #7C3AED, #EC4899) 1',
-                paddingLeft: 28,
-              }}>
+                paddingLeft: 28}}>
                 "Your biodata travels farther than you do."
               </blockquote>
             </FadeInSection>
@@ -310,10 +285,9 @@ export default function AboutPage() {
                 <p style={{
                   fontFamily: 'Inter, sans-serif',
                   fontSize: 'clamp(15px, 1.6vw, 17px)',
-                  color: '#444',
+                  
                   lineHeight: 1.85,
-                  margin: 0,
-                }}>
+                  margin: 0}}>
                   In India, arranged marriages still begin with a document. A page, sometimes
                   two. That page travels to families in cities you've never visited, reaches
                   parents who've never met you, and forms the first judgment before any
@@ -323,10 +297,9 @@ export default function AboutPage() {
                 <p style={{
                   fontFamily: 'Inter, sans-serif',
                   fontSize: 'clamp(15px, 1.6vw, 17px)',
-                  color: '#444',
+                  
                   lineHeight: 1.85,
-                  margin: 0,
-                }}>
+                  margin: 0}}>
                   And yet, most biodatas look like they were made in fifteen minutes on a
                   borrowed laptop. The format hasn't changed in decades. The presentation is
                   an afterthought. The people behind them — layered, warm, extraordinary
@@ -335,10 +308,9 @@ export default function AboutPage() {
                 <p style={{
                   fontFamily: 'Inter, sans-serif',
                   fontSize: 'clamp(15px, 1.6vw, 17px)',
-                  color: '#444',
+                  
                   lineHeight: 1.85,
-                  margin: 0,
-                }}>
+                  margin: 0}}>
                   We built wymm to change that. Not by adding complexity, but by removing
                   everything that shouldn't be there — and replacing it with intention.
                   A well-designed biodata isn't vanity. It's respect for yourself and the
@@ -351,7 +323,7 @@ export default function AboutPage() {
       </section>
 
       {/* WHAT WE BUILT SECTION */}
-      <section style={{ background: '#FFFFFF', padding: '96px 0' }}>
+      <section className="bg-white dark:bg-slate-950 transition-colors" style={{ padding: '96px 0' }}>
         <div className="container">
           <FadeInSection>
             <div style={{ textAlign: 'center', marginBottom: 14 }}>
@@ -361,9 +333,8 @@ export default function AboutPage() {
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#7C3AED',
-              }}>
-                What we built
+                color: '#7C3AED'}}>
+                {t('about.what_built') || 'What we built'}
               </span>
             </div>
             <h2 style={{
@@ -372,33 +343,29 @@ export default function AboutPage() {
               fontWeight: 700,
               fontSize: 'clamp(26px, 4vw, 40px)',
               letterSpacing: '-0.02em',
-              color: '#1A1A1A',
-              marginBottom: 56,
-            }}>
-              Simple to use. Nothing like what you've seen.
+              
+              marginBottom: 56}}>
+              {t('about.what_title') || 'Simple to use. Nothing like what you\'ve seen.'}
             </h2>
           </FadeInSection>
 
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: 24,
-          }}>
+            gap: 24}}>
             {FEATURE_CARDS.map((card, i) => (
               <FadeInSection key={card.title} delay={i * 0.1}>
                 <motion.div
                   whileHover={{
                     y: -6,
                     boxShadow: '0 20px 40px rgba(124,58,237,0.12)',
-                    transition: { duration: 0.22 },
-                  }}
+                    transition: { duration: 0.22 }}}
                   style={{
-                    background: '#FFFFFF',
+                    
                     borderRadius: 16,
                     padding: '32px 28px',
-                    border: '1px solid #E8E8E8',
-                    height: '100%',
-                  }}
+                    
+                    height: '100%'}}
                 >
                   {/* Icon bubble */}
                   <div style={{
@@ -413,8 +380,7 @@ export default function AboutPage() {
                     color: card.accent,
                     fontWeight: 700,
                     fontFamily: 'Sora, sans-serif',
-                    marginBottom: 20,
-                  }}>
+                    marginBottom: 20}}>
                     {card.icon}
                   </div>
 
@@ -423,20 +389,18 @@ export default function AboutPage() {
                     fontWeight: 700,
                     fontSize: 18,
                     letterSpacing: '-0.02em',
-                    color: '#1A1A1A',
+                    
                     marginBottom: 12,
-                    lineHeight: 1.3,
-                  }}>
+                    lineHeight: 1.3}}>
                     {card.title}
                   </h3>
 
                   <p style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: 15,
-                    color: '#666',
+                    
                     lineHeight: 1.7,
-                    margin: 0,
-                  }}>
+                    margin: 0}}>
                     {card.description}
                   </p>
                 </motion.div>
@@ -447,11 +411,8 @@ export default function AboutPage() {
       </section>
 
       {/* VALUES SECTION */}
-      <section style={{
-        background: '#FAFAFA',
-        padding: '96px 0',
-        borderTop: '1px solid #F0F0F0',
-      }}>
+      <section className="bg-gray-50 dark:bg-slate-900 transition-colors" style={{
+        padding: '96px 0'}}>
         <div className="container" style={{ maxWidth: 760, margin: '0 auto' }}>
           <FadeInSection>
             <h2 style={{
@@ -459,11 +420,10 @@ export default function AboutPage() {
               fontWeight: 700,
               fontSize: 'clamp(26px, 4vw, 40px)',
               letterSpacing: '-0.02em',
-              color: '#1A1A1A',
+              
               marginBottom: 56,
-              textAlign: 'center',
-            }}>
-              What we stand for
+              textAlign: 'center'}}>
+              {t('about.values_title') || 'What we stand for'}
             </h2>
           </FadeInSection>
 
@@ -475,8 +435,7 @@ export default function AboutPage() {
                   gap: 40,
                   alignItems: 'flex-start',
                   padding: '40px 0',
-                  borderBottom: i < VALUES.length - 1 ? '1px solid #EBEBEB' : 'none',
-                }}>
+                  borderBottom: i < VALUES.length - 1 ? '1px solid #EBEBEB' : 'none'}}>
                   {/* Index */}
                   <div style={{
                     fontFamily: 'Sora, sans-serif',
@@ -488,8 +447,7 @@ export default function AboutPage() {
                     flexShrink: 0,
                     paddingTop: 4,
                     width: 28,
-                    textAlign: 'right',
-                  }}>
+                    textAlign: 'right'}}>
                     {String(i + 1).padStart(2, '0')}
                   </div>
 
@@ -499,18 +457,16 @@ export default function AboutPage() {
                       fontWeight: 700,
                       fontSize: 20,
                       letterSpacing: '-0.02em',
-                      color: '#1A1A1A',
-                      marginBottom: 10,
-                    }}>
+                      
+                      marginBottom: 10}}>
                       {v.title}
                     </h3>
                     <p style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: 16,
-                      color: '#666',
+                      
                       lineHeight: 1.75,
-                      margin: 0,
-                    }}>
+                      margin: 0}}>
                       {v.body}
                     </p>
                   </div>
@@ -522,11 +478,9 @@ export default function AboutPage() {
       </section>
 
       {/* CLOSING CTA */}
-      <section style={{
-        background: '#FFFFFF',
+      <section className="bg-white dark:bg-slate-950 transition-colors" style={{
         padding: '96px 0 120px',
-        textAlign: 'center',
-      }}>
+        textAlign: 'center'}}>
         <div className="container" style={{ maxWidth: 640, margin: '0 auto' }}>
           <FadeInSection>
             {/* Decorative gradient line */}
@@ -535,8 +489,7 @@ export default function AboutPage() {
               height: 3,
               background: 'linear-gradient(90deg, #7C3AED, #EC4899)',
               borderRadius: 99,
-              margin: '0 auto 40px',
-            }} />
+              margin: '0 auto 40px'}} />
 
             <p style={{
               fontFamily: 'Sora, sans-serif',
@@ -544,10 +497,9 @@ export default function AboutPage() {
               fontSize: 'clamp(22px, 3.5vw, 32px)',
               lineHeight: 1.35,
               letterSpacing: '-0.02em',
-              color: '#1A1A1A',
-              marginBottom: 40,
-            }}>
-              If you've ever felt your biodata didn't do you justice — we made wymm for you.
+              
+              marginBottom: 40}}>
+              {t('about.cta_text') || 'If you\'ve ever felt your biodata didn\'t do you justice — we made wymm for you.'}
             </p>
 
             <Link
@@ -555,27 +507,24 @@ export default function AboutPage() {
               className="btn-primary"
               style={{ fontSize: 16, padding: '14px 36px' }}
             >
-              Create Your Biodata →
+              {t('about.cta_btn') || 'Create Your Biodata →'}
             </Link>
           </FadeInSection>
         </div>
       </section>
 
       {/* LEGAL FOOTER */}
-      <section style={{
-        background: '#FAFAFA',
-        borderTop: '1px solid #F0F0F0',
+      <section className="bg-gray-50 dark:bg-slate-900 transition-colors" style={{
+        
         padding: '28px 0',
-        textAlign: 'center',
-      }}>
+        textAlign: 'center'}}>
         <div className="container" style={{ maxWidth: 760, margin: '0 auto' }}>
           <p style={{
             fontFamily: 'Inter, sans-serif',
             fontSize: 12,
             color: '#BBBBBB',
             lineHeight: 1.6,
-            margin: 0,
-          }}>
+            margin: 0}}>
             wymm is a product of Sahaj Chawla, a sole proprietorship registered in Ayodhya, Uttar Pradesh, India.
           </p>
         </div>

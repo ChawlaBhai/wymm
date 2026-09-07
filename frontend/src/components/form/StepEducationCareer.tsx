@@ -119,8 +119,7 @@ export default function StepEducationCareer() {
               />
               <span style={{
                 position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
-                fontSize: '12px', fontWeight: 600, color: '#AAAAAA', pointerEvents: 'none',
-              }}>per annum</span>
+                fontSize: '12px', fontWeight: 600, color: '#AAAAAA', pointerEvents: 'none'}}>per annum</span>
             </div>
           </Field>
 
@@ -133,15 +132,13 @@ export default function StepEducationCareer() {
               <div style={{
                 width: '40px', height: '22px', borderRadius: '99px',
                 background: career.showIncome ? '#7C3AED' : '#D1D5DB',
-                position: 'relative', transition: 'background 200ms ease', flexShrink: 0,
-              }}>
+                position: 'relative', transition: 'background 200ms ease', flexShrink: 0}}>
                 <div style={{
                   width: '16px', height: '16px', borderRadius: '50%', background: 'white',
                   position: 'absolute', top: '3px',
                   left: career.showIncome ? '21px' : '3px',
                   transition: 'left 200ms ease',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                }} />
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)'}} />
               </div>
               <div>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'inherit' }}>Show income on biodata</p>

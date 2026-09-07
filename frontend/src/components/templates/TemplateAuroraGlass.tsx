@@ -14,8 +14,7 @@ const glass: React.CSSProperties = {
   border: '1px solid rgba(255,255,255,0.4)',
   boxShadow: '0 8px 32px rgba(124,58,237,0.08)',
   borderRadius: '20px',
-  padding: '32px',
-}
+  padding: '32px'}
 
 const blobs = [
   { c: purple, x: '8%',  y: '15%', s: 320, d: 12, delay: 0 },

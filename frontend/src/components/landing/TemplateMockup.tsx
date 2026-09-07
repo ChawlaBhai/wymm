@@ -31,8 +31,7 @@ const CONFIGS: Record<TemplateId, {
   'rose-gold-luxe':       { bg: '#FFF0F3', heroBg: '#FFF0F3', heroH: '0%', accent: '#D4AF37', accentBg: '#FFF0F3', dark: false, nameFill: '#8B2252', extraEl: 'shimmer' },
   'zen-minimal':          { bg: '#FAFAFA', heroBg: '#FAFAFA', heroH: '0%', accent: '#1A1A1A', accentBg: '#FAFAFA', dark: false, nameFill: '#1A1A1A', extraEl: 'zen-line' },
   'pastel-dreams':        { bg: '#FFFFFF', heroBg: '#FFFFFF', heroH: '0%', accent: '#9C27B0', accentBg: '#EDE7F6', dark: false, nameFill: '#9C27B0', extraEl: 'pastel-blobs' },
-  'heritage-splendor':    { bg: '#FFFFF0', heroBg: '#8B0000', heroH: '52%', accent: '#FF8C00', accentBg: '#FFFFF0', dark: false, nameFill: '#FF8C00', extraEl: 'corner-brackets' },
-}
+  'heritage-splendor':    { bg: '#FFFFF0', heroBg: '#8B0000', heroH: '52%', accent: '#FF8C00', accentBg: '#FFFFF0', dark: false, nameFill: '#FF8C00', extraEl: 'corner-brackets' }}
 
 export function TemplateMockup({ templateId, width = 220, height = 200 }: Props) {
   const cfg = CONFIGS[templateId] || CONFIGS['modern-minimal']
@@ -47,8 +46,7 @@ export function TemplateMockup({ templateId, width = 220, height = 200 }: Props)
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0,
           height: `${heroH}%`,
-          background: cfg.heroBg,
-        }} />
+          background: cfg.heroBg}} />
       )}
 
       {/* Full-bg for dark templates */}
@@ -113,8 +111,7 @@ export function TemplateMockup({ templateId, width = 220, height = 200 }: Props)
           border: `2px solid ${cfg.accent}`,
           margin: heroH > 50 ? '0 auto 8px' : '0 0 8px',
           display: heroH > 50 ? 'block' : 'flex',
-          overflow: 'hidden',
-        }}>
+          overflow: 'hidden'}}>
           <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${cfg.accent}40, ${cfg.accent}20)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ fontSize: 9, fontWeight: 700, color: cfg.accent, fontFamily: 'Sora, sans-serif' }}>P</span>
           </div>

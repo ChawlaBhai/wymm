@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 
 export default function TemplateZenMinimal({ biodata }: { biodata: BiodataRecord }) {
@@ -42,8 +41,7 @@ export default function TemplateZenMinimal({ biodata }: { biodata: BiodataRecord
             letterSpacing: '0.1em',
             lineHeight: 1,
             color: '#1A1A1A',
-            marginBottom: 28,
-          }}
+            marginBottom: 28}}
         >
           {basicInfo.fullName || 'Your Name'}
         </motion.h1>

@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }
 
 const SAFFRON = '#FF8C00'
@@ -64,8 +63,7 @@ export default function TemplateHeritageSplendor({ biodata }: { biodata: Biodata
               width: 160, height: 160, borderRadius: '50%', overflow: 'hidden',
               border: `4px solid ${SAFFRON}`,
               boxShadow: `0 0 0 8px ${SAFFRON}20`,
-              margin: '0 auto 36px',
-            }}
+              margin: '0 auto 36px'}}
           >
             {media.profilePhoto ? (
               <img src={media.profilePhoto} alt={basicInfo.fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -310,8 +308,7 @@ export default function TemplateHeritageSplendor({ biodata }: { biodata: Biodata
                     boxShadow: `0 4px 16px rgba(0,0,0,0.10)`,
                     border: `2px solid ${SAFFRON}60`,
                     cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                  }}
+                    transition: 'all 0.25s ease'}}
                 >
                   <img src={photo} alt={`Photo ${i + 1}`} style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block' }} />
                 </motion.div>

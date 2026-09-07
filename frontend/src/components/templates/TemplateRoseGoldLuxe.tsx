@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }
 
 const BLUSH = '#FFF0F3'
@@ -49,8 +48,7 @@ export default function TemplateRoseGoldLuxe({ biodata }: { biodata: BiodataReco
               overflow: 'hidden',
               background: ROSE,
               margin: '0 auto 36px',
-              boxShadow: `0 0 0 4px ${ROSE}30`,
-            }}
+              boxShadow: `0 0 0 4px ${ROSE}30`}}
           >
             {media.profilePhoto ? (
               <img src={media.profilePhoto} alt={basicInfo.fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -79,8 +77,7 @@ export default function TemplateRoseGoldLuxe({ biodata }: { biodata: BiodataReco
               background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)',
               backgroundSize: '200% 100%',
               animation: 'shimmerSlide 2.5s linear infinite',
-              borderRadius: 999,
-            }}
+              borderRadius: 999}}
           />
 
           <motion.p
@@ -269,8 +266,7 @@ export default function TemplateRoseGoldLuxe({ biodata }: { biodata: BiodataReco
                     borderRadius: 4,
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    transition: 'box-shadow 0.3s ease',
-                  }}
+                    transition: 'box-shadow 0.3s ease'}}
                 >
                   <img src={photo} alt={`Photo ${i + 1}`} style={{ width: '100%', height: 180, objectFit: 'cover', display: 'block' }} />
                 </motion.div>

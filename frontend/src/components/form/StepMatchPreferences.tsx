@@ -16,8 +16,7 @@ function TagInput({
   tags,
   placeholder,
   onAdd,
-  onRemove,
-}: {
+  onRemove}: {
   tags: string[]
   placeholder: string
   onAdd: (t: string) => void
@@ -58,8 +57,7 @@ function TagInput({
 function MultiCheckbox({
   options,
   selected,
-  onChange,
-}: {
+  onChange}: {
   options: string[]
   selected: string[]
   onChange: (v: string[]) => void
@@ -88,8 +86,7 @@ function MultiCheckbox({
               fontSize: '13px',
               fontWeight: checked ? 600 : 400,
               cursor: 'pointer',
-              transition: 'all 150ms ease',
-            }}
+              transition: 'all 150ms ease'}}
           >
             {checked && <span style={{ marginRight: '4px' }}>✓</span>}
             {opt}

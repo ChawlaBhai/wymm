@@ -54,8 +54,7 @@ export default function Navbar() {
           boxShadow: scrolled
             ? (isDark ? '0 1px 0 rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.2)' : '0 1px 0 rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)')
             : '0 1px 0 rgba(0,0,0,0)',
-          backdropFilter: scrolled ? 'blur(12px)' : 'blur(0px)',
-        }}
+          backdropFilter: scrolled ? 'blur(12px)' : 'blur(0px)'}}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
         <div className="container" style={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -71,8 +70,7 @@ export default function Navbar() {
                 fontFamily: 'Sora, sans-serif',
                 fontWeight: 700,
                 fontSize: 22,
-                letterSpacing: '-0.03em',
-              }}
+                letterSpacing: '-0.03em'}}
             >
               wymm
             </span>
@@ -154,8 +152,7 @@ export default function Navbar() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 5,
-                alignItems: 'flex-end',
-              }}
+                alignItems: 'flex-end'}}
             >
               <motion.span
                 animate={menuOpen ? { rotate: 45, y: 7, width: 22 } : { rotate: 0, y: 0, width: 22 }}
@@ -188,8 +185,7 @@ export default function Navbar() {
                 overflow: 'hidden',
                 borderTop: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
                 background: isDark ? 'rgba(15, 23, 42, 0.97)' : 'rgba(255,255,255,0.97)',
-                backdropFilter: 'blur(12px)',
-              }}
+                backdropFilter: 'blur(12px)'}}
             >
               <div className="container" style={{ paddingTop: 16, paddingBottom: 20 }}>
                 {NAV_LINKS.map((link, i) => (
@@ -213,8 +209,7 @@ export default function Navbar() {
                             fontSize: 16,
                             color: isDark ? '#F8FAFC' : '#1A1A1A',
                             fontWeight: 500,
-                            textDecoration: 'none',
-                          }}
+                            textDecoration: 'none'}}
                         >
                           {t(link.key)}
                         </Link>
@@ -233,8 +228,7 @@ export default function Navbar() {
                             fontFamily: 'inherit',
                             fontSize: 16,
                             color: isDark ? '#F8FAFC' : '#1A1A1A',
-                            fontWeight: 500,
-                          }}
+                            fontWeight: 500}}
                         >
                           {t(link.key)}
                         </button>

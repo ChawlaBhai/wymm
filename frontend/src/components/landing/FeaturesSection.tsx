@@ -9,59 +9,51 @@ const FEATURES = [
     description: 'Not static PDFs — living, breathing pages that make a real impression.',
     gradientFrom: '#7C3AED',
     gradientTo: '#A855F7',
-    accent: '#7C3AED',
-  },
+    accent: '#7C3AED'},
   {
     icon: '🔗',
     title: 'Instant sharing',
     description: 'A QR code and shareable link ready the moment you finish. Share via WhatsApp in one tap.',
     gradientFrom: '#EC4899',
     gradientTo: '#F472B6',
-    accent: '#EC4899',
-  },
+    accent: '#EC4899'},
   {
     icon: '🖨️',
     title: 'Print-ready PDF',
     description: 'One-click professional export. Pixel-perfect for printing or sending as an attachment.',
     gradientFrom: '#0EA5E9',
     gradientTo: '#38BDF8',
-    accent: '#0EA5E9',
-  },
+    accent: '#0EA5E9'},
   {
     icon: '📱',
     title: 'Mobile first',
     description: 'Designed to look perfect on every screen, from a phone to a desktop monitor.',
     gradientFrom: '#10B981',
     gradientTo: '#34D399',
-    accent: '#10B981',
-  },
+    accent: '#10B981'},
   {
     icon: '🆓',
     title: 'Free forever',
     description: 'No hidden charges, no premium tiers, no subscriptions. Completely free, always.',
     gradientFrom: '#F59E0B',
     gradientTo: '#FCD34D',
-    accent: '#F59E0B',
-  },
+    accent: '#F59E0B'},
   {
     icon: '🪔',
     title: 'Cultural templates',
     description: 'Designed specifically for Indian families — the right fields, the right feel.',
     gradientFrom: '#F43F5E',
     gradientTo: '#FB7185',
-    accent: '#F43F5E',
-  },
+    accent: '#F43F5E'},
 ]
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-}
+  visible: { transition: { staggerChildren: 0.08 } }}
 
 const tileVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.23, 1, 0.32, 1] } }}
 
 export default function FeaturesSection() {
   const { t } = useTranslation()
@@ -87,8 +79,7 @@ export default function FeaturesSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#10B981',
-          }}>
+            color: '#10B981'}}>
             Why wymm
           </span>
         </motion.div>
@@ -103,8 +94,7 @@ export default function FeaturesSection() {
             fontWeight: 700,
             fontSize: 'clamp(28px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            marginBottom: 56,
-          }}
+            marginBottom: 56}}
         >
           What makes wymm different
         </motion.h2>
@@ -117,8 +107,7 @@ export default function FeaturesSection() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: 20,
-          }}
+            gap: 20}}
         >
           {FEATURES.map((feat) => (
             <motion.div
@@ -127,8 +116,7 @@ export default function FeaturesSection() {
               whileHover={{
                 y: -4,
                 boxShadow: '0 20px 40px rgba(124,58,237,0.12)',
-                transition: { duration: 0.22 },
-              }}
+                transition: { duration: 0.22 }}}
               style={{
                 background: '#FFFFFF',
                 borderRadius: 16,
@@ -136,8 +124,7 @@ export default function FeaturesSection() {
                 border: '1px solid #E5E5E5',
                 cursor: 'default',
                 position: 'relative',
-                overflow: 'hidden',
-              }}
+                overflow: 'hidden'}}
             >
               {/* Top-left accent dot */}
               <div
@@ -151,8 +138,7 @@ export default function FeaturesSection() {
                   borderRadius: '50%',
                   background: feat.accent,
                   opacity: 0.2,
-                  pointerEvents: 'none',
-                }}
+                  pointerEvents: 'none'}}
               />
 
               {/* Gradient icon bubble */}
@@ -165,8 +151,7 @@ export default function FeaturesSection() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 28,
-                marginBottom: 16,
-              }}>
+                marginBottom: 16}}>
                 {feat.icon}
               </div>
 
@@ -175,16 +160,14 @@ export default function FeaturesSection() {
                 fontWeight: 700,
                 fontSize: 16,
                 letterSpacing: '-0.02em',
-                marginBottom: 8,
-              }}>
+                marginBottom: 8}}>
                 {feat.title}
               </h3>
 
               <p style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 14,
-                lineHeight: 1.65,
-              }}>
+                lineHeight: 1.65}}>
                 {feat.description}
               </p>
             </motion.div>

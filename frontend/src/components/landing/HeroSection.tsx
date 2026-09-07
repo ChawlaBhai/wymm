@@ -26,8 +26,7 @@ function BiodataMockup() {
       boxShadow: '0 32px 80px rgba(124,58,237,0.14), 0 8px 24px rgba(0,0,0,0.06)',
       overflow: 'hidden',
       border: '1px solid rgba(124,58,237,0.10)',
-      fontFamily: 'Inter, sans-serif',
-    }}>
+      fontFamily: 'Inter, sans-serif'}}>
       {/* Gradient header bar */}
       <div style={{ height: 7, background: 'linear-gradient(90deg, #7C3AED 0%, #EC4899 100%)' }} />
 
@@ -38,16 +37,14 @@ function BiodataMockup() {
         display: 'flex',
         alignItems: 'center',
         gap: 16,
-        borderBottom: '1px solid rgba(124,58,237,0.08)',
-      }}>
+        borderBottom: '1px solid rgba(124,58,237,0.08)'}}>
         <div style={{
           width: 64, height: 64, borderRadius: '50%',
           background: 'linear-gradient(135deg, #E8DFF5 0%, #FCE8EB 100%)',
           border: '3px solid white',
           boxShadow: '0 4px 12px rgba(124,58,237,0.15)',
           flexShrink: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26,
-        }}>🌸</div>
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26}}>🌸</div>
         <div style={{ flex: 1 }}>
           <div style={{ height: 11, background: '#1A1A1A', borderRadius: 6, width: '68%', marginBottom: 8 }} />
           <div style={{ height: 7, background: 'rgba(124,58,237,0.3)', borderRadius: 4, width: '45%', marginBottom: 6 }} />
@@ -125,8 +122,7 @@ export default function HeroSection() {
         paddingTop: 100,
         paddingBottom: 80,
         position: 'relative',
-        overflow: 'hidden',
-      }}
+        overflow: 'hidden'}}
     >
       {/* Decorative gradient strip at top */}
       <div
@@ -139,15 +135,13 @@ export default function HeroSection() {
           height: 4,
           background: 'linear-gradient(90deg, #7C3AED 0%, #EC4899 50%, #6B7F6E 100%)',
           zIndex: 10,
-          pointerEvents: 'none',
-        }}
+          pointerEvents: 'none'}}
       />
       {/* Aurora animated background */}
       <motion.div
         aria-hidden="true"
         animate={{
-          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-        }}
+          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']}}
         transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
         style={{
           position: 'absolute',
@@ -159,8 +153,7 @@ export default function HeroSection() {
           ].join(', '),
           backgroundSize: '200% 200%',
           pointerEvents: 'none',
-          zIndex: 0,
-        }}
+          zIndex: 0}}
       />
 
       {/* Floating particle dots */}
@@ -171,13 +164,11 @@ export default function HeroSection() {
           className={i >= 4 ? 'hero-particle-hide' : ''}
           animate={{
             x: [0, p.dx, 0, -p.dx, 0],
-            y: [0, p.dy, 0, -p.dy, 0],
-          }}
+            y: [0, p.dy, 0, -p.dy, 0]}}
           transition={{
             duration: p.duration,
             repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+            ease: 'easeInOut'}}
           style={{
             position: 'absolute',
             top: p.top,
@@ -189,8 +180,7 @@ export default function HeroSection() {
             filter: 'blur(20px)',
             opacity: 0.15,
             pointerEvents: 'none',
-            zIndex: 0,
-          }}
+            zIndex: 0}}
         />
       ))}
 
@@ -199,8 +189,7 @@ export default function HeroSection() {
           display: 'flex',
           alignItems: 'center',
           gap: 72,
-          flexWrap: 'wrap',
-        }}>
+          flexWrap: 'wrap'}}>
           {/* Left: Copy */}
           <div style={{ flex: '1 1 480px', minWidth: 0 }}>
             {/* Trust badge */}
@@ -222,8 +211,7 @@ export default function HeroSection() {
                 fontWeight: 600,
                 color: '#7C3AED',
                 fontFamily: 'inherit',
-                letterSpacing: '-0.01em',
-              }}>
+                letterSpacing: '-0.01em'}}>
                 ✦ Trusted by families across India
               </span>
             </motion.div>
@@ -235,8 +223,7 @@ export default function HeroSection() {
               fontWeight: 800,
               lineHeight: 1.08,
               letterSpacing: '-0.03em',
-              marginBottom: 28,
-            }}>
+              marginBottom: 28}}>
               {/* Line 1 */}
               <div style={{ display: 'block' }}>
                 <motion.span
@@ -259,8 +246,7 @@ export default function HeroSection() {
                     background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
+                    backgroundClip: 'text'}}
                 >
                   {t('landing.title2')}
                 </motion.span>
@@ -279,8 +265,7 @@ export default function HeroSection() {
                 fontWeight: 400,
                 lineHeight: 1.7,
                 maxWidth: 500,
-                marginBottom: 40,
-              }}
+                marginBottom: 40}}
             >
               {t('landing.subtitle')}
             </motion.p>
@@ -318,8 +303,7 @@ export default function HeroSection() {
                   textDecoration: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
-                  letterSpacing: '-0.01em',
-                }}
+                  letterSpacing: '-0.01em'}}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement
                   el.style.borderColor = '#7C3AED'
@@ -351,8 +335,7 @@ export default function HeroSection() {
                     fontSize: 13,
                     color: 'var(--tw-prose-counters, #888)',
                     fontWeight: 500,
-                    whiteSpace: 'nowrap',
-                  }}>
+                    whiteSpace: 'nowrap'}}>
                     {signal}
                   </span>
                   {i < 2 && (
@@ -377,8 +360,7 @@ export default function HeroSection() {
               rotateY,
               transformStyle: 'preserve-3d',
               perspective: 800,
-              position: 'relative',
-            }}
+              position: 'relative'}}
           >
             {/* Floating heart — top right */}
             <motion.div
@@ -390,8 +372,7 @@ export default function HeroSection() {
                 top: -16,
                 right: -20,
                 pointerEvents: 'none',
-                zIndex: 2,
-              }}
+                zIndex: 2}}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#EC4899" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -408,8 +389,7 @@ export default function HeroSection() {
                 bottom: 40,
                 left: -24,
                 pointerEvents: 'none',
-                zIndex: 2,
-              }}
+                zIndex: 2}}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="#7C3AED" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/>
@@ -428,8 +408,7 @@ export default function HeroSection() {
                 pointerEvents: 'none',
                 zIndex: 2,
                 fontSize: 22,
-                lineHeight: 1,
-              }}
+                lineHeight: 1}}
             >
               💍
             </motion.div>
@@ -439,8 +418,7 @@ export default function HeroSection() {
                 background: '#1C1C1E',
                 borderRadius: '14px 14px 0 0',
                 padding: '12px 12px 0',
-                boxShadow: '0 0 0 1px #333',
-              }}>
+                boxShadow: '0 0 0 1px #333'}}>
                 {/* Top bar with dots */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, paddingLeft: 4 }}>
                   {['#FF5F57', '#FFBD2E', '#28CA41'].map((c) => (
@@ -458,8 +436,7 @@ export default function HeroSection() {
                     minHeight: 300,
                     display: 'flex',
                     alignItems: 'flex-start',
-                    justifyContent: 'center',
-                  }}
+                    justifyContent: 'center'}}
                 >
                   <BiodataMockup />
                 </motion.div>
@@ -469,16 +446,14 @@ export default function HeroSection() {
                 height: 14,
                 background: 'linear-gradient(180deg, #2A2A2C 0%, #1A1A1C 100%)',
                 borderRadius: '0 0 4px 4px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
-              }} />
+                boxShadow: '0 4px 16px rgba(0,0,0,0.2)'}} />
               <div style={{
                 height: 6,
                 background: '#111',
                 borderRadius: '0 0 8px 8px',
                 width: '80%',
                 margin: '0 auto',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-              }} />
+                boxShadow: '0 2px 8px rgba(0,0,0,0.3)'}} />
             </div>
           </motion.div>
         </div>

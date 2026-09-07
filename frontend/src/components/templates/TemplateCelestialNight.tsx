@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }
 
 const NAVY = '#0B0D21'
@@ -19,8 +18,7 @@ const STARS = Array.from({ length: 20 }, (_, i) => ({
   left: `${((i * 23 + 11) % 90) + 3}%`,
   size: i % 3 === 0 ? 3 : 2,
   duration: 2 + (i % 4),
-  delay: (i * 0.3) % 3,
-}))
+  delay: (i * 0.3) % 3}))
 
 export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRecord }) {
   const { basicInfo, familyInfo, education, career, personalInterests, matchPreferences, media } = biodata
@@ -54,8 +52,7 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
             borderRadius: '50%',
             background: 'white',
             animation: `starFlicker ${star.duration}s ease-in-out ${star.delay}s infinite`,
-            pointerEvents: 'none',
-          }} />
+            pointerEvents: 'none'}} />
         ))}
 
         <motion.div
@@ -76,8 +73,7 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
               width: 160, height: 160, borderRadius: '50%', overflow: 'hidden',
               border: `3px solid ${SILVER}`,
               boxShadow: `0 0 0 6px ${SILVER}20, 0 0 40px ${SILVER}15, 0 0 80px ${SILVER}08`,
-              margin: '0 auto 36px',
-            }}
+              margin: '0 auto 36px'}}
           >
             {media.profilePhoto ? (
               <img src={media.profilePhoto} alt={basicInfo.fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -101,8 +97,7 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              marginBottom: 20,
-            }}
+              marginBottom: 20}}
           >
             {basicInfo.fullName || 'Your Name'}
           </motion.h1>
@@ -298,8 +293,7 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
                     borderRadius: 4,
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    transition: 'box-shadow 0.3s ease',
-                  }}
+                    transition: 'box-shadow 0.3s ease'}}
                 >
                   <img src={photo} alt={`Photo ${i + 1}`} style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }} />
                 </motion.div>
@@ -363,8 +357,7 @@ export default function TemplateCelestialNight({ biodata }: { biodata: BiodataRe
               background: 'linear-gradient(135deg, #C0C0C0, #FFFFFF, #C0C0C0)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>{basicInfo.fullName}</p>
+              backgroundClip: 'text'}}>{basicInfo.fullName}</p>
             <p style={{ fontSize: 13, color: '#444', marginTop: 4 }}>{basicInfo.city}{basicInfo.state ? `, ${basicInfo.state}` : ''}</p>
           </div>
           <p style={{ fontSize: 11, color: SILVER_DIM, letterSpacing: '0.12em', fontWeight: 600 }}>CREATED WITH WYMM</p>

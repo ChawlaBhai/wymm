@@ -18,17 +18,14 @@ const DEMO_SLUGS: Partial<Record<TemplateId, string>> = {
   'vintage-warmth': 'demo7', 'aurora-glass': 'demo8', 'ocean-breeze': 'demo9',
   'royal-majestic': 'demo10', 'botanical-fresh': 'demo11', 'celestial-night': 'demo12',
   'rose-gold-luxe': 'demo13', 'zen-minimal': 'demo14', 'pastel-dreams': 'demo15',
-  'heritage-splendor': 'demo16',
-}
+  'heritage-splendor': 'demo16'}
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-}
+  visible: { transition: { staggerChildren: 0.08 } }}
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } }}
 
 export default function TemplatesSection() {
   const { t } = useTranslation()
@@ -46,7 +43,7 @@ export default function TemplatesSection() {
     <section
       id="templates"
       ref={ref}
-      style={{ padding: '80px 0', background: '#FFFFFF' }}
+      style={{ padding: '80px 0', /* bg-white */ }}
     >
       <div className="container">
         {/* Section label */}
@@ -62,8 +59,7 @@ export default function TemplatesSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#7C3AED',
-          }}>
+            color: '#7C3AED'}}>
             Templates
           </span>
         </motion.div>
@@ -78,8 +74,7 @@ export default function TemplatesSection() {
             fontWeight: 700,
             fontSize: 'clamp(24px, 3.6vw, 38px)',
             letterSpacing: '-0.02em',
-            marginBottom: 10,
-          }}
+            marginBottom: 10}}
         >
           Choose from 16 beautiful templates
         </motion.h2>
@@ -92,11 +87,10 @@ export default function TemplatesSection() {
             textAlign: 'center',
             fontFamily: 'Inter, sans-serif',
             fontSize: 'clamp(14px, 1.5vw, 16px)',
-            color: '#888',
+            
             lineHeight: 1.6,
             maxWidth: 480,
-            margin: '0 auto 44px',
-          }}
+            margin: '0 auto 44px'}}
         >
           Every design is fully animated and shareable. Not a PDF — a living profile.
         </motion.p>
@@ -110,8 +104,7 @@ export default function TemplatesSection() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            gap: 20,
-          }}
+            gap: 20}}
         >
           {FEATURED_IDS.map((id) => {
             const meta = TEMPLATE_META[id]
@@ -133,8 +126,7 @@ export default function TemplatesSection() {
                   flexDirection: 'column',
                   height: 200,
                   boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                  transition: 'border-color 0.2s ease',
-                }}
+                  transition: 'border-color 0.2s ease'}}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = `${meta.accent}50` }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isDark ? '#333' : '#E8E8E8' }}
               >
@@ -153,8 +145,7 @@ export default function TemplatesSection() {
                     fontWeight: 700,
                     fontSize: 13,
                     color: isDark ? '#FFFFFF' : '#1A1A1A',
-                    letterSpacing: '-0.01em',
-                  }}>
+                    letterSpacing: '-0.01em'}}>
                     {meta.name}
                   </span>
                   <button
@@ -180,8 +171,7 @@ export default function TemplatesSection() {
                       color: meta.accent,
                       padding: '3px 10px',
                       transition: 'all 150ms ease',
-                      whiteSpace: 'nowrap',
-                    }}
+                      whiteSpace: 'nowrap'}}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = `${meta.accent}12`
                       e.currentTarget.style.borderColor = meta.accent
@@ -220,8 +210,7 @@ export default function TemplatesSection() {
               padding: '8px 20px',
               border: '1.5px solid #7C3AED30',
               borderRadius: 999,
-              transition: 'all 180ms ease',
-            }}
+              transition: 'all 180ms ease'}}
             onMouseEnter={e => {
               const el = e.currentTarget as HTMLAnchorElement
               el.style.background = '#7C3AED08'

@@ -82,8 +82,7 @@ export default function StepFamily() {
                 fontWeight: familyInfo.familyType === ft.value ? 600 : 400,
                 cursor: 'pointer',
                 transition: 'all 150ms ease',
-                textAlign: 'left' as const,
-              }}
+                textAlign: 'left' as const}}
             >
               <span style={{ display: 'block', fontWeight: 600, fontSize: '14px' }}>{ft.label}</span>
               <span style={{ display: 'block', fontSize: '11px', color: familyInfo.familyType === ft.value ? '#A78BFA' : '#AAA', marginTop: '2px' }}>{ft.desc}</span>
@@ -185,8 +184,7 @@ export default function StepFamily() {
               fontWeight: 600,
               cursor: newSibling.name.trim() ? 'pointer' : 'not-allowed',
               opacity: newSibling.name.trim() ? 1 : 0.4,
-              whiteSpace: 'nowrap' as const,
-            }}
+              whiteSpace: 'nowrap' as const}}
           >
             + Add
           </button>

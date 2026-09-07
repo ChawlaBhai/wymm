@@ -19,8 +19,7 @@ export default function ContactPage() {
         phone: form.phone,
         message: form.message,
         createdAt: new Date().toISOString(),
-        read: false,
-      })
+        read: false})
       setStatus('success')
       setForm({ name: '', email: '', phone: '', message: '' })
     } catch (err) {
@@ -36,13 +35,12 @@ export default function ContactPage() {
           fontFamily: 'Sora, sans-serif',
           fontSize: 34,
           fontWeight: 800,
-          color: '#1A1A1A',
+          
           letterSpacing: '-0.03em',
-          marginBottom: 10,
-        }}>
+          marginBottom: 10}}>
           Get in touch
         </h1>
-        <p style={{ fontSize: 16, color: '#666', lineHeight: 1.65, marginBottom: 40 }}>
+        <p style={{ fontSize: 16,  lineHeight: 1.65, marginBottom: 40 }}>
           Have a question, a bug report, or just want to say hello? Fill in the form and we'll get back to you.
         </p>
 
@@ -52,8 +50,7 @@ export default function ContactPage() {
             border: '1.5px solid #86EFAC',
             borderRadius: 14,
             padding: '28px 28px',
-            textAlign: 'center',
-          }}>
+            textAlign: 'center'}}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>✓</div>
             <p style={{ fontFamily: 'Sora, sans-serif', fontSize: 18, fontWeight: 700, color: '#16A34A', marginBottom: 6 }}>
               Message sent!
@@ -74,8 +71,7 @@ export default function ContactPage() {
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 14,
                 fontWeight: 600,
-                cursor: 'pointer',
-              }}
+                cursor: 'pointer'}}
             >
               Send another message
             </button>
@@ -151,8 +147,7 @@ export default function ContactPage() {
                 border: '1px solid #FECACA',
                 borderRadius: 8,
                 padding: '10px 14px',
-                marginBottom: 20,
-              }}>
+                marginBottom: 20}}>
                 Something went wrong. Please try again.
               </p>
             )}
@@ -166,8 +161,7 @@ export default function ContactPage() {
                 padding: '13px',
                 fontSize: 15,
                 opacity: status === 'loading' ? 0.7 : 1,
-                cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-              }}
+                cursor: status === 'loading' ? 'not-allowed' : 'pointer'}}
             >
               {status === 'loading' ? 'Sending…' : 'Send Message'}
             </button>
@@ -182,9 +176,8 @@ const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: 13,
   fontWeight: 600,
-  color: '#444',
-  marginBottom: 6,
-}
+  
+  marginBottom: 6}
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
@@ -193,9 +186,8 @@ const inputStyle: React.CSSProperties = {
   border: '1.5px solid #E5E5E5',
   fontFamily: 'Inter, sans-serif',
   fontSize: 15,
-  color: '#1A1A1A',
+  
   outline: 'none',
   boxSizing: 'border-box',
-  background: '#FAFAFA',
-  transition: 'border-color 150ms ease',
-}
+  
+  transition: 'border-color 150ms ease'}

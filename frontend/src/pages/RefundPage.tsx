@@ -3,7 +3,7 @@ export default function RefundPage() {
     <div style={{ background: '#fff', minHeight: '100vh', padding: '60px 24px 80px', fontFamily: 'Inter, sans-serif' }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <p style={{ fontSize: 13, color: '#AAA', marginBottom: 8 }}>Effective date: 1 June 2025</p>
-        <h1 style={{ fontFamily: 'Sora, sans-serif', fontSize: 34, fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.03em', marginBottom: 12 }}>
+        <h1 style={{ fontFamily: 'Sora, sans-serif', fontSize: 34, fontWeight: 800,  letterSpacing: '-0.03em', marginBottom: 12 }}>
           Refund &amp; Cancellation Policy
         </h1>
         <p style={{ fontSize: 16, color: '#555', lineHeight: 1.7, marginBottom: 40 }}>
@@ -127,7 +127,7 @@ export default function RefundPage() {
             For any questions about this policy or to submit a refund request, please contact us through our{' '}
             <a href="/contact" style={linkStyle}>contact form</a>.
           </p>
-          <p style={{ marginTop: 12, color: '#888', fontSize: 14 }}>
+          <p style={{ marginTop: 12,  fontSize: 14 }}>
             Business: wymm<br />
             Proprietor: Sahaj Chawla<br />
             Address: Ram Nagar Colony, Ayodhya, Uttar Pradesh, India
@@ -141,16 +141,15 @@ export default function RefundPage() {
 const linkStyle: React.CSSProperties = {
   color: '#7C3AED',
   textDecoration: 'none',
-  fontWeight: 500,
-}
+  fontWeight: 500}
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ marginBottom: 36 }}>
-      <h2 style={{ fontFamily: 'Sora, sans-serif', fontSize: 20, fontWeight: 700, color: '#1A1A1A', marginBottom: 12, letterSpacing: '-0.02em' }}>
+      <h2 style={{ fontFamily: 'Sora, sans-serif', fontSize: 20, fontWeight: 700,  marginBottom: 12, letterSpacing: '-0.02em' }}>
         {title}
       </h2>
-      <div style={{ fontSize: 15, color: '#444', lineHeight: 1.8 }}>
+      <div style={{ fontSize: 15,  lineHeight: 1.8 }}>
         {children}
       </div>
     </div>

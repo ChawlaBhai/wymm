@@ -13,8 +13,7 @@ function BadBiodata() {
       fontSize: 10,
       padding: 12,
       height: 240,
-      position: 'relative',
-    }}>
+      position: 'relative'}}>
       {/* Red ✗ badge top-right */}
       <div style={{
         position: 'absolute',
@@ -32,8 +31,7 @@ function BadBiodata() {
         fontWeight: 700,
         fontFamily: 'Inter, sans-serif',
         lineHeight: 1,
-        zIndex: 1,
-      }}>
+        zIndex: 1}}>
         ✗
       </div>
 
@@ -88,8 +86,7 @@ function GoodBiodata() {
       boxShadow: '0 8px 32px rgba(124,58,237,0.15), 0 2px 8px rgba(0,0,0,0.06)',
       border: '1px solid rgba(124,58,237,0.10)',
       height: 240,
-      position: 'relative',
-    }}>
+      position: 'relative'}}>
       {/* Green ✓ badge top-right */}
       <div style={{
         position: 'absolute',
@@ -107,8 +104,7 @@ function GoodBiodata() {
         fontWeight: 700,
         fontFamily: 'Inter, sans-serif',
         lineHeight: 1,
-        zIndex: 1,
-      }}>
+        zIndex: 1}}>
         ✓
       </div>
 
@@ -121,8 +117,7 @@ function GoodBiodata() {
         padding: '14px 16px',
         display: 'flex',
         alignItems: 'center',
-        gap: 12,
-      }}>
+        gap: 12}}>
         <div style={{
           width: 44,
           height: 44,
@@ -135,8 +130,7 @@ function GoodBiodata() {
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: 'Sora, sans-serif',
-          fontSize: 18,
-        }}>
+          fontSize: 18}}>
           🌸
         </div>
         <div>
@@ -178,7 +172,7 @@ export default function WhyMattersSection() {
     <section
       id="why-it-matters"
       ref={ref}
-      style={{ padding: '104px 0', background: '#F8F5FF' }}
+      style={{ padding: '104px 0', /* bg-purple-50 */ }}
     >
       <div className="container">
         {/* Section label */}
@@ -194,8 +188,7 @@ export default function WhyMattersSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#A855F7',
-          }}>
+            color: '#A855F7'}}>
             Why it matters
           </span>
         </motion.div>
@@ -210,8 +203,7 @@ export default function WhyMattersSection() {
             fontWeight: 700,
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            marginBottom: 72,
-          }}
+            marginBottom: 72}}
         >
           Because first impressions write futures.
         </motion.h2>
@@ -221,8 +213,7 @@ export default function WhyMattersSection() {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: 64,
-          alignItems: 'center',
-        }}>
+          alignItems: 'center'}}>
           {/* Left: Emotional copy */}
           <motion.div
             initial={{ opacity: 0, x: -32 }}
@@ -232,10 +223,9 @@ export default function WhyMattersSection() {
             <p style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 17px)',
-              color: '#444',
+              
               lineHeight: 1.85,
-              marginBottom: 32,
-            }}>
+              marginBottom: 32}}>
               In India, a biodata travels farther than a resume. It reaches parents in distant
               cities, relatives you've never met, families who will judge a person by a page.
               Most biodatas look like they were made in a hurry — because they were. Generic
@@ -248,15 +238,13 @@ export default function WhyMattersSection() {
               background: 'linear-gradient(90deg, #7C3AED, #EC4899)',
               borderRadius: 99,
               marginBottom: 32,
-              opacity: 0.4,
-            }} />
+              opacity: 0.4}} />
 
             <p style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 'clamp(15px, 1.6vw, 17px)',
-              color: '#444',
-              lineHeight: 1.85,
-            }}>
+              
+              lineHeight: 1.85}}>
               wymm is different. We built templates that tell your story with the elegance it
               deserves. Not a form. Not a PDF. A first impression you'd actually be proud of.
             </p>
@@ -269,12 +257,11 @@ export default function WhyMattersSection() {
             transition={{ duration: 0.65, delay: 0.22, ease: [0.23, 1, 0.32, 1] }}
           >
             <div style={{
-              background: '#F8F5FF',
+              
               borderRadius: 16,
               padding: 24,
               border: '1px solid rgba(124,58,237,0.10)',
-              position: 'relative',
-            }}>
+              position: 'relative'}}>
               {/* Labels row */}
               <div style={{ display: 'flex', marginBottom: 12 }}>
                 <div style={{
@@ -285,8 +272,7 @@ export default function WhyMattersSection() {
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   color: '#AAA',
-                  textAlign: 'center',
-                }}>
+                  textAlign: 'center'}}>
                   Before wymm
                 </div>
                 {/* Spacer for the vs badge */}
@@ -299,8 +285,7 @@ export default function WhyMattersSection() {
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   color: '#A855F7',
-                  textAlign: 'center',
-                }}>
+                  textAlign: 'center'}}>
                   With wymm
                 </div>
               </div>
@@ -328,8 +313,7 @@ export default function WhyMattersSection() {
                   flexShrink: 0,
                   margin: '0 8px',
                   zIndex: 1,
-                  position: 'relative',
-                }}>
+                  position: 'relative'}}>
                   vs
                 </div>
 

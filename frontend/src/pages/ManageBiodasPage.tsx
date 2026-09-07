@@ -21,8 +21,7 @@ function SkeletonCard() {
       borderRadius: 12,
       border: '1px solid #F0F0F0',
       padding: 20,
-      animation: 'pulse 1.5s ease-in-out infinite',
-    }}>
+      animation: 'pulse 1.5s ease-in-out infinite'}}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
         <div style={{ width: 48, height: 48, borderRadius: 10, background: '#F0F0F0' }} />
         <div style={{ flex: 1 }}>
@@ -48,8 +47,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
       border: '1px solid #EBEBEB',
       padding: '20px 20px 16px',
       transition: 'box-shadow 0.2s, transform 0.2s',
-      cursor: 'default',
-    }}
+      cursor: 'default'}}
       onMouseEnter={e => {
         ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)'
         ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-1px)'
@@ -77,8 +75,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
-            fontSize: 20,
-          }}>
+            fontSize: 20}}>
             {biodata.basicInfo.fullName.charAt(0).toUpperCase()}
           </div>
         )}
@@ -91,8 +88,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
             marginBottom: 4,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}>
+            textOverflow: 'ellipsis'}}>
             {biodata.basicInfo.fullName || 'Unnamed Profile'}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -106,8 +102,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
                 fontSize: 11,
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 600,
-                letterSpacing: '0.02em',
-              }}>
+                letterSpacing: '0.02em'}}>
                 {meta.name}
               </span>
             )}
@@ -127,8 +122,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
         justifyContent: 'space-between',
         marginBottom: 14,
         paddingBottom: 14,
-        borderBottom: '1px solid #F5F5F5',
-      }}>
+        borderBottom: '1px solid #F5F5F5'}}>
         <span style={{ fontSize: 12, color: '#AAA', fontFamily: 'Inter, sans-serif' }}>
           Created {createdDate}
         </span>
@@ -139,8 +133,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
           borderRadius: 20,
           background: biodata.isPublic ? '#F0FDF4' : '#FEF2F2',
           color: biodata.isPublic ? '#16A34A' : '#DC2626',
-          fontWeight: 500,
-        }}>
+          fontWeight: 500}}>
           {biodata.isPublic ? 'Public' : 'Private'}
         </span>
       </div>
@@ -164,8 +157,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
             alignItems: 'center',
             justifyContent: 'center',
             gap: 5,
-            transition: 'background 0.15s',
-          }}
+            transition: 'background 0.15s'}}
         >
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M11 2a2 2 0 100 4 2 2 0 000-4zM5.5 7a2 2 0 100 4 2 2 0 000-4zM11 10a2 2 0 100 4 2 2 0 000-4z" fill="currentColor"/>
@@ -190,8 +182,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
             alignItems: 'center',
             justifyContent: 'center',
             gap: 5,
-            transition: 'background 0.15s',
-          }}
+            transition: 'background 0.15s'}}
         >
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M11.586 1.586a2 2 0 012.828 2.828l-8.5 8.5L2 14l1.086-3.914 8.5-8.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -213,8 +204,7 @@ function BiodataCard({ biodata, onEdit, onDelete, onShare }: BiodataCardProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: 'background 0.15s',
-          }}
+            transition: 'background 0.15s'}}
         >
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 10h8l1-10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -241,16 +231,14 @@ function DeleteDialog({ name, onConfirm, onCancel }: DeleteDialogProps) {
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000,
-      padding: 16,
-    }}>
+      padding: 16}}>
       <div style={{
         background: '#fff',
         borderRadius: 16,
         padding: '28px 28px 24px',
         maxWidth: 360,
         width: '100%',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
-      }}>
+        boxShadow: '0 20px 60px rgba(0,0,0,0.15)'}}>
         <div style={{
           width: 48,
           height: 48,
@@ -259,8 +247,7 @@ function DeleteDialog({ name, onConfirm, onCancel }: DeleteDialogProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: 16,
-        }}>
+          marginBottom: 16}}>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
             <path d="M11 9v4M11 15.5h.01M9.172 3.172a4 4 0 015.656 0l3.999 4A4 4 0 0119 10v3a4 4 0 01-1.172 2.828l-4 4a4 4 0 01-5.656 0l-4-4A4 4 0 013 13v-3a4 4 0 011.172-2.828l4-4z" stroke="#DC2626" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
@@ -284,8 +271,7 @@ function DeleteDialog({ name, onConfirm, onCancel }: DeleteDialogProps) {
               fontFamily: 'Inter, sans-serif',
               fontSize: 14,
               fontWeight: 500,
-              cursor: 'pointer',
-            }}
+              cursor: 'pointer'}}
           >
             Cancel
           </button>
@@ -301,8 +287,7 @@ function DeleteDialog({ name, onConfirm, onCancel }: DeleteDialogProps) {
               fontFamily: 'Inter, sans-serif',
               fontSize: 14,
               fontWeight: 600,
-              cursor: 'pointer',
-            }}
+              cursor: 'pointer'}}
           >
             Delete
           </button>
@@ -416,8 +401,7 @@ export default function ManageBiodasPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '80px 20px 40px',
-      }}>
+        padding: '80px 20px 40px'}}>
         <div style={{ textAlign: 'center', maxWidth: 420 }}>
           <div style={{
             width: 72,
@@ -428,8 +412,7 @@ export default function ManageBiodasPage() {
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 24px',
-            fontSize: 32,
-          }}>
+            fontSize: 32}}>
             💍
           </div>
           <h1 style={{
@@ -438,8 +421,7 @@ export default function ManageBiodasPage() {
             fontSize: 28,
             color: '#1A1A1A',
             marginBottom: 12,
-            letterSpacing: '-0.02em',
-          }}>
+            letterSpacing: '-0.02em'}}>
             Your biodatas, in one place
           </h1>
           <p style={{
@@ -447,8 +429,7 @@ export default function ManageBiodasPage() {
             fontSize: 15,
             color: '#666',
             lineHeight: 1.6,
-            marginBottom: 28,
-          }}>
+            marginBottom: 28}}>
             Sign in to access, edit, and manage all your marriage profiles. Everything stays organised and ready to share.
           </p>
           <Link
@@ -480,8 +461,7 @@ export default function ManageBiodasPage() {
           justifyContent: 'space-between',
           marginBottom: 32,
           flexWrap: 'wrap',
-          gap: 16,
-        }}>
+          gap: 16}}>
           <div>
             <h1 style={{
               fontFamily: 'Sora, sans-serif',
@@ -489,8 +469,7 @@ export default function ManageBiodasPage() {
               fontSize: 28,
               color: '#1A1A1A',
               letterSpacing: '-0.02em',
-              marginBottom: 4,
-            }}>
+              marginBottom: 4}}>
               Your Profiles
             </h1>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#888' }}>
@@ -511,8 +490,7 @@ export default function ManageBiodasPage() {
                 fontSize: 13,
                 fontWeight: 500,
                 cursor: 'pointer',
-                opacity: signingOut ? 0.6 : 1,
-              }}
+                opacity: signingOut ? 0.6 : 1}}
             >
               {signingOut ? 'Signing out…' : 'Sign out'}
             </button>
@@ -544,8 +522,7 @@ export default function ManageBiodasPage() {
             fontSize: 13,
             fontWeight: 500,
             zIndex: 999,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
-          }}>
+            boxShadow: '0 4px 16px rgba(0,0,0,0.2)'}}>
             Link copied to clipboard
           </div>
         )}
@@ -562,16 +539,14 @@ export default function ManageBiodasPage() {
             padding: '64px 20px',
             background: '#fff',
             borderRadius: 16,
-            border: '1px dashed #DDD',
-          }}>
+            border: '1px dashed #DDD'}}>
             <div style={{ fontSize: 40, marginBottom: 16 }}>📋</div>
             <h2 style={{
               fontFamily: 'Sora, sans-serif',
               fontWeight: 600,
               fontSize: 20,
               color: '#1A1A1A',
-              marginBottom: 8,
-            }}>
+              marginBottom: 8}}>
               No profiles yet
             </h2>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#888', marginBottom: 24 }}>

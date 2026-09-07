@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }
 
 const GREEN = '#2D6A4F'
@@ -267,8 +266,7 @@ export default function TemplateBotanicalFresh({ biodata }: { biodata: BiodataRe
                     marginBottom: 12,
                     breakInside: 'avoid',
                     cursor: 'pointer',
-                    borderRadius: 4,
-                  }}
+                    borderRadius: 4}}
                 >
                   <img src={photo} alt={`Photo ${i + 1}`} style={{ width: '100%', display: 'block', borderRadius: 2 }} />
                 </motion.div>

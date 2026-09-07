@@ -63,16 +63,14 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 20,
-    }}>
+      padding: 20}}>
       <div style={{
         background: '#1A1A1A',
         border: '1px solid #2A2A2A',
         borderRadius: 14,
         padding: '36px 32px',
         width: '100%',
-        maxWidth: 360,
-      }}>
+        maxWidth: 360}}>
         <div style={{
           display: 'inline-block',
           background: '#DC2626',
@@ -83,8 +81,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
           letterSpacing: '0.1em',
           padding: '3px 8px',
           borderRadius: 4,
-          marginBottom: 20,
-        }}>
+          marginBottom: 20}}>
           RESTRICTED
         </div>
         <h1 style={{
@@ -92,8 +89,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
           fontWeight: 700,
           fontSize: 22,
           color: '#fff',
-          marginBottom: 6,
-        }}>
+          marginBottom: 6}}>
           Admin Access
         </h1>
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#666', marginBottom: 28 }}>
@@ -122,8 +118,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 14,
                 outline: 'none',
-                boxSizing: 'border-box',
-              }}
+                boxSizing: 'border-box'}}
             />
           </div>
           <div style={{ marginBottom: 20 }}>
@@ -146,8 +141,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 14,
                 outline: 'none',
-                boxSizing: 'border-box',
-              }}
+                boxSizing: 'border-box'}}
             />
           </div>
 
@@ -159,8 +153,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
               marginBottom: 16,
               padding: '8px 12px',
               background: '#3B0A0A',
-              borderRadius: 8,
-            }}>
+              borderRadius: 8}}>
               {error}
             </p>
           )}
@@ -179,8 +172,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
               fontSize: 14,
               fontWeight: 700,
               cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'background 0.2s',
-            }}
+              transition: 'background 0.2s'}}
           >
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
@@ -296,8 +288,7 @@ export default function AdminPage() {
         fontFamily: 'Inter, sans-serif',
         fontSize: 12,
         fontWeight: 700,
-        letterSpacing: '0.08em',
-      }}>
+        letterSpacing: '0.08em'}}>
         <span>ADMIN PANEL — CONFIDENTIAL</span>
         <button
           onClick={async () => { await signOut(); navigate('/') }}
@@ -310,8 +301,7 @@ export default function AdminPage() {
             fontSize: 11,
             fontFamily: 'Inter, sans-serif',
             cursor: 'pointer',
-            letterSpacing: '0.04em',
-          }}
+            letterSpacing: '0.04em'}}
         >
           SIGN OUT
         </button>
@@ -324,8 +314,7 @@ export default function AdminPage() {
           fontSize: 26,
           color: '#1A1A1A',
           marginBottom: 28,
-          letterSpacing: '-0.02em',
-        }}>
+          letterSpacing: '-0.02em'}}>
           Dashboard
         </h1>
 
@@ -334,8 +323,7 @@ export default function AdminPage() {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: 16,
-          marginBottom: 36,
-        }}>
+          marginBottom: 36}}>
           {[
             { label: 'Total Profiles', value: totalProfiles, icon: '📋' },
             { label: 'This Week', value: profilesThisWeek, icon: '📈' },
@@ -346,8 +334,7 @@ export default function AdminPage() {
               background: '#fff',
               borderRadius: 12,
               padding: '20px 20px',
-              border: '1px solid #EBEBEB',
-            }}>
+              border: '1px solid #EBEBEB'}}>
               <div style={{ fontSize: 24, marginBottom: 8 }}>{stat.icon}</div>
               <div style={{
                 fontFamily: 'Sora, sans-serif',
@@ -355,8 +342,7 @@ export default function AdminPage() {
                 fontWeight: 700,
                 color: '#1A1A1A',
                 lineHeight: 1.1,
-                marginBottom: 4,
-              }}>
+                marginBottom: 4}}>
                 {dataLoading ? '—' : stat.value}
               </div>
               <div style={{ fontSize: 12, color: '#888', fontWeight: 500 }}>{stat.label}</div>
@@ -369,8 +355,7 @@ export default function AdminPage() {
           background: '#fff',
           borderRadius: 14,
           border: '1px solid #EBEBEB',
-          overflow: 'hidden',
-        }}>
+          overflow: 'hidden'}}>
           {/* Table header */}
           <div style={{
             padding: '16px 20px',
@@ -379,8 +364,7 @@ export default function AdminPage() {
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 16,
-            flexWrap: 'wrap',
-          }}>
+            flexWrap: 'wrap'}}>
             <h2 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 16, color: '#1A1A1A' }}>
               All Profiles
             </h2>
@@ -398,8 +382,7 @@ export default function AdminPage() {
                 color: '#1A1A1A',
                 outline: 'none',
                 width: 220,
-                background: '#FAFAFA',
-              }}
+                background: '#FAFAFA'}}
             />
           </div>
 
@@ -426,8 +409,7 @@ export default function AdminPage() {
                           fontSize: 12,
                           color: '#888',
                           borderBottom: '1px solid #F0F0F0',
-                          whiteSpace: 'nowrap',
-                        }}>
+                          whiteSpace: 'nowrap'}}>
                           {col}
                         </th>
                       ))}
@@ -458,8 +440,7 @@ export default function AdminPage() {
                                 background: `${meta.accent}18`,
                                 color: meta.accent,
                                 fontSize: 11,
-                                fontWeight: 600,
-                              }}>
+                                fontWeight: 600}}>
                                 {meta.name}
                               </span>
                             ) : (
@@ -485,8 +466,7 @@ export default function AdminPage() {
                                   color: '#7C3AED',
                                   cursor: 'pointer',
                                   fontFamily: 'Inter, sans-serif',
-                                  fontWeight: 500,
-                                }}
+                                  fontWeight: 500}}
                               >
                                 Copy Link
                               </button>
@@ -507,8 +487,7 @@ export default function AdminPage() {
                                     color: '#555',
                                     textDecoration: 'none',
                                     fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 500,
-                                  }}
+                                    fontWeight: 500}}
                                 >
                                   View
                                 </a>
@@ -524,8 +503,7 @@ export default function AdminPage() {
                                   color: '#DC2626',
                                   cursor: 'pointer',
                                   fontFamily: 'Inter, sans-serif',
-                                  fontWeight: 500,
-                                }}
+                                  fontWeight: 500}}
                               >
                                 Delete
                               </button>
@@ -546,8 +524,7 @@ export default function AdminPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: 12,
-                }}>
+                  gap: 12}}>
                   <span style={{ fontSize: 12, color: '#888' }}>
                     Page {currentPage} of {totalPages} — {filtered.length} total
                   </span>
@@ -563,8 +540,7 @@ export default function AdminPage() {
                         color: currentPage === 1 ? '#CCC' : '#333',
                         fontSize: 13,
                         cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                        fontFamily: 'Inter, sans-serif',
-                      }}
+                        fontFamily: 'Inter, sans-serif'}}
                     >
                       Previous
                     </button>
@@ -579,8 +555,7 @@ export default function AdminPage() {
                         color: currentPage === totalPages ? '#CCC' : '#333',
                         fontSize: 13,
                         cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                        fontFamily: 'Inter, sans-serif',
-                      }}
+                        fontFamily: 'Inter, sans-serif'}}
                     >
                       Next
                     </button>
@@ -602,16 +577,14 @@ export default function AdminPage() {
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1000,
-          padding: 16,
-        }}>
+          padding: 16}}>
           <div style={{
             background: '#fff',
             borderRadius: 14,
             padding: '28px',
             maxWidth: 340,
             width: '100%',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
-          }}>
+            boxShadow: '0 20px 60px rgba(0,0,0,0.2)'}}>
             <h3 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600, fontSize: 17, color: '#1A1A1A', marginBottom: 10 }}>
               Confirm deletion
             </h3>

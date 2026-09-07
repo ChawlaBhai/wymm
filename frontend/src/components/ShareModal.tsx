@@ -72,8 +72,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
         WebkitBackdropFilter: 'blur(4px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         zIndex: 1000, padding: '16px',
-        animation: 'fade-in 0.15s ease forwards',
-      }}
+        animation: 'fade-in 0.15s ease forwards'}}
       aria-modal="true"
       role="dialog"
       aria-label="Share your biodata"
@@ -84,8 +83,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
           width: '100%', maxWidth: 480,
           padding: '28px 32px',
           position: 'relative',
-          borderRadius: 20,
-        }}
+          borderRadius: 20}}
       >
         {/* Close button */}
         <button
@@ -94,8 +92,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
           style={{
             position: 'absolute', top: 16, right: 16,
             padding: 8, borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
+            display: 'flex', alignItems: 'center', justifyContent: 'center'}}
           aria-label="Close modal"
         >
           <X size={18} />
@@ -106,8 +103,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
           style={{
             fontFamily: "'Sora', sans-serif",
             fontSize: 20, fontWeight: 700,
-            color: '#1A1A1A', marginBottom: 4,
-          }}
+            color: '#1A1A1A', marginBottom: 4}}
         >
           Share your biodata
         </h2>
@@ -121,8 +117,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
             display: 'flex', alignItems: 'center', gap: 8,
             background: '#F8F9FB', borderRadius: 12,
             border: '1.5px solid #E5E5E5', padding: '10px 14px',
-            marginBottom: 24,
-          }}
+            marginBottom: 24}}
         >
           <Link size={14} color="#AAAAAA" style={{ flexShrink: 0 }} />
           <input
@@ -131,8 +126,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
             style={{
               flex: 1, border: 'none', background: 'transparent',
               fontFamily: "'Inter', sans-serif", fontSize: 13,
-              color: '#666', outline: 'none', minWidth: 0,
-            }}
+              color: '#666', outline: 'none', minWidth: 0}}
             aria-label="Shareable URL"
             onFocus={(e) => e.target.select()}
           />
@@ -146,8 +140,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
               background: copied ? '#10B98120' : 'linear-gradient(135deg, #7C3AED, #A855F7)',
               color: copied ? '#10B981' : '#fff',
               transition: 'all 200ms ease',
-              flexShrink: 0,
-            }}
+              flexShrink: 0}}
             aria-label={copied ? 'Copied' : 'Copy link'}
           >
             {copied ? <Check size={13} /> : <Copy size={13} />}
@@ -161,8 +154,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
             display: 'flex', justifyContent: 'center',
             marginBottom: 24, padding: '20px',
             background: '#F8F9FB', borderRadius: 16,
-            border: '1px solid #E5E5E5',
-          }}
+            border: '1px solid #E5E5E5'}}
         >
           <QRCodeSVG
             value={url}
@@ -192,8 +184,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
               background: '#25D366', color: '#fff',
               fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600,
               textDecoration: 'none',
-              transition: 'all 200ms ease',
-            }}
+              transition: 'all 200ms ease'}}
             onMouseOver={(e) => (e.currentTarget.style.filter = 'brightness(1.08)')}
             onMouseOut={(e) => (e.currentTarget.style.filter = '')}
           >
@@ -209,8 +200,7 @@ export default function ShareModal({ slug, isOpen, onClose }: ShareModalProps) {
               border: '1.5px solid #E5E5E5',
               fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600,
               textDecoration: 'none',
-              transition: 'all 200ms ease',
-            }}
+              transition: 'all 200ms ease'}}
             onMouseOver={(e) => { e.currentTarget.style.borderColor = '#7C3AED'; e.currentTarget.style.color = '#7C3AED' }}
             onMouseOut={(e) => { e.currentTarget.style.borderColor = '#E5E5E5'; e.currentTarget.style.color = '#444' }}
           >

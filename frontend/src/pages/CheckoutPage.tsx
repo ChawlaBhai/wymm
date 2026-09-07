@@ -106,8 +106,7 @@ export default function CheckoutPage() {
         description: `Publish biodata — ${fullName}`,
         prefill: {
           name: fullName,
-          email: user?.email || undefined,
-        },
+          email: user?.email || undefined},
         theme: { color: '#7C3AED' },
         handler: (response) => {
           // Payment successful
@@ -120,9 +119,7 @@ export default function CheckoutPage() {
         modal: {
           ondismiss: () => {
             setPaying(false)
-          },
-        },
-      }
+          }}}
 
       const rzp = new window.Razorpay(options)
       rzp.open()
@@ -147,8 +144,7 @@ export default function CheckoutPage() {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '40px 20px',
-      fontFamily: 'Inter, sans-serif',
-    }}>
+      fontFamily: 'Inter, sans-serif'}}>
       <div style={{ width: '100%', maxWidth: 480 }}>
 
         {/* Header nav */}
@@ -162,8 +158,7 @@ export default function CheckoutPage() {
               background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>
+              backgroundClip: 'text'}}>
               wymm
             </span>
           </Link>
@@ -175,8 +170,7 @@ export default function CheckoutPage() {
           borderRadius: 24,
           padding: '36px 32px',
           boxShadow: '0 20px 60px rgba(124,58,237,0.12)',
-          border: '1px solid rgba(124,58,237,0.08)',
-        }}>
+          border: '1px solid rgba(124,58,237,0.08)'}}>
 
           {paid ? (
             /* ── SUCCESS STATE ── */
@@ -186,8 +180,7 @@ export default function CheckoutPage() {
                 background: 'rgba(16,185,129,0.1)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 20px',
-                fontSize: 28,
-              }}>
+                fontSize: 28}}>
                 ✓
               </div>
               <h2 style={{
@@ -196,8 +189,7 @@ export default function CheckoutPage() {
                 fontWeight: 800,
                 color: '#1A1A1A',
                 letterSpacing: '-0.02em',
-                marginBottom: 12,
-              }}>
+                marginBottom: 12}}>
                 Payment successful!
               </h2>
               <p style={{ fontSize: 15, color: '#555', lineHeight: 1.6, marginBottom: 28 }}>
@@ -217,8 +209,7 @@ export default function CheckoutPage() {
                   fontSize: 16,
                   fontWeight: 700,
                   cursor: 'pointer',
-                  letterSpacing: '-0.01em',
-                }}
+                  letterSpacing: '-0.01em'}}
               >
                 Choose your profile URL →
               </button>
@@ -234,8 +225,7 @@ export default function CheckoutPage() {
                   fontWeight: 800,
                   color: '#1A1A1A',
                   letterSpacing: '-0.02em',
-                  marginBottom: 6,
-                }}>
+                  marginBottom: 6}}>
                   Publish your biodata
                 </h1>
                 <p style={{ fontSize: 14, color: '#888', margin: 0 }}>
@@ -252,8 +242,7 @@ export default function CheckoutPage() {
                 borderRadius: 16,
                 padding: '16px 20px',
                 marginBottom: 24,
-                border: '1px solid #EBEBEB',
-              }}>
+                border: '1px solid #EBEBEB'}}>
                 {/* Avatar */}
                 <div style={{
                   width: 52,
@@ -266,8 +255,7 @@ export default function CheckoutPage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   border: '2px solid white',
-                  boxShadow: '0 2px 8px rgba(124,58,237,0.2)',
-                }}>
+                  boxShadow: '0 2px 8px rgba(124,58,237,0.2)'}}>
                   {profilePhoto ? (
                     <img
                       src={profilePhoto}
@@ -279,8 +267,7 @@ export default function CheckoutPage() {
                       fontFamily: 'Sora, sans-serif',
                       fontWeight: 700,
                       fontSize: 18,
-                      color: 'white',
-                    }}>
+                      color: 'white'}}>
                       {initials}
                     </span>
                   )}
@@ -296,8 +283,7 @@ export default function CheckoutPage() {
                     margin: '0 0 3px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
+                    whiteSpace: 'nowrap'}}>
                     {fullName}
                   </p>
                   <p style={{ fontSize: 13, color: '#AAA', margin: 0 }}>
@@ -312,15 +298,13 @@ export default function CheckoutPage() {
                   border: '1px solid rgba(124,58,237,0.15)',
                   borderRadius: 10,
                   padding: '6px 14px',
-                  textAlign: 'center',
-                }}>
+                  textAlign: 'center'}}>
                   <span style={{
                     fontFamily: 'Sora, sans-serif',
                     fontWeight: 800,
                     fontSize: 20,
                     color: '#7C3AED',
-                    letterSpacing: '-0.02em',
-                  }}>
+                    letterSpacing: '-0.02em'}}>
                     ₹20
                   </span>
                 </div>
@@ -336,8 +320,7 @@ export default function CheckoutPage() {
                       alignItems: 'center',
                       gap: 10,
                       padding: '7px 0',
-                      borderBottom: '1px solid #F5F5F5',
-                    }}
+                      borderBottom: '1px solid #F5F5F5'}}
                   >
                     <span style={{
                       width: 20,
@@ -350,8 +333,7 @@ export default function CheckoutPage() {
                       color: '#10B981',
                       fontSize: 12,
                       fontWeight: 700,
-                      flexShrink: 0,
-                    }}>
+                      flexShrink: 0}}>
                       ✓
                     </span>
                     <span style={{ fontSize: 14, color: '#444', fontWeight: 500 }}>
@@ -370,8 +352,7 @@ export default function CheckoutPage() {
                   padding: '10px 14px',
                   marginBottom: 16,
                   fontSize: 13,
-                  color: '#EF4444',
-                }}>
+                  color: '#EF4444'}}>
                   {error}
                 </div>
               )}
@@ -400,8 +381,7 @@ export default function CheckoutPage() {
                   justifyContent: 'center',
                   gap: 8,
                   transition: 'all 200ms ease',
-                  marginBottom: 14,
-                }}
+                  marginBottom: 14}}
               >
                 {paying ? (
                   <>

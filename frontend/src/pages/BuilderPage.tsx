@@ -49,8 +49,7 @@ function isStepValid(step: FormStep, biodata: ReturnType<typeof useBiodataStore>
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 40 : -40, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -40 : 40, opacity: 0 }),
-}
+  exit: (dir: number) => ({ x: dir > 0 ? -40 : 40, opacity: 0 })}
 
 function TemplateRenderer({ templateId, biodata }: {
   templateId: TemplateId
@@ -135,8 +134,7 @@ export default function BuilderPage() {
     3: <StepEducationCareer />,
     4: <StepPersonalInterests />,
     5: <StepMatchPreferences />,
-    6: <StepMedia />,
-  }
+    6: <StepMedia />}
 
   return (
     <div className="bg-white dark:bg-slate-950 transition-colors duration-300" style={{ display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: 'inherit' }}>
@@ -149,8 +147,7 @@ export default function BuilderPage() {
         flexDirection: 'column',
         height: '100vh',
         position: 'relative',
-        zIndex: 10,
-      }}>
+        zIndex: 10}}>
         {/* Top bar */}
         <div className="border-b border-gray-100 dark:border-slate-800" style={{ padding: '20px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <Link to="/" className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'inherit', fontSize: '14px', fontWeight: 500, transition: 'color 150ms' }}>
@@ -182,8 +179,7 @@ export default function BuilderPage() {
               position: 'absolute', top: '14px', left: '14px', height: '2px', background: 'linear-gradient(90deg, #7C3AED, #A855F7)',
               width: `${((currentStep - 1) / 5) * 100}%`,
               transition: 'width 400ms cubic-bezier(0.23,1,0.32,1)',
-              zIndex: 1,
-            }} />
+              zIndex: 1}} />
             {STEPS.map((step) => {
               const done = step < currentStep
               const active = step === currentStep
@@ -195,8 +191,7 @@ export default function BuilderPage() {
                   style={{
                     flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                     background: 'none', border: 'none', cursor: step <= currentStep ? 'pointer' : 'default',
-                    padding: 0, position: 'relative', zIndex: 2,
-                  }}
+                    padding: 0, position: 'relative', zIndex: 2}}
                   aria-label={`Step ${step}: ${STEP_LABELS[step]}`}
                 >
                   <div className={`transition-all duration-300 ${active ? 'bg-white dark:bg-slate-900' : done ? 'bg-purple-600' : 'bg-gray-100 dark:bg-slate-800'}`} style={{
@@ -204,8 +199,7 @@ export default function BuilderPage() {
                     border: active ? '2.5px solid #7C3AED' : done ? '2.5px solid #7C3AED' : '2px solid var(--color-border)',
                     borderColor: (!active && !done) ? 'var(--color-gray-200)' : '',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: active ? '0 0 0 4px rgba(124,58,237,0.12)' : 'none',
-                  }}>
+                    boxShadow: active ? '0 0 0 4px rgba(124,58,237,0.12)' : 'none'}}>
                     {done ? (
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -268,8 +262,7 @@ export default function BuilderPage() {
               opacity: canProceed ? 1 : 0.4,
               pointerEvents: canProceed ? 'auto' : 'none',
               padding: '11px 24px',
-              fontSize: '14px',
-            }}
+              fontSize: '14px'}}
           >
             {isLastStep ? 'Preview' : 'Next'}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -285,8 +278,7 @@ export default function BuilderPage() {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        overflow: 'hidden',
-      }}>
+        overflow: 'hidden'}}>
         {/* Template selector */}
         <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 transition-colors duration-300" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, flexWrap: 'wrap' as const }}>
           <span className="text-gray-400 dark:text-gray-500" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: '4px' }}>{t('builder.template')}</span>
@@ -307,8 +299,7 @@ export default function BuilderPage() {
                   background: active ? `${meta.accent}14` : '',
                   color: active ? meta.accent : '',
                   fontFamily: 'inherit', fontSize: '13px', fontWeight: active ? 700 : 500,
-                  cursor: 'pointer',
-                }}
+                  cursor: 'pointer'}}
               >
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: meta.accent, flexShrink: 0 }} />
                 {meta.name}
@@ -330,19 +321,16 @@ export default function BuilderPage() {
             flex: 1, width: '100%', overflow: 'hidden',
             borderRadius: '16px', borderWidth: '1px',
             boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            position: 'relative',
-          }}>
+            position: 'relative'}}>
             <div style={{
               position: 'absolute', inset: 0,
               overflowY: 'auto',
-              transformOrigin: 'top left',
-            }}>
+              transformOrigin: 'top left'}}>
               <div style={{
                 transform: 'scale(0.5)',
                 transformOrigin: 'top left',
                 width: '200%',
-                pointerEvents: 'none',
-              }}>
+                pointerEvents: 'none'}}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={biodata.templateId}

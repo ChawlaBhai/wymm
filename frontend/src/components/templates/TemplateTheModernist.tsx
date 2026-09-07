@@ -38,8 +38,7 @@ export default function TemplateTheModernist({ biodata }: { biodata: BiodataReco
         color: '#F5F5F5',
         /* subtle dot texture */
         backgroundImage: 'radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px)',
-        backgroundSize: '20px 20px',
-      }}
+        backgroundSize: '20px 20px'}}
     >
 
       {/* HERO */}
@@ -239,8 +238,7 @@ export default function TemplateTheModernist({ biodata }: { biodata: BiodataReco
                     cursor: 'pointer',
                     padding: 0,
                     transition: 'all 0.3s ease',
-                    flexShrink: 0,
-                  }}
+                    flexShrink: 0}}
                 />
               ))}
             </div>

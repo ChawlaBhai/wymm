@@ -12,8 +12,7 @@ const HOBBY_EMOJI: Record<string, string> = {
   photography: '📸', fitness: '💪', yoga: '🧘', dance: '💃', writing: '✍️',
   gaming: '🎮', movies: '🎬', hiking: '🥾', cycling: '🚴', swimming: '🏊',
   singing: '🎤', painting: '🖌️', gardening: '🌱', cricket: '🏏', chess: '♟️',
-  baking: '🧁', fashion: '👗', sports: '⚽', theatre: '🎭', volunteering: '🤝',
-}
+  baking: '🧁', fashion: '👗', sports: '⚽', theatre: '🎭', volunteering: '🤝'}
 function getEmoji(hobby: string): string {
   const lower = hobby.toLowerCase()
   for (const [k, v] of Object.entries(HOBBY_EMOJI)) { if (lower.includes(k)) return v }

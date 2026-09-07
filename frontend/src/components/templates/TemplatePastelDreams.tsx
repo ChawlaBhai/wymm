@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }
 
 const LILAC = '#EDE7F6'
@@ -31,14 +30,12 @@ export default function TemplatePastelDreams({ biodata }: { biodata: BiodataReco
           position: 'absolute', top: '-10%', left: '-5%', width: '50vw', height: '50vw',
           borderRadius: '50%',
           background: `radial-gradient(circle, ${LILAC}88 0%, transparent 70%)`,
-          pointerEvents: 'none',
-        }} />
+          pointerEvents: 'none'}} />
         <div style={{
           position: 'absolute', top: '-8%', right: '-8%', width: '45vw', height: '45vw',
           borderRadius: '50%',
           background: `radial-gradient(circle, ${PEACH}88 0%, transparent 70%)`,
-          pointerEvents: 'none',
-        }} />
+          pointerEvents: 'none'}} />
 
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}
@@ -57,8 +54,7 @@ export default function TemplatePastelDreams({ biodata }: { biodata: BiodataReco
             style={{
               width: 150, height: 150, borderRadius: '50%', overflow: 'hidden',
               boxShadow: `0 0 0 4px ${LILAC}, 0 0 0 8px ${PEACH}, 0 0 0 12px ${LILAC}60`,
-              margin: '0 auto 28px',
-            }}
+              margin: '0 auto 28px'}}
           >
             {media.profilePhoto ? (
               <img src={media.profilePhoto} alt={basicInfo.fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -85,8 +81,7 @@ export default function TemplatePastelDreams({ biodata }: { biodata: BiodataReco
                 background: `linear-gradient(135deg, ${PURPLE}, #CE93D8, ${PURPLE})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
+                backgroundClip: 'text'}}
             >
               {basicInfo.fullName || 'Your Name'}
             </motion.h1>
@@ -346,8 +341,7 @@ export default function TemplatePastelDreams({ biodata }: { biodata: BiodataReco
             background: `linear-gradient(135deg, ${PURPLE}, #CE93D8)`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}>{basicInfo.fullName}</p>
+            backgroundClip: 'text'}}>{basicInfo.fullName}</p>
           <p style={{ fontSize: 11, color: `${PURPLE}50`, letterSpacing: '0.12em', fontWeight: 600 }}>CREATED WITH WYMM</p>
         </div>
       </footer>

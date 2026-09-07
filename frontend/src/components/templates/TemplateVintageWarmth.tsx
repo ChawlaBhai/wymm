@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } }
 
 const C = {
@@ -14,8 +13,7 @@ const C = {
   brown: '#8B4513',
   terra: '#C4856A',
   peach: '#F5E6D3',
-  border: '#E8D5C0',
-}
+  border: '#E8D5C0'}
 
 function Ornament() {
   return (
@@ -61,8 +59,7 @@ export default function TemplateVintageWarmth({ biodata }: { biodata: BiodataRec
     vegetarian: 'Vegetarian',
     'non-vegetarian': 'Non-Vegetarian',
     vegan: 'Vegan',
-    eggetarian: 'Eggetarian',
-  }
+    eggetarian: 'Eggetarian'}
 
   return (
     <div style={{ fontFamily: 'Georgia, serif', background: C.bg, minHeight: '100vh', color: C.text }}>
@@ -74,22 +71,19 @@ export default function TemplateVintageWarmth({ biodata }: { biodata: BiodataRec
           position: 'absolute', inset: '20px',
           border: `1px solid ${C.border}`,
           borderRadius: '4px',
-          pointerEvents: 'none',
-        }} />
+          pointerEvents: 'none'}} />
         <div style={{
           position: 'absolute', inset: '28px',
           border: `1px solid ${C.border}`,
           borderRadius: '2px',
           pointerEvents: 'none',
-          opacity: 0.5,
-        }} />
+          opacity: 0.5}} />
 
         {/* Large decorative swash */}
         <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
           fontSize: '320px', color: C.brown, opacity: 0.05, pointerEvents: 'none',
-          fontFamily: 'Georgia, serif', lineHeight: 1, userSelect: 'none',
-        }}>❦</div>
+          fontFamily: 'Georgia, serif', lineHeight: 1, userSelect: 'none'}}>❦</div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}
           style={{ position: 'relative', zIndex: 1 }}>
@@ -101,8 +95,7 @@ export default function TemplateVintageWarmth({ biodata }: { biodata: BiodataRec
               <div style={{
                 width: '140px', height: '175px', overflow: 'hidden',
                 borderRadius: '50% 50% 50% 50% / 40% 40% 60% 60%',
-                boxShadow: `0 0 0 8px ${C.bg}, 0 0 0 10px ${C.border}, 0 0 0 14px ${C.bg}, 0 0 0 16px ${C.border}`,
-              }}>
+                boxShadow: `0 0 0 8px ${C.bg}, 0 0 0 10px ${C.border}, 0 0 0 14px ${C.bg}, 0 0 0 16px ${C.border}`}}>
                 <img src={media.profilePhoto} alt={basicInfo.fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             ) : (
@@ -111,8 +104,7 @@ export default function TemplateVintageWarmth({ biodata }: { biodata: BiodataRec
                 borderRadius: '50% 50% 50% 50% / 40% 40% 60% 60%',
                 background: `linear-gradient(160deg, ${C.peach} 0%, ${C.border} 100%)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: `0 0 0 8px ${C.bg}, 0 0 0 10px ${C.border}, 0 0 0 14px ${C.bg}, 0 0 0 16px ${C.border}`,
-              }}>
+                boxShadow: `0 0 0 8px ${C.bg}, 0 0 0 10px ${C.border}, 0 0 0 14px ${C.bg}, 0 0 0 16px ${C.border}`}}>
                 <span style={{ fontFamily: 'Georgia, serif', fontSize: '48px', fontWeight: 700, color: C.brown }}>{initials}</span>
               </div>
             )}
@@ -149,8 +141,7 @@ export default function TemplateVintageWarmth({ biodata }: { biodata: BiodataRec
               <p style={{ margin: 0, fontSize: '17px', lineHeight: 1.9, fontStyle: 'italic', color: C.text }}>
                 <span style={{
                   float: 'left', fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 700,
-                  lineHeight: '0.75', marginRight: '8px', marginTop: '8px', color: C.brown,
-                }}>
+                  lineHeight: '0.75', marginRight: '8px', marginTop: '8px', color: C.brown}}>
                   {basicInfo.aboutMe.charAt(0)}
                 </span>
                 {basicInfo.aboutMe.slice(1)}
@@ -338,8 +329,7 @@ export default function TemplateVintageWarmth({ biodata }: { biodata: BiodataRec
                     cursor: 'pointer',
                     width: '180px',
                     rotate: `${photoRotations[i % photoRotations.length]}deg`,
-                    transformOrigin: 'center center',
-                  }}>
+                    transformOrigin: 'center center'}}>
                   <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden' }}>
                     <img src={photo} alt={`Memory ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   </div>

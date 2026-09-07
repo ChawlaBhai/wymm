@@ -29,8 +29,7 @@ const TEMPLATE_CATEGORIES: Record<TemplateId, string> = {
   'vintage-warmth': 'Warm', 'aurora-glass': 'Glass', 'ocean-breeze': 'Nature',
   'royal-majestic': 'Premium', 'botanical-fresh': 'Nature', 'celestial-night': 'Dark',
   'rose-gold-luxe': 'Elegant', 'zen-minimal': 'Minimal', 'pastel-dreams': 'Soft',
-  'heritage-splendor': 'Cultural',
-}
+  'heritage-splendor': 'Cultural'}
 
 const CATEGORY_FILTERS = ['All', 'Light', 'Dark', 'Cultural', 'Nature', 'Minimal', 'Elegant', 'Premium', 'Warm', 'Glass', 'Soft']
 
@@ -38,8 +37,7 @@ const FILTER_MAP: Record<string, string[]> = {
   All: [],
   Light: ['Minimal', 'Elegant', 'Premium', 'Warm', 'Glass', 'Soft', 'Nature', 'Cultural'],
   Dark: ['Dark'], Cultural: ['Cultural'], Nature: ['Nature'], Minimal: ['Minimal'],
-  Elegant: ['Elegant'], Premium: ['Premium'], Warm: ['Warm'], Glass: ['Glass'], Soft: ['Soft'],
-}
+  Elegant: ['Elegant'], Premium: ['Premium'], Warm: ['Warm'], Glass: ['Glass'], Soft: ['Soft']}
 
 const TEMPLATE_DEMO_SLUGS: Partial<Record<TemplateId, string>> = {
   'modern-minimal': 'demo1', 'refined-elegance': 'demo2', 'professional-premium': 'demo3',
@@ -47,16 +45,14 @@ const TEMPLATE_DEMO_SLUGS: Partial<Record<TemplateId, string>> = {
   'vintage-warmth': 'demo7', 'aurora-glass': 'demo8', 'ocean-breeze': 'demo9',
   'royal-majestic': 'demo10', 'botanical-fresh': 'demo11', 'celestial-night': 'demo12',
   'rose-gold-luxe': 'demo13', 'zen-minimal': 'demo14', 'pastel-dreams': 'demo15',
-  'heritage-splendor': 'demo16',
-}
+  'heritage-splendor': 'demo16'}
 
 const DARK_TEMPLATES: TemplateId[] = ['the-modernist', 'celestial-night']
 const TEMPLATE_IDS = Object.keys(TEMPLATE_META) as TemplateId[]
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] } }}
 const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }
 
 // Helper to render the correct template component
@@ -94,8 +90,7 @@ function LivePreviewCard({ id, meta, biodata }: { id: TemplateId, meta: any, bio
         flex: 1,
         border: `1px solid ${isDark ? '#2A2A2A' : '#F0F0F0'}`,
         overflow: 'hidden',
-        position: 'relative',
-      }}
+        position: 'relative'}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -109,14 +104,12 @@ function LivePreviewCard({ id, meta, biodata }: { id: TemplateId, meta: any, bio
         transformOrigin: 'top left',
         position: 'absolute',
         top: 4,
-        left: 0,
-      }}>
+        left: 0}}>
         <div style={{
           width: '100%',
           height: 'max-content',
           transition: 'transform 8s linear',
-          transform: isHovered ? 'translateY(calc(-100% + 700px))' : 'translateY(0)',
-        }}>
+          transform: isHovered ? 'translateY(calc(-100% + 700px))' : 'translateY(0)'}}>
           <Suspense fallback={<div style={{ width: '100%', height: 800, background: isDark ? '#111' : '#f9f9f9' }} />}>
             <LiveTemplateRenderer templateId={id} biodata={biodata} />
           </Suspense>
@@ -134,8 +127,7 @@ const BADGE_STYLES: Record<string, { bg: string; color: string }> = {
   Premium: { bg: '#FFFBEB', color: '#92400E' }, Cultural: { bg: '#FFF7ED', color: '#C2410C' },
   Dark: { bg: '#1F2937', color: '#9CA3AF' }, Nature: { bg: '#F0FDF4', color: '#166534' },
   Warm: { bg: '#FFF8F1', color: '#92400E' }, Glass: { bg: '#EEF2FF', color: '#3730A3' },
-  Soft: { bg: '#F5F3FF', color: '#6D28D9' },
-}
+  Soft: { bg: '#F5F3FF', color: '#6D28D9' }}
 
 function CategoryBadge({ category }: { category: string }) {
   const style = BADGE_STYLES[category] || { bg: '#F3F4F6', color: '#374151' }
@@ -143,8 +135,7 @@ function CategoryBadge({ category }: { category: string }) {
     <span style={{
       padding: '2px 8px', background: style.bg, color: style.color, borderRadius: 999,
       fontSize: 10, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase',
-      fontFamily: 'Inter, sans-serif', flexShrink: 0,
-    }}>
+      fontFamily: 'Inter, sans-serif', flexShrink: 0}}>
       {category}
     </span>
   )
@@ -169,8 +160,7 @@ export default function TemplatesPage() {
       aboutMe: 'I am a software engineer who loves traveling, photography, and spending time with family.'
     },
     career: { ...defaultBiodata.career, currentDesignation: 'Senior Developer', company: 'Google', industry: 'IT' },
-    education: { ...defaultBiodata.education, highestQualification: 'B.Tech', institution: 'IIT Bombay' },
-  }
+    education: { ...defaultBiodata.education, highestQualification: 'B.Tech', institution: 'IIT Bombay' }}
 
   const filteredTemplates = TEMPLATE_IDS.filter(id => {
     if (activeFilter === 'All') return true
@@ -217,8 +207,7 @@ export default function TemplatesPage() {
               fontWeight: 800,
               letterSpacing: '-0.03em',
               marginBottom: 12,
-              lineHeight: 1.1,
-            }}
+              lineHeight: 1.1}}
           >
             {t('templates.title')}
           </motion.h1>
@@ -291,8 +280,7 @@ export default function TemplatesPage() {
                       display: 'flex',
                       flexDirection: 'column',
                       height: 380, // Taller to show live preview nicely
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                    }}
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.04)'}}
                     onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${meta.accent}80` }}
                     onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '' }}
                   >
@@ -312,8 +300,7 @@ export default function TemplatesPage() {
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap' as const,
-                          flex: 1,
-                        }}>
+                          flex: 1}}>
                           {meta.name}
                         </span>
                         <CategoryBadge category={category} />
@@ -326,8 +313,7 @@ export default function TemplatesPage() {
                         lineHeight: 1.4,
                         whiteSpace: 'nowrap' as const,
                         overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}>
+                        textOverflow: 'ellipsis'}}>
                         {meta.tagline}
                       </p>
                       <div style={{ display: 'flex', gap: 8 }}>
@@ -344,8 +330,7 @@ export default function TemplatesPage() {
                             fontWeight: 700,
                             fontFamily: 'inherit',
                             cursor: 'pointer',
-                            transition: 'opacity 150ms ease',
-                          }}
+                            transition: 'opacity 150ms ease'}}
                           onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
                           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
                         >
@@ -365,8 +350,7 @@ export default function TemplatesPage() {
                             fontWeight: 700,
                             fontFamily: 'inherit',
                             cursor: 'pointer',
-                            transition: 'all 150ms ease',
-                          }}
+                            transition: 'all 150ms ease'}}
                           onMouseEnter={e => {
                             const el = e.currentTarget as HTMLButtonElement
                             el.style.background = `${meta.accent}15`

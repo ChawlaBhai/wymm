@@ -27,8 +27,7 @@ function TagInput({
   suggestions,
   placeholder,
   onAdd,
-  onRemove,
-}: {
+  onRemove}: {
   tags: string[]
   suggestions: string[]
   placeholder: string
@@ -85,8 +84,7 @@ function TagInput({
 function PillGroup<T extends string>({
   options,
   value,
-  onChange,
-}: {
+  onChange}: {
   options: { value: T; label: string; emoji?: string }[]
   value: T
   onChange: (v: T) => void
@@ -108,8 +106,7 @@ function PillGroup<T extends string>({
             fontSize: '14px',
             fontWeight: value === opt.value ? 600 : 400,
             cursor: 'pointer',
-            transition: 'all 150ms ease',
-          }}
+            transition: 'all 150ms ease'}}
         >
           {opt.emoji && <span style={{ marginRight: '6px' }}>{opt.emoji}</span>}
           {opt.label}
@@ -219,8 +216,7 @@ export default function StepPersonalInterests() {
                   fontSize: '13px',
                   fontWeight: selected ? 600 : 400,
                   cursor: maxed ? 'not-allowed' : 'pointer',
-                  transition: 'all 150ms ease',
-                }}
+                  transition: 'all 150ms ease'}}
               >
                 {trait}
               </button>

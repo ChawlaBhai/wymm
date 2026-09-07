@@ -4,8 +4,7 @@ import type { BiodataRecord } from '@/types/biodata'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }
 
 const CORAL = '#FF6B6B'
@@ -260,8 +259,7 @@ export default function TemplateOceanBreeze({ biodata }: { biodata: BiodataRecor
                   boxShadow: `0 4px 20px ${CORAL}25, 0 2px 8px rgba(0,0,0,0.08)`,
                   border: `2px solid ${CORAL}30`,
                   cursor: 'pointer',
-                  transform: `rotate(${i % 3 === 0 ? -3 : i % 3 === 1 ? 2 : -1}deg)`,
-                }}
+                  transform: `rotate(${i % 3 === 0 ? -3 : i % 3 === 1 ? 2 : -1}deg)`}}
               >
                 <img src={photo} alt={`Photo ${i + 1}`} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
               </motion.div>

@@ -15,8 +15,7 @@ const schema = z.object({
   motherTongue: z.string().optional(),
   city: z.string().min(1, 'City is required'),
   state: z.string().min(1, 'State is required'),
-  aboutMe: z.string().max(300, 'Max 300 characters').optional(),
-})
+  aboutMe: z.string().max(300, 'Max 300 characters').optional()})
 
 type FormValues = z.infer<typeof schema>
 
@@ -38,8 +37,7 @@ export default function StepBasicInfo() {
   const {
     register,
     watch,
-    formState: { errors },
-  } = useForm<FormValues>({
+    formState: { errors }} = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       fullName: basicInfo.fullName,
@@ -50,10 +48,8 @@ export default function StepBasicInfo() {
       motherTongue: basicInfo.motherTongue,
       city: basicInfo.city,
       state: basicInfo.state,
-      aboutMe: basicInfo.aboutMe,
-    },
-    mode: 'onChange',
-  })
+      aboutMe: basicInfo.aboutMe},
+    mode: 'onChange'})
 
   const values = watch()
   const aboutMeVal = watch('aboutMe') ?? ''
@@ -70,8 +66,7 @@ export default function StepBasicInfo() {
       motherTongue: values.motherTongue ?? '',
       city: values.city ?? '',
       state: values.state ?? '',
-      aboutMe: values.aboutMe ?? '',
-    })
+      aboutMe: values.aboutMe ?? ''})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     values.fullName, values.dateOfBirth, values.height, values.religion,

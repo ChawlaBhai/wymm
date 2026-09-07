@@ -277,8 +277,7 @@ export default function PreviewPage() {
           naturalW: img.naturalWidth,
           naturalH: img.naturalHeight,
           containerW: pr ? Math.round(pr.width * scaleFactor) : 0,
-          containerH: pr ? Math.round(pr.height * scaleFactor) : 0,
-        }
+          containerH: pr ? Math.round(pr.height * scaleFactor) : 0}
       })
 
       // ── STEP 2: Collect link positions from LIVE DOM ──
@@ -291,8 +290,7 @@ export default function PreviewPage() {
           x: (r.left - sourceRect.left) * scaleFactor,
           y: (r.top - sourceRect.top) * scaleFactor,
           w: r.width * scaleFactor,
-          h: r.height * scaleFactor,
-        }
+          h: r.height * scaleFactor}
       }).filter(l => l.href && !l.href.startsWith('#'))
 
       // ── STEP 3: Clone into off-screen container ──
@@ -355,8 +353,7 @@ export default function PreviewPage() {
       const canvas = await html2canvas(container, {
         scale: 2, useCORS: true, allowTaint: true,
         backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
-        windowWidth: 794, windowHeight: container.scrollHeight,
-      })
+        windowWidth: 794, windowHeight: container.scrollHeight})
 
       document.body.removeChild(container)
 
@@ -406,8 +403,7 @@ export default function PreviewPage() {
         borderBottom: '1px solid #F0F0F0',
         padding: '14px 28px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        fontFamily: 'Inter, sans-serif',
-      }}
+        fontFamily: 'Inter, sans-serif'}}
         className="preview-header"
       >
         <Link
@@ -437,8 +433,7 @@ export default function PreviewPage() {
               border: '1.5px solid #E5E5E5', background: 'white',
               color: '#1A1A1A', fontFamily: 'Inter, sans-serif',
               fontSize: '14px', fontWeight: 600, cursor: 'pointer',
-              transition: 'all 200ms ease',
-            }}
+              transition: 'all 200ms ease'}}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#7C3AED'; e.currentTarget.style.color = '#7C3AED' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E5E5'; e.currentTarget.style.color = '#1A1A1A' }}
           >
@@ -489,8 +484,7 @@ export default function PreviewPage() {
             background: 'white', borderRadius: '24px', padding: '36px',
             width: '100%', maxWidth: '440px',
             boxShadow: '0 24px 64px rgba(0,0,0,0.16)',
-            fontFamily: 'Inter, sans-serif',
-          }}>
+            fontFamily: 'Inter, sans-serif'}}>
             {/* Modal header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
               <h2 style={{ fontFamily: 'Sora, sans-serif', fontSize: '20px', fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
@@ -506,8 +500,7 @@ export default function PreviewPage() {
                   width: 64, height: 64, borderRadius: '50%',
                   background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(236,72,153,0.12))',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 20px',
-                }}>
+                  margin: '0 auto 20px'}}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#shareGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <defs>
                       <linearGradient id="shareGrad" x1="0" y1="0" x2="1" y2="1">
@@ -531,8 +524,7 @@ export default function PreviewPage() {
                     background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
                     color: 'white', fontFamily: 'Sora, sans-serif',
                     fontSize: '15px', fontWeight: 700,
-                    textDecoration: 'none', transition: 'opacity 200ms ease',
-                  }}
+                    textDecoration: 'none', transition: 'opacity 200ms ease'}}
                   onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
                   onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                 >
@@ -559,8 +551,7 @@ export default function PreviewPage() {
                     border: `1.5px solid ${slugStatus === 'available' ? '#10B981' : slugStatus === 'taken' || slugStatus === 'invalid' ? '#EF4444' : '#E5E5E5'}`,
                     borderRadius: '12px', overflow: 'hidden',
                     transition: 'border-color 200ms ease',
-                    background: '#F8F9FB',
-                  }}>
+                    background: '#F8F9FB'}}>
                     <span style={{ padding: '11px 0 11px 14px', fontSize: '13px', color: '#AAA', whiteSpace: 'nowrap', fontFamily: 'Inter, monospace' }}>
                       wymm.store/pr/
                     </span>
@@ -574,8 +565,7 @@ export default function PreviewPage() {
                         flex: 1, padding: '11px 14px 11px 0',
                         border: 'none', background: 'transparent',
                         fontFamily: 'Inter, monospace', fontSize: '13px',
-                        color: '#1A1A1A', outline: 'none',
-                      }}
+                        color: '#1A1A1A', outline: 'none'}}
                     />
                     {slugStatus === 'checking' && (
                       <span style={{ padding: '0 12px', color: '#AAA', fontSize: '12px' }}>…</span>
@@ -623,8 +613,7 @@ export default function PreviewPage() {
                     fontFamily: 'Sora, sans-serif', fontSize: '15px', fontWeight: 700,
                     cursor: slugStatus === 'available' && !isPublishing ? 'pointer' : 'default',
                     transition: 'all 200ms ease',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  }}
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'}}
                 >
                   {isPublishing ? 'Publishing…' : 'Publish Profile'}
                 </button>
@@ -638,8 +627,7 @@ export default function PreviewPage() {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   background: 'rgba(16,185,129,0.08)', borderRadius: '12px',
-                  padding: '12px 16px', marginBottom: '24px',
-                }}>
+                  padding: '12px 16px', marginBottom: '24px'}}>
                   <span style={{ color: '#10B981', fontSize: '20px' }}>✓</span>
                   <p style={{ fontSize: '13px', color: '#10B981', fontWeight: 600, margin: 0 }}>
                     Your profile is live at the link below.
@@ -657,8 +645,7 @@ export default function PreviewPage() {
                         flex: 1, padding: '10px 14px', borderRadius: '10px',
                         border: '1.5px solid #E5E5E5', background: '#F8F9FB',
                         fontFamily: 'Inter, monospace', fontSize: '13px',
-                        color: '#666', outline: 'none',
-                      }}
+                        color: '#666', outline: 'none'}}
                     />
                     <button
                       type="button"
@@ -669,8 +656,7 @@ export default function PreviewPage() {
                         background: copied ? 'rgba(16,185,129,0.08)' : 'rgba(124,58,237,0.08)',
                         color: copied ? '#10B981' : '#7C3AED',
                         fontFamily: 'Inter, sans-serif', fontSize: '13px', fontWeight: 600,
-                        cursor: 'pointer', transition: 'all 200ms ease', whiteSpace: 'nowrap' as const,
-                      }}
+                        cursor: 'pointer', transition: 'all 200ms ease', whiteSpace: 'nowrap' as const}}
                     >
                       {copied ? '✓ Copied' : 'Copy'}
                     </button>
@@ -695,8 +681,7 @@ export default function PreviewPage() {
                     color: 'white', fontFamily: 'Sora, sans-serif',
                     fontSize: '15px', fontWeight: 700, cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    transition: 'opacity 200ms ease',
-                  }}
+                    transition: 'opacity 200ms ease'}}
                   onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
                   onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                 >
@@ -717,8 +702,7 @@ export default function PreviewPage() {
                     color: '#25D366', fontFamily: 'Inter, sans-serif',
                     fontSize: '14px', fontWeight: 600, cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    transition: 'all 200ms ease',
-                  }}
+                    transition: 'all 200ms ease'}}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(37,211,102,0.06)' }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
                 >
@@ -739,8 +723,7 @@ export default function PreviewPage() {
                     width: '100%', marginTop: '12px', padding: '10px', borderRadius: '10px',
                     border: '1px solid #E5E5E5', background: 'transparent',
                     color: '#AAA', fontFamily: 'Inter, sans-serif', fontSize: '13px',
-                    cursor: 'pointer',
-                  }}
+                    cursor: 'pointer'}}
                 >
                   Change profile URL
                 </button>
@@ -837,8 +820,7 @@ export default function PreviewPage() {
             maxWidth: '100vw',
             gap: 8,
             alignItems: 'center',
-            WebkitOverflowScrolling: 'touch',
-          }}
+            WebkitOverflowScrolling: 'touch'}}
         >
           {TEMPLATE_IDS.map((id) => {
             const meta = TEMPLATE_META[id]
@@ -863,8 +845,7 @@ export default function PreviewPage() {
                   fontWeight: active ? 700 : 500,
                   cursor: 'pointer',
                   transition: 'all 150ms ease',
-                  whiteSpace: 'nowrap',
-                }}
+                  whiteSpace: 'nowrap'}}
               >
                 <span style={{ width: 7, height: 7, borderRadius: '50%', background: meta.accent, flexShrink: 0 }} />
                 {meta.name}

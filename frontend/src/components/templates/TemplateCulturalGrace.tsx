@@ -10,8 +10,7 @@ const RELIGION_GREETINGS: Record<string, { greeting: string; symbol: string; col
   sikh:      { greeting: 'Sat Sri Akal',      symbol: '☬',   color: '#B45309', bgColor: 'rgba(180,83,9,0.10)' },
   jain:      { greeting: 'Jai Jinendra',      symbol: '🕉️',  color: '#6B21A8', bgColor: 'rgba(107,33,168,0.10)' },
   buddhist:  { greeting: 'Namo Buddhaya',     symbol: '☸️',  color: '#0F766E', bgColor: 'rgba(15,118,110,0.10)' },
-  parsi:     { greeting: 'Asho Farohar',      symbol: '🔥',  color: '#9A3412', bgColor: 'rgba(154,52,18,0.10)' },
-}
+  parsi:     { greeting: 'Asho Farohar',      symbol: '🔥',  color: '#9A3412', bgColor: 'rgba(154,52,18,0.10)' }}
 
 function getReligionInfo(religion: string) {
   const key = religion?.toLowerCase().trim() || ''
@@ -24,16 +23,13 @@ interface Props {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const fadeLeft = {
   hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const fadeRight = {
   hidden: { opacity: 0, x: 30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }}
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 
 const HOBBY_EMOJI: Record<string, string> = {
@@ -41,8 +37,7 @@ const HOBBY_EMOJI: Record<string, string> = {
   photography: '📸', fitness: '💪', yoga: '🧘', dance: '💃', writing: '✍️',
   gaming: '🎮', movies: '🎬', hiking: '🥾', cycling: '🚴', swimming: '🏊',
   singing: '🎤', painting: '🖌️', gardening: '🌱', cricket: '🏏', chess: '♟️',
-  temple: '🛕', puja: '🪔', music_classical: '🎶', cooking_traditional: '🫕',
-}
+  temple: '🛕', puja: '🪔', music_classical: '🎶', cooking_traditional: '🫕'}
 function getEmoji(hobby: string): string {
   const lower = hobby.toLowerCase()
   for (const [key, emoji] of Object.entries(HOBBY_EMOJI)) {

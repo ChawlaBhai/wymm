@@ -127,8 +127,7 @@ export default function SharePage() {
         return {
           naturalW: img.naturalWidth, naturalH: img.naturalHeight,
           containerW: pr ? Math.round(pr.width * scaleFactor) : 0,
-          containerH: pr ? Math.round(pr.height * scaleFactor) : 0,
-        }
+          containerH: pr ? Math.round(pr.height * scaleFactor) : 0}
       })
 
       const liveLinks = Array.from(source.querySelectorAll('a[href]')) as HTMLAnchorElement[]
@@ -137,8 +136,7 @@ export default function SharePage() {
         const r = a.getBoundingClientRect()
         return {
           href, x: (r.left - sourceRect.left) * scaleFactor, y: (r.top - sourceRect.top) * scaleFactor,
-          w: r.width * scaleFactor, h: r.height * scaleFactor,
-        }
+          w: r.width * scaleFactor, h: r.height * scaleFactor}
       }).filter(l => l.href && !l.href.startsWith('#'))
 
       // Step 2: Clone off-screen
@@ -190,8 +188,7 @@ export default function SharePage() {
       const canvas = await html2canvas(container, {
         scale: 2, useCORS: true, allowTaint: true,
         backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
-        windowWidth: 480, windowHeight: container.scrollHeight,
-      })
+        windowWidth: 480, windowHeight: container.scrollHeight})
       document.body.removeChild(container)
 
       const pxToMm = 0.264583
@@ -224,16 +221,14 @@ export default function SharePage() {
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           minHeight: '100vh', background: '#FAFAFA',
-          gap: 16,
-        }}
+          gap: 16}}
       >
         <div
           style={{
             width: 44, height: 44, borderRadius: '50%',
             border: '3px solid #E5E5E5',
             borderTopColor: '#7C3AED',
-            animation: 'spin 0.7s linear infinite',
-          }}
+            animation: 'spin 0.7s linear infinite'}}
         />
         <p style={{ fontFamily: "'Sora', sans-serif", color: '#666', fontSize: 14 }}>
           Loading profile...
@@ -251,8 +246,7 @@ export default function SharePage() {
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           minHeight: '100vh', background: '#FAFAFA',
-          padding: '24px', textAlign: 'center',
-        }}
+          padding: '24px', textAlign: 'center'}}
       >
         <div
           style={{
@@ -261,8 +255,7 @@ export default function SharePage() {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             fontFamily: "'Sora', sans-serif",
-            fontWeight: 800,
-          }}
+            fontWeight: 800}}
         >
           404
         </div>
@@ -270,8 +263,7 @@ export default function SharePage() {
           style={{
             fontFamily: "'Sora', sans-serif",
             fontSize: 22, fontWeight: 700,
-            color: '#1A1A1A', marginBottom: 10,
-          }}
+            color: '#1A1A1A', marginBottom: 10}}
         >
           This biodata doesn't exist
         </h1>
@@ -295,16 +287,14 @@ export default function SharePage() {
           position: 'fixed', top: 0, left: 0, right: 0,
           height: 60, zIndex: 100,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '0 24px',
-        }}
+          padding: '0 24px'}}
       >
         <Link
           to="/"
           style={{
             fontFamily: "'Sora', sans-serif",
             fontWeight: 700, fontSize: 20,
-            textDecoration: 'none',
-          }}
+            textDecoration: 'none'}}
         >
           <span className="text-gradient-purple">wymm 💍</span>
         </Link>
@@ -335,8 +325,7 @@ export default function SharePage() {
           position: 'fixed', bottom: 0, left: 0, right: 0,
           height: 72, zIndex: 100,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: 12, padding: '0 24px',
-        }}
+          gap: 12, padding: '0 24px'}}
       >
         {pdfError && (
           <p style={{ color: '#DC2626', fontSize: 12, position: 'absolute', top: -24, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap' }}>
@@ -356,8 +345,7 @@ export default function SharePage() {
                 style={{
                   width: 14, height: 14, borderRadius: '50%',
                   border: '2px solid #E5E5E5', borderTopColor: '#7C3AED',
-                  display: 'inline-block', animation: 'spin 0.7s linear infinite',
-                }}
+                  display: 'inline-block', animation: 'spin 0.7s linear infinite'}}
               />
               Generating...
             </>

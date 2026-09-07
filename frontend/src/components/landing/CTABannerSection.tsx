@@ -25,8 +25,7 @@ export default function CTABannerSection() {
             position: 'relative',
             overflow: 'hidden',
             background: 'white',
-            border: '1px solid rgba(124,58,237,0.10)',
-          }}
+            border: '1px solid rgba(124,58,237,0.10)'}}
         >
           {/* Animated aurora blobs */}
           <motion.div
@@ -42,8 +41,7 @@ export default function CTABannerSection() {
               background: 'radial-gradient(ellipse, rgba(124,58,237,0.22) 0%, transparent 70%)',
               borderRadius: '50%',
               pointerEvents: 'none',
-              zIndex: 0,
-            }}
+              zIndex: 0}}
           />
           <motion.div
             aria-hidden="true"
@@ -58,8 +56,7 @@ export default function CTABannerSection() {
               background: 'radial-gradient(ellipse, rgba(236,72,153,0.20) 0%, transparent 70%)',
               borderRadius: '50%',
               pointerEvents: 'none',
-              zIndex: 0,
-            }}
+              zIndex: 0}}
           />
           <motion.div
             aria-hidden="true"
@@ -74,8 +71,7 @@ export default function CTABannerSection() {
               background: 'radial-gradient(ellipse, rgba(168,85,247,0.18) 0%, transparent 70%)',
               borderRadius: '50%',
               pointerEvents: 'none',
-              zIndex: 0,
-            }}
+              zIndex: 0}}
           />
 
           {/* Decorative ring — large centered circle */}
@@ -91,8 +87,7 @@ export default function CTABannerSection() {
               borderRadius: '50%',
               border: '1px solid rgba(124,58,237,0.20)',
               pointerEvents: 'none',
-              zIndex: 0,
-            }}
+              zIndex: 0}}
           />
 
           {/* Floating icons */}
@@ -107,8 +102,7 @@ export default function CTABannerSection() {
               fontSize: 24,
               pointerEvents: 'none',
               zIndex: 1,
-              opacity: 0.6,
-            }}
+              opacity: 0.6}}
           >
             💕
           </motion.div>
@@ -123,8 +117,7 @@ export default function CTABannerSection() {
               fontSize: 22,
               pointerEvents: 'none',
               zIndex: 1,
-              opacity: 0.6,
-            }}
+              opacity: 0.6}}
           >
             💍
           </motion.div>
@@ -139,8 +132,7 @@ export default function CTABannerSection() {
               fontSize: 20,
               pointerEvents: 'none',
               zIndex: 1,
-              opacity: 0.5,
-            }}
+              opacity: 0.5}}
           >
             ✨
           </motion.div>
@@ -157,16 +149,14 @@ export default function CTABannerSection() {
                 fontSize: 'clamp(28px, 4.5vw, 52px)',
                 letterSpacing: '-0.03em',
                 marginBottom: 18,
-                lineHeight: 1.1,
-              }}
+                lineHeight: 1.1}}
             >
               {t('cta.title1')}{' '}
               <span style={{
                 background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}>
+                backgroundClip: 'text'}}>
                 {t('cta.title2')}
               </span>
             </motion.h2>
@@ -181,8 +171,7 @@ export default function CTABannerSection() {
                 color: 'var(--tw-prose-body)',
                 lineHeight: 1.65,
                 maxWidth: 420,
-                margin: '0 auto 36px',
-              }}
+                margin: '0 auto 36px'}}
             >
               {t('cta.desc')}
             </motion.p>
@@ -204,8 +193,7 @@ export default function CTABannerSection() {
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 13,
                 color: 'var(--tw-prose-counters)',
-                fontWeight: 500,
-              }}>
+                fontWeight: 500}}>
                 {t('cta.trust')}
               </span>
             </motion.div>

@@ -8,33 +8,28 @@ const TESTIMONIALS = [
     name: 'Ravi K.',
     city: 'Mumbai',
     initials: 'RK',
-    avatarColor: '#7C3AED',
-  },
+    avatarColor: '#7C3AED'},
   {
     quote: 'My biodata always felt like a resume. This finally feels like me.',
     name: 'Ananya S.',
     city: 'Bengaluru',
     initials: 'AS',
-    avatarColor: '#EC4899',
-  },
+    avatarColor: '#EC4899'},
   {
     quote: 'Our son got married 8 months after we shared his wymm profile. The response was unlike anything we expected.',
     name: 'Meera & Suresh P.',
     city: 'Delhi',
     initials: 'MP',
-    avatarColor: '#F59E0B',
-  },
+    avatarColor: '#F59E0B'},
 ]
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-}
+  visible: { transition: { staggerChildren: 0.12 } }}
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.23, 1, 0.32, 1] } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.23, 1, 0.32, 1] } }}
 
 export default function TestimonialsSection() {
   const { t } = useTranslation()
@@ -60,8 +55,7 @@ export default function TestimonialsSection() {
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: '#EC4899',
-          }}>
+            color: '#EC4899'}}>
             Stories
           </span>
         </motion.div>
@@ -76,8 +70,7 @@ export default function TestimonialsSection() {
             fontWeight: 700,
             fontSize: 'clamp(26px, 4vw, 42px)',
             letterSpacing: '-0.02em',
-            marginBottom: 56,
-          }}
+            marginBottom: 56}}
         >
           Families who trusted wymm
         </motion.h2>
@@ -89,8 +82,7 @@ export default function TestimonialsSection() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 24,
-          }}
+            gap: 24}}
         >
           {TESTIMONIALS.map((t) => (
             <motion.div
@@ -99,8 +91,7 @@ export default function TestimonialsSection() {
               whileHover={{
                 y: -4,
                 boxShadow: '0 16px 40px rgba(124,58,237,0.12)',
-                transition: { duration: 0.22 },
-              }}
+                transition: { duration: 0.22 }}}
               style={{
                 borderRadius: 16,
                 padding: '28px 28px 24px',
@@ -115,8 +106,7 @@ export default function TestimonialsSection() {
                 borderLeft: '3px solid transparent',
                 backgroundImage: 'linear-gradient(white, white), linear-gradient(to bottom, #7C3AED, transparent)',
                 backgroundOrigin: 'border-box',
-                backgroundClip: 'padding-box, border-box',
-              }}
+                backgroundClip: 'padding-box, border-box'}}
             >
               {/* Decorative large quote mark */}
               <div
@@ -132,8 +122,7 @@ export default function TestimonialsSection() {
                   opacity: 0.08,
                   userSelect: 'none',
                   pointerEvents: 'none',
-                  zIndex: 0,
-                }}
+                  zIndex: 0}}
               >
                 ❝
               </div>
@@ -151,8 +140,7 @@ export default function TestimonialsSection() {
                 flex: 1,
                 fontStyle: 'italic',
                 position: 'relative',
-                zIndex: 1,
-              }}>
+                zIndex: 1}}>
                 "{t.quote}"
               </p>
 
@@ -172,8 +160,7 @@ export default function TestimonialsSection() {
                   fontWeight: 700,
                   fontSize: 14,
                   color: t.avatarColor,
-                  flexShrink: 0,
-                }}>
+                  flexShrink: 0}}>
                   {t.initials}
                 </div>
                 <div>
@@ -181,15 +168,13 @@ export default function TestimonialsSection() {
                     fontFamily: 'Inter, sans-serif',
                     fontSize: 13,
                     fontWeight: 600,
-                    marginBottom: 2,
-                  }}>
+                    marginBottom: 2}}>
                     {t.name}
                   </div>
                   <div style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: 12,
-                    color: '#AAA',
-                  }}>
+                    color: '#AAA'}}>
                     {t.city}
                   </div>
                 </div>
@@ -209,8 +194,7 @@ export default function TestimonialsSection() {
             fontSize: 11,
             color: '#BBBBBB',
             marginTop: 28,
-            letterSpacing: '0.04em',
-          }}
+            letterSpacing: '0.04em'}}
         >
           Illustrative testimonials
         </motion.p>
